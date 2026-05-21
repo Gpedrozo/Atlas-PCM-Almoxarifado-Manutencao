@@ -1,0 +1,39 @@
+# Environment variables (NUNCA COMMITAR!)
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+audit.log
+
+# Backups
+data/backups/
+pecas_backup*.json
+*.backup
+
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dados sensíveis
+data/usuarios.json
+data/consertos_solicitacoes.json
+data/consertos_anexos.json
+
+# Temporários
+temp/
+tmp/
+*.tmp

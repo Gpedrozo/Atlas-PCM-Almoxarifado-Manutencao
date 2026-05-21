@@ -1,0 +1,84 @@
+{
+  "proximaReqNum": 27,
+  "logo": "atlas.png",
+  "emailAprovadores": "gustavo.pedrozo@atlas.ind.br",
+  "aprovacaoAjustes": true,
+  "aprovacaoRequisicoes": false,
+  "sysUrl": "http://172.16.11.22:8080/",
+  "emailjsPublicKey": "EOis7GTpscs9sKkRr",
+  "emailjsServiceId": "service_ef7u1qs",
+  "emailjsTemplateId": "template_use13x2",
+  "empresa": "Atlas Ind. Eletrodomésticos",
+  "sub": "PCM Almoxarifado",
+  "emailjsTemplateIdAprovacao": "template_73a97nr",
+  "reqSugestoesFornecedor": [
+    "asdasd",
+    "dalla"
+  ],
+  "reqSugestoesMaterial": [
+    "123",
+    "asd"
+  ],
+  "reqSugestoesEquipamento": [
+    "elevador de peças",
+    "asd"
+  ],
+  "reqSugestoesCentroCusto": [
+    "asdasd"
+  ],
+  "proximoConsertoNum": 11,
+  "emailjsTemplateIdConsertoNovo": "template_use13x2",
+  "emailjsTemplateIdConsertoRetorno": "template_73a97nr",
+  "emailjsTemplateIdConsertoPrazo": "template_73a97nr",
+  "emailjsTemplateIdConsertoNF": "template_73a97nr",
+  "reqPrioridades": [
+    {
+      "value": "BAIXA",
+      "label": "Baixa"
+    },
+    {
+      "value": "MEDIA",
+      "label": "Média"
+    },
+    {
+      "value": "ALTA",
+      "label": "Alta"
+    },
+    {
+      "value": "URGENTE",
+      "label": "Urgente"
+    }
+  ],
+  "reqFluxos": [
+    {
+      "value": "MATERIAL_NORMAL",
+      "label": "Material - Normal"
+    },
+    {
+      "value": "MATERIAL_RETIRAR",
+      "label": "Material - Retirar no Fornecedor"
+    },
+    {
+      "value": "SERVICO_INTERNO",
+      "label": "Serviço - Interno"
+    },
+    {
+      "value": "SERVICO_EXTERNO",
+      "label": "Serviço - Externo"
+    },
+    {
+      "value": "FRETE",
+      "label": "Frete"
+    }
+  ],
+  "reqMoedas": [
+    "BRL",
+    "USD",
+    "EUR",
+    "CNY",
+    "JPY",
+    "GBP"
+  ],
+  "internalKey": "bb52024f84c66d8224d0dc6745efc0299eeb025797cb5ceaf22fbdd017109027",
+  "emailContabilidade": "gustavo.pedrozo@atlas.ind.br"
+}

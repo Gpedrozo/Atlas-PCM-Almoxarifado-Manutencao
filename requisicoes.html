@@ -1,0 +1,1386 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Solicitações de Requisições de Compras - Atlas PCM</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <style> .badge-PENDENTE   { background:#fff3e0; color:#e65100; }
+    .badge-SOLICITADO { background:#dbeafe; color:#1565c0; }
+    .badge-RECEBIDO   { background:#e6f4ea; color:#2e7d32; }
+    .badge-REJEITADO  { background:#fce8e6; color:#c62828; }
+
+    /* Tabela de itens dentro do formulário */
+    .itens-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .itens-table th { background:var(--bg); padding:8px 10px; text-align:left; font-weight:600; font-size:12px; color:var(--text-muted); border-bottom:2px solid var(--border); }
+    .itens-table td { padding:7px 8px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .itens-table tr:last-child td { border-bottom:none; }
+    .itens-table select, .itens-table input[type="number"] { background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:5px 8px; font-size:13px; color:var(--text); width:100%; }
+    .itens-table select:focus, .itens-table input:focus { border-color:var(--primary); outline:none; }
+    .btn-del-item { background:none; border:none; color:var(--danger); cursor:pointer; font-size:16px; padding:2px 6px; border-radius:4px; }
+    .btn-del-item:hover { background:var(--bg); }
+    .item-desc-row { background:rgba(0,0,0,0.03); border-bottom:1px solid var(--border); }
+    .item-data-row { background:rgba(0,0,0,0.01); border-bottom:1px solid var(--border); font-size:12px; }
+    .item-data-row td { padding:6px 8px; }
+    .item-desc-row td { padding:10px 8px; }
+    .item-desc-row strong { display:inline; overflow-wrap:anywhere; word-break:break-word; }
+    .item-desc-code { color:var(--text-muted); font-weight:400; font-size:11px; margin-left:6px; }
+
+    /* ÁREA DE IMPRESSÃO */
+    @media print {
+      * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      body { background:#fff; }
+      .no-print, .sidebar, .topbar { display:none !important; }
+      .main-content { padding:0 !important; }
+      .page-body { padding:0 !important; }
+      #area-tela { display:none !important; }
+      #area-print { display:block !important; }
+    }
+    #area-print { display:none; }
+
+    .print-req { font-family: Arial, sans-serif; font-size: 11pt; color: #000; max-width: 21cm; margin: 0 auto; padding: 1cm; }
+    .print-req-header { display: flex; align-items: center; gap: 16px; border-bottom: 3px solid #1e3a5f; padding-bottom: 12px; margin-bottom: 18px; }
+    .print-req-logo { max-height: 50px; max-width: 120px; object-fit: contain; }
+    .print-req-empresa { flex: 1; }
+    .print-req-empresa .nome { font-size: 14pt; font-weight: bold; color: #1e3a5f; }
+    .print-req-empresa .sub  { font-size: 9pt; color: #555; }
+    .print-req-titulo { font-size: 15pt; font-weight: bold; color: #1e3a5f; text-align: right; }
+    .print-req-numero { font-size: 10pt; color: #666; text-align: right; }
+    .print-req-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; background: #f8fafc; border: 1px solid #ddd; border-radius: 4px; padding: 12px; }
+    .print-req-meta-item { display: flex; flex-direction: column; }
+    .print-req-meta-label { font-size: 8pt; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+    .print-req-meta-val { font-size: 10.5pt; font-weight: 600; color: #1e3a5f; margin-top: 2px; }
+    .print-req-itens-title { font-size: 11pt; font-weight: bold; color: #1e3a5f; margin: 16px 0 8px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+    .print-req-itens-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+    .print-req-itens-table th { background: #1e3a5f; color: #fff; padding: 6px 10px; text-align: left; }
+    .print-req-itens-table td { padding: 7px 10px; border-bottom: 1px solid #eee; }
+    .print-req-itens-table tr:nth-child(even) td { background: #f5f5f5; }
+    .print-req-obs { margin-top: 12px; padding: 10px; background: #fffbf0; border: 1px solid #f0d070; border-radius: 4px; font-size: 10pt; }
+    .print-req-obs-label { font-weight: bold; font-size: 9pt; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+    .print-assinaturas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 40px; }
+    .print-assinatura { border-top: 1px solid #333; padding-top: 6px; text-align: center; font-size: 9pt; color: #555; }
+    .print-assinatura .label { font-weight: bold; }
+
+    /* Seções do formulário de requisição */
+    .req-secao { background:var(--bg); border:1px solid var(--border); border-left:4px solid var(--primary); border-radius:8px; padding:14px 16px; margin-bottom:16px; }
+    .req-secao-titulo { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; }
+
+    /* UX industrial: layout mais leve, compacto e fluido */
+    #modal-req .modal {
+      max-width: 840px;
+      width: min(840px, calc(100vw - 24px));
+      max-height: 92vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    #modal-req * { box-sizing: border-box; }
+    #modal-req form,
+    #modal-req .req-secao,
+    #modal-req .form-grid,
+    #modal-req .form-group { min-width: 0; }
+    #modal-req .form-grid { gap: 10px; }
+    #modal-req .form-group label { font-size: 12px; margin-bottom: 4px; }
+    #modal-req input,
+    #modal-req select,
+    #modal-req textarea {
+      padding: 8px 10px;
+      font-size: 12.5px;
+    }
+    #modal-req .req-secao {
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+    }
+    #modal-req .req-secao-titulo {
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+
+    .req-item-entry {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 0.8fr auto;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .req-item-panel {
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      max-height: 230px;
+    }
+    .req-item-panel .itens-table {
+      width: 100%;
+      min-width: 0;
+      table-layout: fixed;
+    }
+    .req-item-panel .itens-table th,
+    .req-item-panel .itens-table td {
+      padding: 6px 7px;
+      font-size: 12px;
+    }
+    .req-item-panel .itens-table td {
+      word-break: break-word;
+    }
+
+    @media (max-width: 980px) {
+      #modal-req .modal {
+        max-width: 95vw;
+        width: calc(100vw - 24px);
+        overflow-x: hidden;
+      }
+      .req-item-entry {
+        grid-template-columns: 1fr;
+      }
+      .req-item-entry > div:first-child {
+        grid-column: 1;
+      }
+      .req-item-entry .btn {
+        grid-column: 1/-1;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 680px) {
+      #modal-req .modal {
+        max-height: 96vh;
+        overflow-x: hidden;
+      }
+      #modal-req .req-secao {
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .req-item-panel .itens-table {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar no-print" id="sidebar"> <div class="sidebar-logo"> <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none"> <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div> <div class="sub">PCM Almoxarifado</div> </div> <nav> <div class="nav-group-label">Principal</div> <a href="dashboard.html" data-page="dashboard">Dashboard</a> <a href="estoque.html" data-page="estoque">Estoque</a> <a href="movimentacoes.html" data-page="movimentacoes">Movimentações</a> <div class="nav-group-label">Cadastros</div> <a href="pecas.html" data-page="pecas">Peças</a> <a href="ativos.html" data-page="ativos">Ativos</a> <a href="requisicoes.html" data-page="requisicoes">Req. de Compra</a> <a href="consertos.html" data-page="consertos">Consertos Externos</a> <div class="nav-group-label">Análise</div> <a href="relatorios.html" data-page="relatorios">Relatórios</a> <a href="etiquetas.html" data-page="etiquetas">Etiquetas</a> <div class="nav-group-label" data-admin>Administração</div> <a href="aprovacoes.html" data-page="aprovacoes" data-admin><span class="icon"></span> Solicitações</a> <a href="ajustes.html" data-page="ajustes" data-admin>Ajuste de Saldo</a> <a href="configuracoes.html" data-page="configuracoes" data-admin>Configurações</a> </nav> <div class="sidebar-footer"> <div class="user-info" id="sidebar-user-name">-</div> <div class="user-role" id="sidebar-user-role">-</div> <button class="btn-logout" onclick="Auth.logout()">Sair do Sistema</button> </div> </aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar no-print"> <div> <div class="topbar-title">Solicitações de Requisições de Compras</div> <div class="topbar-subtitle">Solicite reposição de materiais e acompanhe o status</div> </div> <div class="topbar-actions"> <button class="btn btn-primary" onclick="abrirNovaRequisicao()">+ Nova Requisição</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <!-- ÁREA DE TELA (oculta no print) --> <div class="page-body no-print" id="area-tela"> <!-- Tabs de status --> <div class="tabs"> <button class="tab-btn active" data-tab="todas" onclick="mudarTab(this,'todas')">Todas</button> <button class="tab-btn" data-tab="PENDENTE" onclick="mudarTab(this,'PENDENTE')"> Pendentes <span id="cnt-pendente" class="badge badge-PENDENTE" style="margin-left:6px;display:none"></span> </button> <button class="tab-btn" data-tab="SOLICITADO" onclick="mudarTab(this,'SOLICITADO')">Solicitadas</button> <button class="tab-btn" data-tab="RECEBIDO"   onclick="mudarTab(this,'RECEBIDO')">Recebidas</button> <button class="tab-btn" data-tab="REJEITADO"  onclick="mudarTab(this,'REJEITADO')">Rejeitadas</button> </div> <!-- Tabela de requisições --> <div class="card"> <div class="table-wrapper"> <table> <thead> <tr> <th>Número</th> <th>Data</th> <th>Material / Serviço</th> <th>Fornecedor</th> <th>Valor</th> <th>N&#186; SAP</th> <th>Prioridade</th> <th>Solicitante</th> <th>Status</th> <th style="text-align:center">Ações</th> </tr> </thead> <tbody id="tbody-req"></tbody> </table> </div> <div id="empty-req" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma requisição encontrada</p> </div> </div> </div> <!-- ÁREA DE IMPRESSÃO (visível só no print) --> <div id="area-print"></div> </div>
+</div> <!-- ------------------------------------------------------
+     MODAL NOVA / EDITAR REQUISIÇÃO
+-------------------------------------------------------- -->
+<div class="modal-overlay" id="modal-req" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal"> <div class="modal-header"> <div class="modal-title" id="modal-req-titulo">Nova Solicitação de Requisição de Compra</div> <button class="modal-close" onclick="Utils.fecharModal('modal-req')"></button> </div> <form id="form-req" onsubmit="salvarRequisicao(event)" autocomplete="off"> <input type="hidden" id="req-id"> <!-- --- SEÇÃO 1: PRIORIDADE E FLUXO --- --> <div class="req-secao" style="border-left-color:var(--primary)"> <div class="req-secao-titulo">Prioridade e Fluxo de Entrada</div> <div class="form-grid" style="grid-template-columns:1fr 1fr"> <div class="form-group"> <label>PRIORIDADE *</label> <input type="hidden" id="req-prioridade" required> <div id="req-prioridade-botoes" style="display:flex;gap:8px;flex-wrap:wrap"></div> <div style="font-size:11px;color:var(--text-muted);margin-top:6px">As opções podem ser alteradas em Configurações > Aprovação.</div> </div> <div class="form-group"> <label>FLUXO DE ENTRADA *</label> <select id="req-fluxo-entrada" required> <option value="">- Selecione o fluxo -</option> </select> <div style="font-size:11px;color:var(--text-muted);margin-top:6px">As opções podem ser alteradas em Configurações > Aprovação.</div> </div> </div> </div> <!-- --- SEÇÃO 2: RESPONSÁVEIS --- --> <div class="req-secao" style="border-left-color:#2196F3"> <div class="req-secao-titulo"> Solicitante e Responsável</div> <div class="form-grid" style="grid-template-columns:1fr 1fr"> <div class="form-group"> <label>Solicitante (Usuário do Sistema)</label> <input type="text" id="req-solicitante-nome" readonly style="background:var(--bg);opacity:.7;cursor:default;font-size:13px"> <div style="font-size:11px;color:var(--text-muted);margin-top:4px"> Seu usuário será registrado automaticamente</div> </div> <div class="form-group"> <label>RESPONSÁVEL *</label> <select id="req-responsavel" required onchange="onResponsavelChange(this)"> <option value="">- Selecione o responsável -</option> <option value="EDIMILSON">Edimilson</option> <option value="VALTER">Valter</option> <option value="MAIRON">Mairon</option> <option value="CAIO">Caio</option> <option value="RAFAEL">Rafael</option> <option value="MATHEUS">Matheus</option> <option value="JANINHO">Janinho</option> <option value="MARIANE">Mariane</option> <option value="STHEFANY">Sthefany</option> <option value="OUTRO">Outro</option> </select> </div> </div> <div id="grupo-responsavel-outro" style="display:none;margin-top:12px"> <div class="form-group"> <label>Nome do Responsável (quando "Outro")</label> <input type="text" id="req-responsavel-outro" placeholder="Digite o nome do responsável"> </div> </div> <div style="background:rgba(33,150,243,.1);border-left:3px solid #2196F3;padding:10px 12px;border-radius:4px;font-size:12px;color:var(--text);margin-top:10px"> <strong>Dica:</strong> O responsável pode ser diferente do solicitante - útil quando um usuário pede para outro dar suporte na requisição.
+        </div> </div> <!-- --- SEÇÃO 3: CENTRO DE CUSTO / ORDEM DE INVESTIMENTO --- --> <div class="req-secao" style="border-left-color:#9c27b0"> <div class="req-secao-titulo"> Centro de Custo ou Ordem de Investimento</div> <div class="form-group" style="margin-bottom:12px"> <label>CENTRO DE CUSTO OU ORDEM DE INVESTIMENTO *</label> <div style="display:flex;gap:20px;margin-top:6px;flex-wrap:wrap;row-gap:8px"> <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-weight:normal;font-size:13px"> <input type="radio" name="req-tipo-cc-oi" id="req-tipo-cc" value="CC" checked onchange="onTipoCCOIChange(this)"> Centro de Custo (K)
+            </label> <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-weight:normal;font-size:13px"> <input type="radio" name="req-tipo-cc-oi" id="req-tipo-oi" value="OI" onchange="onTipoCCOIChange(this)"> Centro de Custo (I)
+            </label> <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-weight:normal;font-size:13px"> <input type="radio" name="req-tipo-cc-oi" id="req-tipo-oi2" value="OI2" onchange="onTipoCCOIChange(this)"> Ordem de Investimento (F)
+            </label> </div> </div> <div class="form-grid" style="grid-template-columns:1fr 1fr"> <div class="form-group" id="grupo-cc"> <label>CENTRO DE CUSTO (K) *</label> <input type="text" id="req-centro-custo-k" list="lista-centro-custo" placeholder="Ex: PINTURA A PÓ" required> </div> <div class="form-group" id="grupo-cc-i" style="display:none"> <label>CENTRO DE CUSTO (I) *</label> <input type="text" id="req-centro-custo-i" list="lista-centro-custo" placeholder="Ex: ESMALTAÇÃO"> </div> <div class="form-group" id="grupo-oi" style="display:none"> <label>NUMERO DA ORDEM DE INVESTIMENTO (F) *</label> <input type="text" id="req-numero-oi" placeholder="Ex: OI-2026-001"> </div> </div> </div> <!-- --- SEÇÃO 4: FORNECEDOR --- --> <div class="req-secao" style="border-left-color:#e74c3c"> <div class="req-secao-titulo"> Fornecedor</div> <div class="form-group"> <label>FORNECEDOR *</label> <input type="text" id="req-fornecedor" list="lista-fornecedores" placeholder="Ex: DALLA AUTOMAÇÃO, LEON USINAGEM" required> </div> </div> <!-- --- SEÇÃO 5: MATERIAL / SERVIÇO --- --> <div class="req-secao" style="border-left-color:#4caf50"> <div class="req-secao-titulo"> Materiais / Serviço</div> <div class="form-group" style="margin-bottom:12px"> <label>MATERIAIS / SERVIÇO *</label> <textarea id="req-descricao-material" rows="2" list="lista-materiais" placeholder="Resumo geral dos materiais/serviço" required style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);background:var(--bg);resize:vertical;text-transform:uppercase"></textarea> </div> <div class="form-group" style="margin-bottom:12px"> <label>ITENS DA SOLICITAÇÃO (com cálculo automático)</label> <div class="req-item-entry"> <div style="grid-column: 1/-1; margin-bottom: 6px"> <input type="text" id="novo-item-descricao" list="lista-pecas" placeholder="Código ou nome do item" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:13px; color:var(--text); background:var(--bg)"> </div> <input type="text" id="novo-item-unidade" placeholder="UN" value="UN" style="padding:8px;"> <input type="number" id="novo-item-quantidade" min="1" step="1" value="1" placeholder="Qtd" style="padding:8px;"> <input type="text" id="novo-item-unitario" placeholder="0,00" style="padding:8px;"> <button type="button" class="btn btn-secondary" onclick="adicionarItemCompra()" style="padding:8px 12px;">+ Item</button> </div> <div class="req-item-panel"> <table class="itens-table"> <thead> <tr> <th>Item / Descrição</th> <th>Un</th> <th>Qtd</th> <th>Unitário</th> <th>Total</th> <th>Ação</th> </tr> </thead> <tbody id="itens-compra-tbody"></tbody> </table> </div> </div> <div class="form-group"> <label>PARA QUAL EQUIPAMENTO/MÁQUINA É A PEÇA/SERVIÇO*</label> <input type="text" id="req-maquina-equipamento" list="lista-equipamentos" placeholder="Ex: CAB002 - Cabine de Esmaltação, BOMBA DO CICLONE" required> </div> </div> <!-- --- SEÇÃO 6: CLASSIFICAÇÃO --- --> <div class="req-secao" style="border-left-color:#ff9800"> <div class="req-secao-titulo"> Classificação do Material</div> <div class="form-group"> <label>CLASSIFICAÇÃO DO MATERIAL (CONTA CONTÁBIL) *</label> <select id="req-classificacao" required> <option value="">- Selecione a classificação -</option> <option value="31203003">31203003 - MANUTENÇÃO ELÉTRICA</option> <option value="31203002">31203002 - MANUTENÇÃO MECÂNICA</option> <option value="31203001">31203001 - MANUTENÇÃO CIVIL</option> <option value="31203005">31203005 - MANUTENÇÃO DE EMPILHADEIRA</option> <option value="SERV_TERCEIROS">SERVIÇO DE TERCEIROS</option> <option value="SERV_TERCEIROS_MECANICA">SERVIÇO DE TERCEIROS - MANUTENÇÃO MECÂNICA</option> <option value="SERV_TERCEIROS_ELETRICA">SERVIÇO DE TERCEIROS - MANUTENÇÃO ELÉTRICA</option> <option value="SERV_TERCEIROS_CIVIL">SERVIÇO DE TERCEIROS - MANUTENÇÃO CIVIL</option> <option value="SERV_TERCEIROS_EMPILHADEIRA">SERVIÇO DE TERCEIROS - MANUTENÇÃO EMPILHADEIRA</option> <option value="SERRALHERIA">SERRALHERIA</option> <option value="31206007">31206007 - MATERIAL DE SEGURANÇA</option> <option value="31206009">31206009 - UNIFORMES</option> <option value="31207011">31207011 - MATERIAL DE EXPEDIENTE</option> </select> </div> </div> <!-- --- SEÇÃO 7: JUSTIFICATIVA --- --> <div class="req-secao" style="border-left-color:#673AB7"> <div class="req-secao-titulo"> Justificativa</div> <div class="form-group"> <label>JUSTIFICATIVA *</label> <textarea id="req-justificativa" rows="3" placeholder="Ex: Peças danificadas e vazando ar. Equipamento parado, prejudicando a produção." required style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);background:var(--bg);resize:vertical"></textarea> </div> </div> <!-- --- SEÇÃO 8: VALOR E ORÇAMENTO --- --> <div class="req-secao" style="border-left-color:#e91e63"> <div class="req-secao-titulo"> Valor Total e Orçamento</div> <div class="form-grid" style="grid-template-columns:1fr 1fr"> <div class="form-group"> <label>MOEDA / COTAÇÃO</label> <div style="display:grid;grid-template-columns:120px 1fr;gap:8px"> <select id="req-moeda" onchange="atualizarCotacaoMoeda()"></select> <input type="text" id="req-cotacao" readonly placeholder="Cotação em BRL por 1 unidade da moeda"> </div> </div> <div class="form-group"> <label>VALOR TOTAL *</label> <input type="text" id="req-valor" placeholder="R$ 0,00" required> <div id="req-resumo-calculo" style="font-size:11px;color:var(--text-muted);margin-top:6px">Adicione itens para cálculo automático.</div> </div> </div> <div class="form-grid" style="grid-template-columns:1fr 1fr"> <div class="form-group"> <label>Nº DO ORÇAMENTO *</label> <input type="text" id="req-numero-orcamento" placeholder="Ex: 2957" required> </div> </div> <div class="form-group"> <label>QUAL A ESTIMATIVA DE ENTREGA DO ITEM*</label> <input type="date" id="req-data-entrega" required> <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Datas retroativas são permitidas, com confirmação no envio.</div> </div> </div> <!-- --- SEÇÃO 9: OBSERVAÇÃO --- --> <div class="req-secao" style="border-left-color:#00BCD4"> <div class="req-secao-titulo"> Observação</div> <div class="form-group"> <label>OBSERVAÇÃO</label> <textarea id="req-observacoes" rows="2" placeholder="Informações adicionais (opcional)..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);background:var(--bg);resize:vertical"></textarea> </div> </div> <!-- --- SEÇÃO 10: ANEXAR ORÇAMENTO --- --> <div class="req-secao" style="border-left-color:#FFC107"> <div class="req-secao-titulo"> ANEXAR ORÇAMENTO</div> <div style="border:2px dashed var(--border);border-radius:8px;padding:16px;text-align:center;background:var(--bg);cursor:pointer;transition:border-color .2s" id="zona-upload-orcamento"
+          onclick="document.getElementById('input-upload-orcamento').click()"
+          onmouseenter="this.style.borderColor='var(--primary)'"
+          onmouseleave="this.style.borderColor='var(--border)'"> <input type="file" id="input-upload-orcamento" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" multiple style="display:none" onchange="handleUploadOrcamento(event)"> <div style="font-size:28px;margin-bottom:6px"></div> <div style="font-weight:600;color:var(--text);margin-bottom:4px">Clique para anexar o orçamento</div> <div style="font-size:12px;color:var(--text-muted)">Limite: 10 arquivos | Máx. 5 MB por arquivo | Tipos: PDF, imagem, Word e Excel</div> <div id="orcamento-info" style="margin-top:10px;padding:8px 12px;background:rgba(76,175,80,.12);border-radius:4px;display:none;text-align:left"> <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"> <span id="orcamento-count" style="font-size:12px;color:#2e7d32;font-weight:700">0 arquivos anexados</span> <button type="button" onclick="event.stopPropagation();limparOrcamentos()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:12px;padding:0 4px" title="Limpar anexos">Limpar</button> </div> <div id="orcamento-lista" style="margin-top:6px"></div> </div> </div> </div> <!-- --- FOOTER --- --> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-req')">Cancelar</button> <button type="submit" class="btn btn-primary"> Enviar Requisição</button> </div> <datalist id="lista-fornecedores"></datalist> <datalist id="lista-centro-custo"></datalist> <datalist id="lista-materiais"></datalist> <datalist id="lista-equipamentos"></datalist> <datalist id="lista-pecas"></datalist> </form> </div>
+</div> <!-- ------------------------------------------------------
+     MODAL DETALHES / APROVAÇÃO
+-------------------------------------------------------- -->
+<div class="modal-overlay" id="modal-detalhe" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:600px"> <div class="modal-header"> <div class="modal-title" id="detalhe-titulo">Detalhes da Requisição</div> <button class="modal-close" onclick="Utils.fecharModal('modal-detalhe')"></button> </div> <div id="detalhe-body"></div> <div class="modal-footer" id="detalhe-footer"></div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script src="requisicoes-novo.js"></script>
+<script src="requisicoes-padrao.js"></script>
+<script src="requisicoes-email-sap.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('requisicoes');
+    Utils.aplicarPermissoes();
+    _inicializar();
+  });
+
+  var tabAtiva = 'todas';
+  var pecasCache = [];
+
+  // ── Helpers de badge / label ──────────────────────────
+  function badgeStatus(s) {
+    var labelMap = { PENDENTE:'Pendente', SOLICITADO:'Solicitado', RECEBIDO:'Recebido', REJEITADO:'Rejeitado', APROVADA:'Solicitado', COMPRADA:'Recebido', REJEITADA:'Rejeitado' };
+    var clsMap   = { PENDENTE:'PENDENTE', SOLICITADO:'SOLICITADO', RECEBIDO:'RECEBIDO', REJEITADO:'REJEITADO', APROVADA:'SOLICITADO', COMPRADA:'RECEBIDO', REJEITADA:'REJEITADO' };
+    return '<span class="badge badge-' + (clsMap[s]||s) + '">' + (labelMap[s]||s) + '</span>';
+  }
+  function badgeUrgencia(u) {
+    if (u === 'CRITICA') return '<span class="badge badge-critical">Crítica</span>';
+    if (u === 'ALTA')    return '<span class="badge badge-low">Alta</span>';
+    return '<span class="badge badge-ok">Normal</span>';
+  }
+  function labelUrgencia(u) {
+    return { NORMAL:'Normal', ALTA:'Alta', CRITICA:'Crítica - Máquina Parada' }[u] || u || 'Normal';
+  }
+  function labelFluxoEntrada(v) {
+    var m = {
+      'MATERIAL_NORMAL':   'Material - Normal',
+      'MATERIAL_RETIRAR':  'Material - Retirar no Fornecedor',
+      'SERVICO_INTERNO':   'Serviço - Interno',
+      'FRETE':             'Frete',
+      'MATERIAL_ENTREGAR': 'Material - Fornecedor Entrega',
+      'SERVICO_LOCAL':     'Serviço - Execução no Local',
+      'SERVICO_EXTERNO':   'Serviço - Execução Externa',
+      'COLETA':            'Coleta por Terceiro',
+      'RETIRAR':           'Retirar no Fornecedor',
+      'ENTREGAR':          'Fornecedor Entrega',
+    };
+    return m[v] || v || '-';
+  }
+  function fmtValor(v) {
+    return 'R$ ' + (parseFloat(v) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // ── Contador de pendentes ─────────────────────────────
+  function atualizarContador() {
+    var n = DB.Requisicoes.listar().filter(function(r) { return r.status === 'PENDENTE'; }).length;
+    var el = document.getElementById('cnt-pendente');
+    el.textContent = n;
+    el.style.display = n > 0  '' : 'none';
+  }
+
+  // ── Mudar aba ─────────────────────────────────────────
+  function mudarTab(btn, tab) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    tabAtiva = tab;
+    renderTabela();
+  }
+
+  // ── Renderizar tabela ─────────────────────────────────
+  function renderTabela() {
+    atualizarContador();
+    var usuariosMap = {};
+    DB.Usuarios.listar().forEach(function(u) { usuariosMap[u.id] = u.nome; });
+
+    var statusAlias = { SOLICITADO:['SOLICITADO','APROVADA'], RECEBIDO:['RECEBIDO','COMPRADA'], REJEITADO:['REJEITADO','REJEITADA'] };
+    var reqs = DB.Requisicoes.listar().filter(function(r) {
+      if (tabAtiva === 'todas') return true;
+      var alvo = statusAlias[tabAtiva] || [tabAtiva];
+      return alvo.indexOf(r.status) >= 0;
+    });
+
+    var tbody = document.getElementById('tbody-req');
+    var empty  = document.getElementById('empty-req');
+
+    if (reqs.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+    empty.style.display = 'none';
+
+    tbody.innerHTML = reqs.map(function(r) {
+      var material = r.descricaoMaterial || r.fornecedorSugerido || '-';
+      if (material.length > 45) material = material.substring(0, 45) + '...';
+      var fornecedor = r.fornecedor || r.fornecedorSugerido || '-';
+      if (fornecedor.length > 20) fornecedor = fornecedor.substring(0, 20) + '...';
+
+      var acoes = '<button class="btn-icon" title="Ver detalhes" onclick="verDetalhe(\'' + r.id + '\')"></button>'
+        + '<button class="btn-icon" title="Enviar por e-mail" onclick="notificarAprovadores(\'' + r.id + '\')"></button>'
+        + '<button class="btn-icon" title="Imprimir" onclick="imprimirReq(\'' + r.id + '\')"></button>';
+
+      return '<tr>'
+        + '<td style="font-weight:700;font-family:monospace;font-size:13px">' + (r.numero || '-') + '</td>'
+        + '<td style="font-size:12px;white-space:nowrap">' + Utils.formatarData(r.criadoEm) + '</td>'
+        + '<td style="font-size:12.5px">' + Utils.safe(material) + '</td>'
+        + '<td style="font-size:12px">' + Utils.safe(fornecedor) + '</td>'
+        + '<td style="font-size:12px;white-space:nowrap">' + (r.valor  fmtValor(r.valor) : '-') + '</td>'
+                + '<td style="font-size:12px;font-family:monospace;color:' + (r.numeroOrdemSAP  'var(--primary)' : 'var(--text-muted)') + ';font-weight:' + (r.numeroOrdemSAP  '700' : '400') + '">' + (r.numeroOrdemSAP  Utils.safe(r.numeroOrdemSAP) : '-') + '</td>'
+        + '<td><span class="badge badge-PENDENTE" style="background:#e8f0fe;color:#1a73e8">' + Utils.safe(labelPrioridade(r.prioridade || 'NORMAL')) + '</span></td>'
+        + '<td style="font-size:12px">' + Utils.safe(usuariosMap[r.solicitanteId] || '-') + '</td>'
+        + '<td>' + badgeStatus(r.status) + '</td>'
+        + '<td style="text-align:center;white-space:nowrap">' + acoes + '</td>'
+        + '</tr>';
+    }).join('');
+  }
+
+  // Regras dinamicas de formulario
+  var prioridadesReq = [];
+  var fluxosReq = [];
+  var moedasReq = [];
+  var cotacaoAtual = 1;
+
+  function parseListaConfig(raw, fallback) {
+    if (!Array.isArray(raw) || !raw.length) return fallback.slice();
+    return raw.filter(function(x) { return x && x.value && x.label; });
+  }
+
+  function getCfgReq() {
+    var cfg = DB.Config.get();
+    prioridadesReq = parseListaConfig(cfg.reqPrioridades, [
+      { value: 'BAIXA', label: 'Baixa' },
+      { value: 'MEDIA', label: 'Média' },
+      { value: 'ALTA', label: 'Alta' },
+      { value: 'URGENTE', label: 'Urgente' }
+    ]);
+    fluxosReq = parseListaConfig(cfg.reqFluxos, [
+      { value: 'MATERIAL_NORMAL', label: 'Material - Normal' },
+      { value: 'MATERIAL_RETIRAR', label: 'Material - Retirar no Fornecedor' },
+      { value: 'SERVICO_INTERNO', label: 'Serviço - Interno' },
+      { value: 'SERVICO_EXTERNO', label: 'Serviço - Externo' },
+      { value: 'FRETE', label: 'Frete' }
+    ]);
+    moedasReq = (Array.isArray(cfg.reqMoedas) && cfg.reqMoedas.length  cfg.reqMoedas : ['BRL', 'USD', 'EUR', 'CNY', 'JPY', 'GBP'])
+      .map(function(m) { return String(m || '').toUpperCase(); })
+      .filter(Boolean);
+    return cfg;
+  }
+
+  function renderPrioridadeBotoes(defaultValue) {
+    var wrap = document.getElementById('req-prioridade-botoes');
+    var hidden = document.getElementById('req-prioridade');
+    if (!wrap || !hidden) return;
+    wrap.innerHTML = prioridadesReq.map(function(p) {
+      return '<button type="button" class="btn btn-secondary" data-prioridade="' + p.value + '" onclick="selecionarPrioridade(\'' + p.value + '\')">' + Utils.safe(p.label) + '</button>';
+    }).join('');
+    selecionarPrioridade(defaultValue || (prioridadesReq[0]  prioridadesReq[0].value : ''));
+  }
+
+  function selecionarPrioridade(value) {
+    var hidden = document.getElementById('req-prioridade');
+    if (!hidden) return;
+    hidden.value = value || '';
+    document.querySelectorAll('#req-prioridade-botoes [data-prioridade]').forEach(function(btn) {
+      if (btn.getAttribute('data-prioridade') === value) {
+        btn.className = 'btn btn-primary';
+      } else {
+        btn.className = 'btn btn-secondary';
+      }
+    });
+  }
+
+  function renderFluxos(defaultValue) {
+    var sel = document.getElementById('req-fluxo-entrada');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">- Selecione o fluxo -</option>' + fluxosReq.map(function(f) {
+      return '<option value="' + f.value + '">' + Utils.safe(f.label) + '</option>';
+    }).join('');
+    if (defaultValue) sel.value = defaultValue;
+  }
+
+  function renderMoedas() {
+    var sel = document.getElementById('req-moeda');
+    if (!sel) return;
+    sel.innerHTML = moedasReq.map(function(m) {
+      return '<option value="' + m + '"' + (m === 'BRL'  ' selected' : '') + '>' + m + '</option>';
+    }).join('');
+  }
+
+  function preencherDatalists() {
+    var cfg = getCfgReq();
+    var reqs = DB.Requisicoes.listar();
+    var fornecedores = (cfg.reqSugestoesFornecedor || []).concat(reqs.map(function(r) { return r.fornecedor || ''; }));
+    var centros = (cfg.reqSugestoesCentroCusto || []).concat(reqs.map(function(r) { return r.centroCustoK || r.centroCustoI || ''; }));
+    var materiais = (cfg.reqSugestoesMaterial || []).concat(reqs.map(function(r) { return r.descricaoMaterial || ''; }));
+    var equipamentos = (cfg.reqSugestoesEquipamento || []).concat(reqs.map(function(r) { return r.maquinaEquipamento || ''; }));
+
+    function fill(id, arr) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var unicos = {};
+      el.innerHTML = arr.filter(Boolean).map(function(x) { return String(x).trim(); }).filter(Boolean)
+        .filter(function(x) {
+          var k = x.toUpperCase();
+          if (unicos[k]) return false;
+          unicos[k] = true;
+          return true;
+        })
+        .slice(0, 200)
+        .map(function(v) { return '<option value="' + Utils.safe(v) + '"></option>'; }).join('');
+    }
+
+    fill('lista-fornecedores', fornecedores);
+    fill('lista-centro-custo', centros);
+    fill('lista-materiais', materiais);
+    fill('lista-equipamentos', equipamentos);
+
+    var pecas = DB.Pecas.ativas();
+    var elPecas = document.getElementById('lista-pecas');
+    if (elPecas) {
+      elPecas.innerHTML = pecas.map(function(p) {
+        return '<option value="[' + Utils.safe(p.codigo || '') + '] ' + Utils.safe(p.nome || '') + '"></option>';
+      }).join('');
+    }
+  }
+
+  function parseDinheiro(v) {
+    return parseFloat(String(v || '').replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+  }
+
+  function fmtDinheiro(v, moeda) {
+    var m = moeda || 'BRL';
+    try {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: m }).format(parseFloat(v) || 0);
+    } catch (e) {
+      return (m + ' ' + (parseFloat(v) || 0).toFixed(2));
+    }
+  }
+
+  function formatarInputValor(el) {
+    if (!el) return;
+    var n = parseDinheiro(el.value);
+    el.value = fmtDinheiro(n, 'BRL');
+  }
+
+  function atualizarCotacaoMoeda() {
+    var sel = document.getElementById('req-moeda');
+    var out = document.getElementById('req-cotacao');
+    if (!sel || !out) return Promise.resolve(1);
+    var moeda = sel.value || 'BRL';
+    if (moeda === 'BRL') {
+      cotacaoAtual = 1;
+      out.value = '1 ' + moeda + ' = 1,0000 BRL';
+      recalcularItensCompra();
+      return Promise.resolve(1);
+    }
+    out.value = 'Buscando cotação...';
+    return fetch('https://open.er-api.com/v6/latest/' + encodeURIComponent(moeda))
+      .then(function(r) { return r.ok  r.json() : Promise.reject(); })
+      .then(function(data) {
+        var brl = data && data.rates  data.rates.BRL : 0;
+        if (!brl) throw new Error('Sem BRL');
+        cotacaoAtual = brl;
+        out.value = '1 ' + moeda + ' = ' + brl.toLocaleString('pt-BR', { minimumFractionDigits: 4, maximumFractionDigits: 4 }) + ' BRL';
+        recalcularItensCompra();
+        return brl;
+      })
+      .catch(function() {
+        cotacaoAtual = 1;
+        out.value = 'Não foi possível obter cotação online agora.';
+        return 1;
+      });
+  }
+
+  function extrairCodigoDescricaoItem(texto) {
+    var bruto = String(texto || '').trim();
+    var m = bruto.match(/^\[([^\]]+)\]\s*(.+)$/);
+    if (m) {
+      return { codigo: String(m[1] || '').trim().toUpperCase(), descricao: String(m[2] || '').trim() };
+    }
+    return { codigo: '', descricao: bruto };
+  }
+
+  function adicionarItemCompra() {
+    var descricaoEl = document.getElementById('novo-item-descricao');
+    var unidadeEl = document.getElementById('novo-item-unidade');
+    var qtdEl = document.getElementById('novo-item-quantidade');
+    var unitEl = document.getElementById('novo-item-unitario');
+    var tbody = document.getElementById('itens-compra-tbody');
+    if (!descricaoEl || !tbody) return;
+
+    var detalhe = extrairCodigoDescricaoItem(descricaoEl.value);
+    var descricao = detalhe.descricao;
+    var codigo = detalhe.codigo;
+    var quantidade = parseFloat(qtdEl.value || '0');
+    var unitario = parseDinheiro(unitEl.value);
+    var unidade = (unidadeEl.value || 'UN').trim().toUpperCase();
+    if (!descricao || !(quantidade > 0)) {
+      Utils.toast('Informe descrição e quantidade do item.', 'warning');
+      return;
+    }
+
+    var rowId = 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);
+    var tr1 = document.createElement('tr');
+    tr1.id = rowId + '-desc';
+    tr1.className = 'item-desc-row';
+    tr1.setAttribute('data-descricao', descricao);
+    tr1.setAttribute('data-codigo', codigo);
+    tr1.innerHTML = '<td colspan="5" style="padding:10px 8px; vertical-align:middle"><strong>' + Utils.safe(descricao) + '</strong>'
+      + (codigo  '<span class="item-desc-code">[' + Utils.safe(codigo) + ']</span>' : '') + '</td>'
+      + '<td style="text-align:center;vertical-align:middle"><button type="button" class="btn-del-item" onclick="removerItemCompra(\'' + rowId + '\')" style="font-size:18px; padding:0"></button></td>';
+    tbody.appendChild(tr1);
+    var tr2 = document.createElement('tr');
+    tr2.id = rowId;
+    tr2.className = 'item-data-row';
+    tr2.innerHTML = '<td style="text-align:left;color:var(--text-muted);font-size:11px">Detalhes</td>'
+      + '<td data-k="unidade" style="text-align:center">' + Utils.safe(unidade) + '</td>'
+      + '<td data-k="quantidade" style="text-align:center">' + quantidade + '</td>'
+      + '<td data-k="unitario" style="text-align:right">' + unitario.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>'
+      + '<td data-k="total" style="text-align:right;font-weight:700">0,00</td>'
+      + '<td></td>';
+    tbody.appendChild(tr2);
+
+    descricaoEl.value = '';
+    unidadeEl.value = 'UN';
+    qtdEl.value = '1';
+    unitEl.value = '';
+    recalcularItensCompra();
+  }
+
+  function removerItemCompra(rowId) {
+    var tr = document.getElementById(rowId);
+    var trDesc = document.getElementById(rowId + '-desc');
+    if (tr) tr.remove();
+    if (trDesc) trDesc.remove();
+    recalcularItensCompra();
+  }
+
+  function coletarItensCompra() {
+    var items = [];
+    document.querySelectorAll('#itens-compra-tbody tr.item-data-row').forEach(function(tr) {
+      var trDesc = document.getElementById(tr.id + '-desc') || tr.previousElementSibling;
+      var descricao = trDesc  (trDesc.getAttribute('data-descricao') || '') : '';
+      var codigo = trDesc  (trDesc.getAttribute('data-codigo') || '') : '';
+      var unidade = (tr.querySelector('[data-k="unidade"]') || {}).textContent || 'UN';
+      var quantidade = parseFloat((tr.querySelector('[data-k="quantidade"]') || {}).textContent || '0');
+      var unitario = parseDinheiro((tr.querySelector('[data-k="unitario"]') || {}).textContent || '0');
+      if (descricao && quantidade > 0) {
+        items.push({
+          descricao: descricao,
+          codigo: codigo,
+          unidade: unidade,
+          quantidade: quantidade,
+          precoUnitario: unitario
+        });
+      }
+    });
+    return items;
+  }
+
+  function recalcularItensCompra() {
+    var moeda = (document.getElementById('req-moeda') || {}).value || 'BRL';
+    var itens = coletarItensCompra();
+    var totalMoeda = 0;
+    document.querySelectorAll('#itens-compra-tbody tr.item-data-row').forEach(function(tr) {
+      var qtd = parseFloat((tr.querySelector('[data-k="quantidade"]') || {}).textContent || '0');
+      var unitario = parseDinheiro((tr.querySelector('[data-k="unitario"]') || {}).textContent || '0');
+      var t = qtd * unitario;
+      totalMoeda += t;
+      var totalCell = tr.querySelector('[data-k="total"]');
+      if (totalCell) totalCell.textContent = t.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    });
+    var totalBRL = totalMoeda * (cotacaoAtual || 1);
+    var valorEl = document.getElementById('req-valor');
+    if (valorEl && totalMoeda > 0) {
+      valorEl.value = fmtDinheiro(totalBRL, 'BRL');
+    }
+    var resumo = document.getElementById('req-resumo-calculo');
+    if (resumo) {
+      resumo.textContent = itens.length  ('Subtotal ' + moeda + ': ' + fmtDinheiro(totalMoeda, moeda) + ' | Total em BRL: ' + fmtDinheiro(totalBRL, 'BRL'))
+        : 'Adicione itens para cálculo automático.';
+    }
+  }
+
+  function onItemDescricaoChange() {
+    var inDesc = document.getElementById('novo-item-descricao');
+    var inUn = document.getElementById('novo-item-unidade');
+    var text = (inDesc && inDesc.value  inDesc.value : '').toUpperCase();
+    if (!text) return;
+    var p = DB.Pecas.ativas().find(function(x) {
+      return ('[' + (x.codigo || '').toUpperCase() + '] ' + (x.nome || '').toUpperCase()) === text
+        || (x.codigo || '').toUpperCase() === text
+        || (x.nome || '').toUpperCase() === text;
+    });
+    if (p) {
+      inUn.value = (p.unidade || 'UN').toUpperCase();
+      inDesc.value = '[' + (p.codigo || '') + '] ' + (p.nome || '');
+    }
+  }
+
+  // Tipo CC / OI com 3 opcoes
+  function onTipoCCOIChange(radio) {
+    var val = radio.value;
+    var grupoK = document.getElementById('grupo-cc');
+    var grupoI = document.getElementById('grupo-cc-i');
+    var grupoF = document.getElementById('grupo-oi');
+    var inK = document.getElementById('req-centro-custo-k');
+    var inI = document.getElementById('req-centro-custo-i');
+    var inF = document.getElementById('req-numero-oi');
+
+    grupoK.style.display = val === 'CC'  '' : 'none';
+    grupoI.style.display = val === 'OI'  '' : 'none';
+    grupoF.style.display = val === 'OI2'  '' : 'none';
+
+    inK.required = val === 'CC';
+    inI.required = val === 'OI';
+    inF.required = val === 'OI2';
+  }
+
+  function abrirNovaRequisicao() {
+    document.getElementById('form-req').reset();
+    document.getElementById('req-id').value = '';
+    document.getElementById('modal-req-titulo').textContent = 'Nova Solicitação de Requisição de Compra';
+    document.getElementById('itens-compra-tbody').innerHTML = '';
+    document.getElementById('orcamento-info').style.display = 'none';
+    if (typeof limparOrcamentos === 'function') limparOrcamentos();
+
+    getCfgReq();
+    renderPrioridadeBotoes();
+    renderFluxos();
+    renderMoedas();
+    preencherDatalists();
+    atualizarCotacaoMoeda();
+
+    var sessao = Auth.getSessao();
+    document.getElementById('req-solicitante-nome').value = sessao  sessao.nome : '-';
+
+    document.getElementById('req-tipo-cc').checked = true;
+    onTipoCCOIChange(document.getElementById('req-tipo-cc'));
+
+    document.getElementById('grupo-responsavel-outro').style.display = 'none';
+    document.getElementById('req-responsavel-outro').required = false;
+
+    var itemDesc = document.getElementById('novo-item-descricao');
+    if (itemDesc && !itemDesc.dataset.hook) {
+      itemDesc.addEventListener('change', onItemDescricaoChange);
+      itemDesc.dataset.hook = '1';
+    }
+    var valorEl = document.getElementById('req-valor');
+    if (valorEl && !valorEl.dataset.hook) {
+      valorEl.addEventListener('blur', function() { formatarInputValor(valorEl); });
+      valorEl.dataset.hook = '1';
+    }
+    var unitEl = document.getElementById('novo-item-unitario');
+    if (unitEl && !unitEl.dataset.hook) {
+      unitEl.addEventListener('blur', function() {
+        var n = parseDinheiro(unitEl.value);
+        unitEl.value = n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      });
+      unitEl.dataset.hook = '1';
+    }
+    pecasCache = DB.Pecas.ativas();
+    Utils.abrirModal('modal-req');
+  }
+
+  function memorizarSugestoes(req) {
+    var cfg = DB.Config.get();
+    function pushUnique(key, value) {
+      if (!value) return;
+      if (!Array.isArray(cfg[key])) cfg[key] = [];
+      var v = String(value).trim();
+      if (!v) return;
+      var exists = cfg[key].some(function(x) { return String(x).toUpperCase() === v.toUpperCase(); });
+      if (!exists) cfg[key].push(v);
+    }
+    pushUnique('reqSugestoesFornecedor', req.fornecedor);
+    pushUnique('reqSugestoesCentroCusto', req.centroCustoK || req.centroCustoI);
+    pushUnique('reqSugestoesMaterial', req.descricaoMaterial);
+    pushUnique('reqSugestoesEquipamento', req.maquinaEquipamento);
+    DB.Config.set(cfg);
+  }
+
+  function salvarRequisicao(e) {
+    e.preventDefault();
+
+    var itensCompra = coletarItensCompra();
+    var tipoCCOI = document.querySelector('input[name="req-tipo-cc-oi"]:checked').value;
+    var sessao = Auth.getSessao();
+    var responsavel = document.getElementById('req-responsavel').value;
+    var responsavelFinal = responsavel === 'OUTRO'  document.getElementById('req-responsavel-outro').value.trim() : responsavel;
+
+    var dataEntrega = document.getElementById('req-data-entrega').value;
+    if (dataEntrega) {
+      var hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      var dataSel = new Date(dataEntrega + 'T00:00:00');
+      if (dataSel < hoje && !confirm('A data de entrega informada é retroativa. Confirmar mesmo assim')) {
+        return;
+      }
+    }
+
+    var moeda = (document.getElementById('req-moeda').value || 'BRL').toUpperCase();
+    var valorDigitado = parseDinheiro(document.getElementById('req-valor').value);
+    var totalMoedaItens = itensCompra.reduce(function(acc, it) { return acc + ((it.quantidade || 0) * (it.precoUnitario || 0)); }, 0);
+    var baseMoeda = totalMoedaItens > 0  totalMoedaItens : valorDigitado;
+    var cot = (moeda === 'BRL')  1 : (cotacaoAtual || 1);
+    var totalBRL = moeda === 'BRL'  baseMoeda : (baseMoeda * cot);
+
+    var descricaoResumo = document.getElementById('req-descricao-material').value.trim();
+    if (!descricaoResumo && itensCompra.length) {
+      descricaoResumo = itensCompra.map(function(it) { return it.descricao + ' (x' + it.quantidade + ')'; }).join('; ');
+    }
+
+    var req = {
+      id:                  document.getElementById('req-id').value || undefined,
+      prioridade:          document.getElementById('req-prioridade').value,
+      responsavel:         responsavelFinal,
+      tipoCCOI:            tipoCCOI,
+      centroCustoK:        tipoCCOI === 'CC'  document.getElementById('req-centro-custo-k').value.trim() : '',
+      centroCustoI:        tipoCCOI === 'OI'  document.getElementById('req-centro-custo-i').value.trim() : '',
+      numeroOI:            tipoCCOI === 'OI2'  document.getElementById('req-numero-oi').value.trim() : '',
+      descricaoMaterial:   descricaoResumo,
+      maquinaEquipamento:  document.getElementById('req-maquina-equipamento').value.trim(),
+      classificacao:       document.getElementById('req-classificacao').value.trim(),
+      fluxoEntrada:        document.getElementById('req-fluxo-entrada').value,
+      fornecedor:          document.getElementById('req-fornecedor').value.trim(),
+      numeroOrcamento:     document.getElementById('req-numero-orcamento').value.trim(),
+      valor:               totalBRL,
+      valorTexto:          fmtDinheiro(totalBRL, 'BRL'),
+      moeda:               moeda,
+      cotacaoMoeda:        cot,
+      valorMoedaOriginal:  baseMoeda,
+      itens:               itensCompra,
+      dataEntrega:         dataEntrega,
+      justificativa:       document.getElementById('req-justificativa').value.trim(),
+      observacoes:         document.getElementById('req-observacoes').value.trim(),
+      solicitanteId:       sessao  sessao.id : ''
+    };
+
+    var isNovaReq = !req.id;
+    var reqSalva = DB.Requisicoes.salvar(req);
+
+    var anexos = (typeof orcamentosTemporarios !== 'undefined' && Array.isArray(orcamentosTemporarios))
+       orcamentosTemporarios.slice()
+      : (typeof orcamentoTemporario !== 'undefined' && orcamentoTemporario  [orcamentoTemporario] : []);
+
+    var uploadPromise = Promise.resolve();
+    if (reqSalva && anexos.length) {
+      uploadPromise = Promise.all(anexos.map(function(arq) {
+        var uploadData = {
+          base64: arq.base64,
+          nomeOriginal: arq.nomeOriginal,
+          reqId: reqSalva.id
+        };
+        return fetch('/api/orcamentos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(uploadData)
+        }).then(function(resp) {
+          return resp.ok  resp.json() : Promise.reject('Erro upload');
+        });
+      })).then(function(resultados) {
+        reqSalva.orcamentos = resultados.map(function(res) {
+          return {
+            filename: res.filename,
+            nomeOriginal: res.nomeOriginal,
+            tamanho: res.tamanho,
+            uploadadoEm: res.uploadadoEm
+          };
+        });
+        reqSalva.orcamento = reqSalva.orcamentos[0] || null;
+        DB.Requisicoes.salvar(reqSalva);
+        if (typeof limparOrcamentos === 'function') limparOrcamentos();
+      }).catch(function(err) {
+        console.error('Erro ao fazer upload de orcamentos:', err);
+        Utils.toast('Requisição salva, mas houve erro em um ou mais anexos.', 'warning');
+      });
+    }
+
+    uploadPromise.finally(function() {
+      memorizarSugestoes(req);
+      Utils.fecharModal('modal-req');
+      Utils.toast('Requisição enviada com sucesso!', 'success');
+
+      var maq = (req.maquinaEquipamento || '').trim();
+      if (maq) {
+        var jaExisteAtivo = DB.Ativos.listar().some(function(a) {
+          var tag = String(a.tag || '').trim().toUpperCase();
+          var desc = String(a.descricao || '').trim().toUpperCase();
+          var alvo = maq.toUpperCase();
+          return tag === alvo || desc === alvo;
+        });
+        if (!jaExisteAtivo && confirm('Deseja cadastrar este equipamento nos Ativos\n\n' + maq)) {
+          DB.Ativos.salvar({ tag: maq, descricao: maq, setor: '', localizacao: '' });
+          Utils.toast('Equipamento cadastrado em Ativos.', 'success');
+        }
+      }
+
+      if (reqSalva && isNovaReq) {
+        DB.Usuarios.listar().filter(function(u) { return u.nivel === 'ADMIN' && u.ativo !== false; }).forEach(function(admin) {
+          DB.Notificacoes.criar({
+            userId: admin.id,
+            tipo: 'PENDENTE_APROVACAO',
+            titulo: 'Nova requisição aguardando aprovação ',
+            mensagem: 'Requisição ' + (reqSalva.numero || reqSalva.id) + ' criada por ' + (sessao  sessao.nome : '-') + ' aguarda sua aprovação.',
+            referenciaId: reqSalva.id,
+            referenciaTipo: 'req'
+          });
+        });
+        notificarAprovadores(reqSalva.id, true);
+      }
+      renderTabela();
+    });
+  }
+
+  // ── Mudar Status ──────────────────────────────────────
+  function mudarStatus(id, status) {
+    var r = DB.Requisicoes.buscarId(id);
+    if (!r) return;
+    r.status = status;
+    DB.Requisicoes.salvar(r);
+    Utils.toast('Status atualizado.', 'success');
+    Utils.fecharModal('modal-detalhe');
+    renderTabela();
+  }
+
+  function verDetalhe(id) {
+    var r = DB.Requisicoes.buscarId(id);
+    if (!r) return;
+    var usuariosMap = {};
+    DB.Usuarios.listar().forEach(function(u) { usuariosMap[u.id] = u.nome; });
+    var pecasMap = {};
+    DB.Pecas.listar().forEach(function(p) { pecasMap[p.id] = p; });
+    var itens = r.itens || (r.pecaId  [{ pecaId: r.pecaId, quantidade: r.quantidade }] : []);
+
+    function row(label, val) {
+      if (!val && val !== 0) return '';
+      return '<div class="detail-row"><span class="detail-label">' + label + '</span><span class="detail-value">' + val + '</span></div>';
+    }
+
+    var ativoParadoHtml = '';
+    if (r.ativoParadoId) {
+      var at = DB.Ativos.buscarId(r.ativoParadoId);
+      if (at) ativoParadoHtml = '<div class="detail-row" style="border:1.5px solid var(--danger);border-radius:6px;padding:10px;background:var(--bg)">'
+        + '<span class="detail-label" style="color:var(--danger)"> Ativo / Máquina Parada</span>'
+        + '<span class="detail-value" style="color:var(--danger);font-weight:700">' + Utils.safe(at.tag) + ' - ' + Utils.safe(at.descricao) + '</span></div>';
+    }
+
+    var orcamentosReq = (Array.isArray(r.orcamentos) && r.orcamentos.length)
+       r.orcamentos
+      : (r.orcamento && r.orcamento.filename  [r.orcamento] : []);
+    var orcHtml = '';
+    if (orcamentosReq.length) {
+      var linksOrc = orcamentosReq.map(function(orc) {
+        var tamanhoTxt = orc.tamanho  ' <small style="color:var(--text-muted)">(' + (orc.tamanho / 1024).toFixed(1) + ' KB)</small>' : '';
+        return '<div><a href="/api/orcamentos/' + Utils.safe(orc.filename) + '" target="_blank" style="color:var(--primary);font-weight:600">'
+          + Utils.safe(orc.nomeOriginal || orc.filename) + '</a>' + tamanhoTxt + '</div>';
+      }).join('');
+      orcHtml = '<div class="detail-row" style="align-items:flex-start"><span class="detail-label"> Orçamentos Anexados (' + orcamentosReq.length + ')</span>'
+        + '<span class="detail-value">' + linksOrc + '</span></div>';
+    }
+
+    var itensHtml = '';
+    if (itens.length > 0) {
+      itensHtml = '<div style="margin-top:14px"><div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:6px">ITENS DO CATÁLOGO (' + itens.length + ')</div>'
+        + '<table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr>'
+        + '<th style="background:var(--bg);padding:6px 10px;text-align:left;border-bottom:2px solid var(--border)">Peça</th>'
+        + '<th style="background:var(--bg);padding:6px 10px;text-align:center;border-bottom:2px solid var(--border)">Qtd</th>'
+        + '<th style="background:var(--bg);padding:6px 10px;text-align:left;border-bottom:2px solid var(--border)">Unidade</th>'
+        + '</tr></thead><tbody>'
+        + itens.map(function(it) {
+            var p = pecasMap[it.pecaId];
+            return '<tr>'
+              + '<td style="padding:7px 10px;border-bottom:1px solid var(--border)">' + (p  '<strong>' + Utils.safe(p.nome) + '</strong><br><small style="color:var(--text-muted)">' + Utils.safe(p.codigo) + '</small>' : '-') + '</td>'
+              + '<td style="padding:7px 10px;border-bottom:1px solid var(--border);text-align:center;font-weight:700">' + it.quantidade + '</td>'
+              + '<td style="padding:7px 10px;border-bottom:1px solid var(--border)">' + (p  Utils.safe(p.unidade) : '-') + '</td>'
+              + '</tr>';
+          }).join('')
+        + '</tbody></table></div>';
+    }
+
+    var ccOiLabel   = r.tipoCCOI === 'OI'  'N da Ordem de Investimento (OI)' : 'Centro de Custo (CC)';
+    var ccOiVal = '';
+    if (r.tipoCCOI === 'OI2') {
+      ccOiLabel = 'Ordem de Investimento (F)';
+      ccOiVal = r.numeroOI || '-';
+    } else if (r.tipoCCOI === 'CC') {
+      ccOiLabel = 'Centro de Custo (K)';
+      ccOiVal = r.centroCustoK || '-';
+    } else {
+      ccOiLabel = 'Centro de Custo (I)';
+      ccOiVal = r.centroCustoI || '-';
+    }
+
+    document.getElementById('detalhe-titulo').textContent = 'Requisição ' + (r.numero || '-');
+    document.getElementById('detalhe-body').innerHTML =
+      '<div class="item-detail-info">'
+      + row('Número', '<span style="font-weight:700;font-family:monospace">' + (r.numero || '-') + '</span>')
+      + row('Data / Hora', Utils.formatarDataHora(r.criadoEm))
+      + row('Status', badgeStatus(r.status))
+      + row('Prioridade', r.prioridade  labelPrioridade(r.prioridade) : '-')
+      + row('Responsável', r.responsavel  Utils.safe(r.responsavel) : '-')
+      + row('Solicitante', Utils.safe(usuariosMap[r.solicitanteId] || '-'))
+      + '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">'
+      + row('Material / Serviço', '<strong>' + Utils.safe(r.descricaoMaterial || '-') + '</strong>')
+      + row('Máquina / Equipamento', Utils.safe(r.maquinaEquipamento || '-'))
+      + row('Classificação', obterLabelClassificacao(r.classificacao))
+      + row('Fluxo de Entrada', labelFluxoEntrada(r.fluxoEntrada))
+      + '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">'
+      + row(ccOiLabel, Utils.safe(ccOiVal))
+      + '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">'
+      + row('Fornecedor', Utils.safe(r.fornecedor || r.fornecedorSugerido || '-'))
+      + row('Nº do Orçamento', Utils.safe(r.numeroOrcamento || '-'))
+      + row('Valor Total', r.valor  '<strong>' + fmtValor(r.valor) + '</strong>' : '-')
+      + row('Moeda', Utils.safe(r.moeda || 'BRL'))
+      + row('Valor na Moeda', (typeof r.valorMoedaOriginal === 'number')  fmtDinheiro(r.valorMoedaOriginal, r.moeda || 'BRL') : '-')
+      + row('Cotação', (typeof r.cotacaoMoeda === 'number')  (r.cotacaoMoeda.toLocaleString('pt-BR', { minimumFractionDigits: 4, maximumFractionDigits: 4 }) + ' BRL') : '-')
+      + row('Data Estimada de Entrega', r.dataEntrega  new Date(r.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR') : '-')
+      + orcHtml
+      + (r.justificativa  '<div class="detail-row" style="flex-direction:column;gap:4px"><span class="detail-label">Justificativa</span><span style="font-size:13px">' + Utils.safe(r.justificativa) + '</span></div>' : '')
+      + (r.observacoes  '<div class="detail-row" style="flex-direction:column;gap:4px"><span class="detail-label">Observa-es</span><span style="font-size:13px">' + Utils.safe(r.observacoes) + '</span></div>' : '')
+            + '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">'
+      + '<div class="detail-row" style="flex-direction:column;gap:6px">'
+        + '<span class="detail-label" style="color:var(--primary);font-weight:700">N&#186; Ordem de Compra SAP</span>'
+        + (r.numeroOrdemSAP  '<span style="font-size:14px;font-weight:700;font-family:monospace;color:var(--primary)">' + Utils.safe(r.numeroOrdemSAP) + '</span>'
+            : '<span style="font-size:12px;color:var(--text-muted)">N&#227;o informado ainda</span>')
+        + (r.status === 'PENDENTE'  '<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">'
+                + '<input type="text" id="input-ordem-sap" value="' + Utils.safe(r.numeroOrdemSAP || '') + '" placeholder="Ex: 4500012345" style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:13px;color:var(--text);background:var(--bg)">'
+                + '<button class="btn btn-primary btn-sm" onclick="salvarOrdemSAP(\'' + r.id + '\')">Confirmar SAP</button>'
+              + '</div>'
+              + '<button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="document.getElementById(\'bloco-reprovacao\').style.display=\'\'">Reprovar no SAP</button>'
+              + '<div id="bloco-reprovacao" style="display:none;margin-top:10px;padding:12px;background:var(--bg);border:1px solid var(--danger);border-radius:8px">'
+                + '<div style="font-size:11px;font-weight:700;color:var(--danger);text-transform:uppercase;margin-bottom:6px">Motivo da Reprovação</div>'
+                + '<textarea id="input-motivo-reprovacao" rows="3" placeholder="Descreva o motivo..." style="width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);background:var(--bg);resize:vertical"></textarea>'
+                + '<button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="reprovarSAP(\'' + r.id + '\')">Confirmar Reprovação</button>'
+              + '</div>'
+            : '')
+        + (r.status === 'SOLICITADO'  '<div style="padding:12px;background:var(--bg);border:1.5px solid var(--primary);border-radius:8px">'
+                + '<div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;margin-bottom:8px">Confirmar Recebimento</div>'
+                + '<div style="display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px">'
+                  + '<label style="font-size:12px;color:var(--text-muted)">Quantidade Recebida</label>'
+                  + '<input type="number" id="input-qtd-recebida" min="0.01" step="0.01" placeholder="Ex: 5" style="padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);background:var(--bg)">'
+                  + '<label style="font-size:12px;color:var(--text-muted)">Observação</label>'
+                  + '<input type="text" id="input-obs-recebimento" placeholder="Opcional..." style="padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--text);background:var(--bg)">'
+                + '</div>'
+                + '<button class="btn btn-success btn-sm" onclick="confirmarRecebimento(\'' + r.id + '\')">Confirmar Recebimento</button>'
+              + '</div>'
+            : '')
+        + (r.status === 'RECEBIDO'  '<div style="padding:10px;background:#e6f4ea;border:1px solid #4caf50;border-radius:8px">'
+                + '<div style="font-size:11px;font-weight:700;color:#2e7d32;text-transform:uppercase;margin-bottom:4px">Material Recebido</div>'
+                + (r.quantidadeRecebida  '<div>Qtd: <strong>' + r.quantidadeRecebida + '</strong></div>' : '')
+                + (r.obsRecebimento  '<div style="font-size:12px;color:var(--text-muted)">' + Utils.safe(r.obsRecebimento) + '</div>' : '')
+                + (r.recebidoEm  '<div style="font-size:12px;color:var(--text-muted)">Em: ' + Utils.formatarDataHora(r.recebidoEm) + (r.recebidoPorNome  ' por ' + Utils.safe(r.recebidoPorNome) : '') + '</div>' : '')
+              + '</div>'
+            : '')
+        + ((r.status === 'REJEITADO' || r.status === 'REJEITADA')  '<div style="padding:10px;background:#fce8e6;border:1px solid #f44336;border-radius:8px">'
+                + '<div style="font-size:11px;font-weight:700;color:#c62828;text-transform:uppercase;margin-bottom:4px">Reprovada no SAP</div>'
+                + (r.motivoRejeicao  '<div style="font-size:13px">' + Utils.safe(r.motivoRejeicao) + '</div>' : '')
+                + (r.rejeitadoEm  '<div style="font-size:12px;color:var(--text-muted)">Em: ' + Utils.formatarDataHora(r.rejeitadoEm) + (r.rejeitadoPorNome  ' por ' + Utils.safe(r.rejeitadoPorNome) : '') + '</div>' : '')
+              + '</div>'
+            : '')
+      + '</div>'
+      + '</div>'
+      + itensHtml;
+
+    var footer = document.getElementById('detalhe-footer');
+    footer.innerHTML = '<button class="btn btn-secondary" onclick="Utils.fecharModal(\'modal-detalhe\')">Fechar</button>'
+      + '<button class="btn btn-secondary" onclick="notificarAprovadores(\'' + r.id + '\')"> Enviar por E-mail</button>'
+      + '<button class="btn btn-secondary" onclick="imprimirReq(\'' + r.id + '\');Utils.fecharModal(\'modal-detalhe\')"> Imprimir</button>';
+    Utils.abrirModal('modal-detalhe');
+  }
+
+  // ── Notificar Aprovadores por E-mail ──────────────────
+  function notificarAprovadores(reqId, silencioso) {
+    var r = DB.Requisicoes.buscarId(reqId);
+    if (!r) return;
+    var cfg    = DB.Config.get();
+    var emails = (cfg.emailAprovadores || '').trim();
+    if (!emails) {
+      if (!silencioso) Utils.toast('Nenhum e-mail de aprovador configurado. Acesse Configurações > Aprovação.', 'warning');
+      return;
+    }
+
+    var usuariosMap = {};
+    DB.Usuarios.listar().forEach(function(u) { usuariosMap[u.id] = u.nome; });
+    var sysUrl = (cfg.sysUrl || window.location.origin + '/').replace(/\/$/, '/');
+    var linkRequisicao = sysUrl + 'requisicoes.htmlid=' + r.id + '&acao=detalhe';
+    var linkSap = sysUrl + 'requisicoes.htmlid=' + r.id + '&acao=sap';
+
+    // ---- DATA E HORA ----
+    var dataHora = new Date(r.criadoEm);
+    var dataFormatada = dataHora.toLocaleDateString('pt-BR');
+    var horaFormatada = dataHora.toLocaleTimeString('pt-BR');
+
+    // ---- CC/OI COM OS 3 TIPOS (K, I, F) ----
+    var ccOiTxt = '';
+    if (r.tipoCCOI === 'CC') {
+      ccOiTxt = 'CENTRO DE CUSTO (K): ' + (r.centroCustoK || '-');
+    } else if (r.tipoCCOI === 'CC-I' || r.tipoCCOI === 'OI') {
+      ccOiTxt = 'CENTRO DE CUSTO (I): ' + (r.centroCustoI || '-');
+    } else if (r.tipoCCOI === 'OI2') {
+      ccOiTxt = 'ORDEM DE INVESTIMENTO (F): ' + (r.numeroOI || '-');
+    } else {
+      ccOiTxt = 'CENTRO DE CUSTO (K): ' + (r.centroCustoK || '-');
+    }
+
+    // ---- ORÇAMENTOS COM LINKS ----
+    var orcamentosReq = (Array.isArray(r.orcamentos) && r.orcamentos.length)
+       r.orcamentos
+      : (r.orcamento && r.orcamento.filename  [r.orcamento] : []);
+    var orcamentoTxt = orcamentosReq.length  ('ORÇAMENTOS ANEXADOS (' + orcamentosReq.length + '):\n' + orcamentosReq.map(function(orc, idx) {
+          return (idx + 1) + '. ' + (orc.nomeOriginal || orc.filename) + '\n   Link: ' + sysUrl + 'api/orcamentos/' + orc.filename;
+        }).join('\n') + '\n')
+      : 'Nenhum arquivo de orçamento anexado.\n';
+    var itensTxt = (Array.isArray(r.itens) && r.itens.length)  r.itens.map(function(it, idx) {
+          var desc = it.descricao || it.nome || it.pecaId || 'Item';
+          var qtd = it.quantidade || 0;
+          var un = it.unidade || 'UN';
+          var pu = (it.precoUnitario || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          return (idx + 1) + '. ' + desc + ' | Qtd: ' + qtd + ' ' + un + ' | Unit: ' + pu;
+        }).join('\n')
+      : 'N/A';
+
+    // ---- CLASSIFICAÇÃO COM LABEL + PRIORIDADE + RESPONSÁVEL ----
+    var classificacaoLabel = obterLabelClassificacao(r.classificacao) || r.classificacao || '-';
+    var prioridadeLabel = labelPrioridade(r.prioridade) || r.prioridade || 'Normal';
+    var responsavelNome = r.responsavel  (r.responsavelOutro || usuariosMap[r.responsavel] || r.responsavel) : '-';
+
+    var emailjsKey      = cfg.emailjsPublicKey  || '';
+    var emailjsService  = cfg.emailjsServiceId  || '';
+    // Usa template especifico de aprovacao quando configurado.
+    var emailjsTemplate = cfg.emailjsTemplateIdAprovacao || cfg.emailjsTemplateId || '';
+
+    var emailParams = {
+      req_numero:        r.numero || r.id,
+      req_prioridade:    prioridadeLabel,
+      req_data:          dataFormatada,
+      req_hora:          horaFormatada,
+      req_solicitante:   usuariosMap[r.solicitanteId] || '-',
+      req_responsavel:   responsavelNome,
+      req_material:      r.descricaoMaterial || '-',
+      req_maquina:       r.maquinaEquipamento || '-',
+      req_classificacao: classificacaoLabel,
+      req_fluxo:         r.fluxoEntrada || '-',
+      req_cc_oi:         ccOiTxt,
+      req_fornecedor:    r.fornecedor || r.fornecedorSugerido || '-',
+      req_num_orcamento: r.numeroOrcamento || '-',
+      req_valor:         r.valor  fmtValor(r.valor) : '-',
+      req_moeda:         r.moeda || 'BRL',
+      req_cotacao:       (r.cotacaoMoeda || 1).toLocaleString('pt-BR', { minimumFractionDigits: 4, maximumFractionDigits: 4 }),
+      req_valor_original_moeda: (r.valorMoedaOriginal || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+      req_itens:         itensTxt,
+      req_data_entrega:  r.dataEntrega  new Date(r.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR') : '-',
+      req_justificativa: r.justificativa || '-',
+      req_observacoes:   r.observacoes || '-',
+      orcamento_info:    orcamentoTxt,
+      link_requisicao:   linkRequisicao,
+      link_sap:          linkSap,
+      // Aliases para templates antigos do EmailJS (retrocompatibilidade)
+      req_urgencia:      prioridadeLabel,
+      req_numeroOrcamento: r.numeroOrcamento || '-',
+      req_dataEntrega:   r.dataEntrega  new Date(r.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR') : '-',
+      req_centroCusto:   ccOiTxt,
+      link_aprovacao:    linkSap,
+      link_rejeicao:     linkRequisicao,
+    };
+
+    if (emailjsKey && emailjsService && emailjsTemplate) {
+      if (!notificarAprovadores._ejsKey || notificarAprovadores._ejsKey !== emailjsKey) {
+        try { emailjs.init({ publicKey: emailjsKey }); notificarAprovadores._ejsKey = emailjsKey; } catch(e) {}
+      }
+      var emailList = emails.split(',').map(function(e) { return e.trim(); }).filter(Boolean);
+      var promises  = emailList.map(function(email) {
+        return emailjs.send(emailjsService, emailjsTemplate, Object.assign({}, emailParams, { to_email: email }));
+      });
+      Promise.all(promises)
+        .then(function() { Utils.toast('E-mail enviado aos aprovadores com sucesso!', 'success'); })
+        .catch(function(err) {
+          var d = (err && err.text)  ' - ' + err.text : ((err && err.status)  ' - status ' + err.status : (typeof err === 'string'  ' - ' + err : ''));
+          Utils.toast('Erro ao enviar e-mail' + d + '. Verifique as configurações.', 'error');
+        });
+    } else {
+      if (!silencioso) Utils.toast('EmailJS não configurado. Configure em Configurações > Aprovação.', 'warning');
+      var corpo =
+        'Olá,\n\n'
+        + 'Uma nova requisição de compra foi criada e aguarda aprovação.\n\n'
+        + '------------------------------------------\n'
+        + 'REQUISIÇÃO DE COMPRA Nº ' + (r.numero || r.id) + '\n'
+        + '------------------------------------------\n\n'
+        + 'DATA: ' + dataFormatada + '   |   HORA: ' + horaFormatada + '\n'
+        + 'PRIORIDADE: ' + prioridadeLabel + '\n'
+        + 'SOLICITANTE: ' + (usuariosMap[r.solicitanteId] || '-') + '\n'
+        + 'RESPONSÁVEL: ' + responsavelNome + '\n'
+        + '\n---- MATERIAL / SERVIÇO ----------------------------------------\n'
+        + 'DESCRIÇÃO: '         + (r.descricaoMaterial || '-') + '\n'
+        + 'MÁQUINA/EQUIPAMENTO: ' + (r.maquinaEquipamento || '-') + '\n'
+        + 'CLASSIFICAÇÃO: ' + classificacaoLabel + '\n'
+        + 'FLUXO DE ENTRADA: ' + (r.fluxoEntrada || '-') + '\n'
+        + '\n---- CENTRO DE CUSTO / ORDEM ------------------------------------\n'
+        + ccOiTxt + '\n'
+        + '\n---- FORNECEDOR E ORÇAMENTO ------------------------------------\n'
+        + 'FORNECEDOR: ' + (r.fornecedor || r.fornecedorSugerido || '-') + '\n'
+        + 'Nº ORÇAMENTO: ' + (r.numeroOrcamento || '-') + '\n'
+        + 'VALOR TOTAL (BRL): ' + (r.valor  fmtValor(r.valor) : '-') + '\n'
+        + 'MOEDA ORIGEM: ' + (r.moeda || 'BRL') + '\n'
+        + 'VALOR NA MOEDA: ' + ((r.valorMoedaOriginal || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) + '\n'
+        + 'COTAÇÃO DO DIA: ' + ((r.cotacaoMoeda || 1).toLocaleString('pt-BR', { minimumFractionDigits: 4, maximumFractionDigits: 4 })) + '\n'
+        + 'DATA ESTIMADA ENTREGA: ' + (r.dataEntrega  new Date(r.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR') : '-') + '\n'
+        + orcamentoTxt
+        + '\nITENS SOLICITADOS:\n' + itensTxt + '\n'
+        + '\n---- JUSTIFICATIVA ---------------------------------------------\n'
+        + (r.justificativa || '-') + '\n'
+        + (r.observacoes  '\nOBSERVA-ES: ' + r.observacoes + '\n' : '')
+        + '\n----------------------------------------------------------------\n\n'
+        + ' ACESSAR E PREENCHER DADOS DE SAP:\n'
+        + linkSap + '\n\n'
+        + ' ACESSAR REQUISIÇÃO COMPLETA:\n'
+        + linkRequisicao + '\n\n'
+        + '- Atlas PCM Almoxarifado';
+      var assunto = encodeURIComponent('[ATLAS PCM] Nova Req. ' + (r.numero || r.id) + ' - ' + prioridadeLabel + ' - ' + (r.descricaoMaterial || '').substring(0, 40));
+      window.open('mailto:' + emails + 'subject=' + assunto + '&body=' + encodeURIComponent(corpo));
+    }
+  }
+
+  // ── Imprimir Requisição ───────────────────────────────
+  function imprimirReq(id) {
+    var r = DB.Requisicoes.buscarId(id);
+    if (!r) return;
+    var cfg      = DB.Config.get();
+    var pecasMap = {};
+    DB.Pecas.listar().forEach(function(p) { pecasMap[p.id] = p; });
+    var usuariosMap = {};
+    DB.Usuarios.listar().forEach(function(u) { usuariosMap[u.id] = u.nome; });
+    var itens = r.itens || (r.pecaId  [{ pecaId: r.pecaId, quantidade: r.quantidade }] : []);
+
+    var ativoParadoHtml = '';
+    if (r.ativoParadoId) {
+      var at = DB.Ativos.buscarId(r.ativoParadoId);
+      if (at) ativoParadoHtml = '<div style="grid-column:1/-1;border:1.5pt solid #c62828;border-radius:4pt;padding:8pt;background:#fff5f5">'
+        + '<div style="font-size:7pt;color:#c62828;text-transform:uppercase;font-weight:700;margin-bottom:2pt"> Ativo / Máquina com Parada</div>'
+        + '<div style="font-size:10.5pt;font-weight:700;color:#c62828">' + Utils.safe(at.tag) + ' - ' + Utils.safe(at.descricao) + '</div></div>';
+    }
+
+    var orcamentosReq = (Array.isArray(r.orcamentos) && r.orcamentos.length)
+       r.orcamentos
+      : (r.orcamento && r.orcamento.filename  [r.orcamento] : []);
+
+    var logoHtml = cfg.logo
+       '<img src="' + cfg.logo + '" style="max-height:45pt;max-width:100pt;object-fit:contain" alt="Logo">'
+      : '<div style="font-size:14pt;font-weight:800;color:#1e3a5f">' + Utils.safe(cfg.empresa || 'Atlas PCM') + '</div>';
+
+    var urgenciaCor = { BAIXA: '#2e7d32', MEDIA: '#1e88e5', ALTA: '#e65100', URGENTE: '#c62828' }[r.prioridade] || '#333';
+    var ccOiLabel   = r.tipoCCOI === 'OI'  'N da Ordem de Investimento (OI)' : 'Centro de Custo (CC)';
+    var ccOiVal     = r.tipoCCOI === 'OI'  (r.numeroOI || '-') : (r.centroCusto || '-');
+
+    function mi(label, val) {
+      return '<div><div style="font-size:7pt;color:#888;text-transform:uppercase;letter-spacing:.4pt">' + label + '</div>'
+        + '<div style="font-size:10pt;font-weight:600;color:#1e3a5f;margin-top:2pt">' + val + '</div></div>';
+    }
+
+    var itensHtml = itens.length > 0  itens.map(function(it, idx) {
+      var p = pecasMap[it.pecaId];
+      return '<tr style="background:' + (idx % 2 === 0  '#fff' : '#f5f8fc') + '">'
+        + '<td style="text-align:center;width:4%;padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (idx + 1) + '</td>'
+        + '<td style="font-family:monospace;width:12%;padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (p  Utils.safe(p.codigo) : '-') + '</td>'
+        + '<td style="padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (p  '<strong>' + Utils.safe(p.nome) + '</strong>' : '-') + '</td>'
+        + '<td style="text-align:center;width:8%;padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (p  Utils.safe(p.unidade || '') : '-') + '</td>'
+        + '<td style="text-align:center;width:10%;font-weight:700;padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + it.quantidade + '</td>'
+        + '</tr>';
+    }).join('') : '';
+
+    document.getElementById('area-print').innerHTML =
+      '<div style="font-family:Arial,Helvetica,sans-serif;font-size:10pt;color:#111;max-width:180mm;margin:0 auto">'
+      // Cabeçalho
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;border-bottom:2.5pt solid #1e3a5f;padding-bottom:10pt;margin-bottom:14pt">'
+        + '<div style="display:flex;align-items:center;gap:14pt">' + logoHtml
+          + '<div><div style="font-size:12pt;font-weight:800;color:#1e3a5f">' + Utils.safe(cfg.empresa || 'Atlas Ind. Eletrodomésticos') + '</div>'
+          + '<div style="font-size:8pt;color:#555">' + Utils.safe(cfg.sub || 'PCM Almoxarifado') + '</div></div>'
+        + '</div>'
+        + '<div style="text-align:right">'
+          + '<div style="font-size:13pt;font-weight:800;color:#1e3a5f;letter-spacing:.5pt">REQUISIÇÃO DE COMPRA</div>'
+          + '<div style="font-size:10pt;font-weight:700;font-family:monospace;color:#1e3a5f">' + (r.numero || '-') + '</div>'
+          + '<div style="font-size:8pt;color:#888">Emissão: ' + Utils.formatarData(r.criadoEm) + '</div>'
+        + '</div>'
+      + '</div>'
+      // Prioridade urgente
+      + (r.prioridade === 'URGENTE'  '<div style="background:#c62828;color:#fff;padding:6pt 12pt;border-radius:4pt;font-size:9pt;font-weight:700;margin-bottom:12pt;text-align:center"> PRIORIDADE URGENTE - Requer Atendimento Imediato</div>' : '')
+      // Bloco: Identificação
+      + '<div style="background:#f5f8fc;border:.5pt solid #c0cfe0;border-radius:5pt;padding:10pt;margin-bottom:8pt">'
+        + '<div style="font-size:8pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;margin-bottom:8pt;border-bottom:.5pt solid #c0cfe0;padding-bottom:4pt">Identificação</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8pt">'
+        + mi('Solicitante', Utils.safe(usuariosMap[r.solicitanteId] || '-'))
+        + mi('Prioridade', '<span style="color:' + urgenciaCor + '">' + labelPrioridade(r.prioridade || 'NORMAL') + ' - ' + (r.descricaoMaterial || '').substring(0, 40))
+        + mi('Data da Solicitação', Utils.formatarData(r.criadoEm))
+        + mi('Status', r.status)
+        + ativoParadoHtml
+        + '</div>'
+      + '</div>'
+      // Bloco: CC / OI
+      + '<div style="background:#f5f8fc;border:.5pt solid #c0cfe0;border-radius:5pt;padding:10pt;margin-bottom:8pt">'
+        + '<div style="font-size:8pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;margin-bottom:8pt;border-bottom:.5pt solid #c0cfe0;padding-bottom:4pt">Centro de Custo / Ordem de Investimento</div>'
+        + mi(ccOiLabel, Utils.safe(ccOiVal))
+      + '</div>'
+      // Bloco: Material / Serviço
+      + '<div style="background:#f5f8fc;border:.5pt solid #c0cfe0;border-radius:5pt;padding:10pt;margin-bottom:8pt">'
+        + '<div style="font-size:8pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;margin-bottom:8pt;border-bottom:.5pt solid #c0cfe0;padding-bottom:4pt">Material / Serviço</div>'
+        + mi('Descrição do Material / Serviço', Utils.safe(r.descricaoMaterial || '-'))
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8pt;margin-top:8pt">'
+        + mi('Máquina / Equipamento', Utils.safe(r.maquinaEquipamento || '-'))
+        + mi('Classificação do Material', Utils.safe(r.classificacao || '-'))
+        + mi('Fluxo de Entrada', labelFluxoEntrada(r.fluxoEntrada))
+        + '</div>'
+      + '</div>'
+      // Bloco: Orçamento
+      + '<div style="background:#f5f8fc;border:.5pt solid #c0cfe0;border-radius:5pt;padding:10pt;margin-bottom:8pt">'
+        + '<div style="font-size:8pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;margin-bottom:8pt;border-bottom:.5pt solid #c0cfe0;padding-bottom:4pt">Dados do Orçamento</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8pt">'
+        + mi('Fornecedor', Utils.safe(r.fornecedor || r.fornecedorSugerido || '-'))
+        + mi('Nº do Orçamento', Utils.safe(r.numeroOrcamento || '-'))
+        + mi('Valor Total', r.valor  fmtValor(r.valor) : '-')
+        + mi('Data Estimada de Entrega', r.dataEntrega  new Date(r.dataEntrega + 'T12:00:00').toLocaleDateString('pt-BR') : '-')
+        + (orcamentosReq.length  mi('Arquivos de Oramento', String(orcamentosReq.length) + ' anexo(s)') : '')
+        + (orcamentosReq.length  '<div style="grid-column:1/-1;font-size:8pt;color:#1e3a5f;line-height:1.45">'
+                + orcamentosReq.map(function(orc, idx) {
+                    return (idx + 1) + '. ' + Utils.safe(orc.nomeOriginal || orc.filename);
+                  }).join('<br>')
+              + '</div>'
+            : '')
+        + '</div>'
+      + '</div>'
+      // Bloco: Justificativa
+      + ((r.justificativa || r.observacoes)  '<div style="background:#fffbf0;border:1pt solid #f0d070;border-radius:5pt;padding:10pt;margin-bottom:8pt">'
+          + '<div style="font-size:8pt;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6pt">Justificativa e Observações</div>'
+          + (r.justificativa  '<div style="margin-bottom:5pt"><strong>Justificativa:</strong> ' + Utils.safe(r.justificativa) + '</div>' : '')
+          + (r.observacoes  '<div><strong>Observa-es:</strong> ' + Utils.safe(r.observacoes) + '</div>' : '')
+          + '</div>'
+        : '')
+      // Tabela de itens do catálogo
+      + (itens.length > 0  '<div style="margin-bottom:10pt">'
+          + '<div style="font-size:8pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;margin-bottom:6pt;border-bottom:1pt solid #1e3a5f;padding-bottom:4pt">Itens do Catálogo (' + itens.length + ')</div>'
+          + '<table style="width:100%;border-collapse:collapse">'
+          + '<thead><tr>'
+          + '<th style="background:#1e3a5f;color:#fff;padding:5pt 7pt;text-align:center">#</th>'
+          + '<th style="background:#1e3a5f;color:#fff;padding:5pt 7pt">Código</th>'
+          + '<th style="background:#1e3a5f;color:#fff;padding:5pt 7pt">Descrição</th>'
+          + '<th style="background:#1e3a5f;color:#fff;padding:5pt 7pt;text-align:center">Unid.</th>'
+          + '<th style="background:#1e3a5f;color:#fff;padding:5pt 7pt;text-align:center">Qtd.</th>'
+          + '</tr></thead>'
+          + '<tbody>' + itensHtml + '</tbody>'
+          + '</table></div>'
+        : '')
+      // Assinaturas
+      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:30pt;margin-top:36pt">'
+        + '<div style="text-align:center"><div style="height:28pt;border-bottom:1pt solid #333;margin-bottom:6pt"></div><div style="font-size:8pt;font-weight:700">Solicitante</div><div style="font-size:8pt;color:#555">' + Utils.safe(usuariosMap[r.solicitanteId] || '-') + '</div></div>'
+        + '<div style="text-align:center"><div style="height:28pt;border-bottom:1pt solid #333;margin-bottom:6pt"></div><div style="font-size:8pt;font-weight:700">Aprovador / PCM</div><div style="font-size:8pt;color:#555">___________________</div></div>'
+        + '<div style="text-align:center"><div style="height:28pt;border-bottom:1pt solid #333;margin-bottom:6pt"></div><div style="font-size:8pt;font-weight:700">Almoxarife</div><div style="font-size:8pt;color:#555">___________________</div></div>'
+      + '</div>'
+    + '</div>';
+    window.print();
+  }
+
+  // ── Inicializar ───────────────────────────────────────
+  // Salvar No. Ordem de Compra SAP
+  function salvarOrdemSAP(reqId) {
+    var r = DB.Requisicoes.buscarId(reqId);
+    if (!r) return;
+    var val = (document.getElementById('input-ordem-sap').value || '').trim();
+    if (!val) { Utils.toast('Informe o numero da Ordem SAP.', 'error'); return; }
+    var sessao = Auth.getSessao();
+    r.numeroOrdemSAP = val;
+    r.status = 'SOLICITADO';
+    r.solicitadoEm = new Date().toISOString();
+    r.solicitadoPorId = sessao  sessao.id : '';
+    r.solicitadoPorNome = sessao  sessao.nome : '';
+    DB.Requisicoes.salvar(r);
+    if (r.solicitanteId) {
+      DB.Notificacoes.criar({ userId: r.solicitanteId, tipo: 'REQ_SOLICITADA',
+        titulo: 'Req. Solicitada no SAP',
+        mensagem: 'Requisicao solicitada no SAP. N. SAP: ' + val,
+        referenciaId: r.id, referenciaTipo: 'req' });
+    }
+    Utils.toast('SAP confirmado! Status: Solicitado.', 'success');
+    Utils.fecharModal('modal-detalhe');
+    renderTabela();
+    setTimeout(function() { verDetalhe(reqId); }, 200);
+  }
+
+  
+  function reprovarSAP(reqId) {
+    var r = DB.Requisicoes.buscarId(reqId);
+    if (!r) return;
+    var motivo = (document.getElementById('input-motivo-reprovacao').value || '').trim();
+    if (!motivo) { Utils.toast('Informe o motivo da reprovação.', 'error'); return; }
+    var sessao = Auth.getSessao();
+    r.status = 'REJEITADO';
+    r.rejeitadoEm = new Date().toISOString();
+    r.rejeitadoPorId = sessao  sessao.id : '';
+    r.rejeitadoPorNome = sessao  sessao.nome : '';
+    r.motivoRejeicao = motivo;
+    DB.Requisicoes.salvar(r);
+    if (r.solicitanteId) {
+      DB.Notificacoes.criar({ userId: r.solicitanteId, tipo: 'REQ_REJEITADA',
+        titulo: 'Requisição Reprovada no SAP',
+        mensagem: 'Sua requisição foi reprovada. Motivo: ' + motivo,
+        referenciaId: r.id, referenciaTipo: 'req' });
+    }
+    Utils.toast('Requisição reprovada.', 'warning');
+    Utils.fecharModal('modal-detalhe');
+    renderTabela();
+  }
+
+  function confirmarRecebimento(reqId) {
+    var r = DB.Requisicoes.buscarId(reqId);
+    if (!r) return;
+    var qtd = parseFloat(document.getElementById('input-qtd-recebida').value || '0');
+    if (!qtd || qtd <= 0) { Utils.toast('Informe a quantidade recebida.', 'error'); return; }
+    var obs = (document.getElementById('input-obs-recebimento').value || '').trim();
+    var sessao = Auth.getSessao();
+    r.status = 'RECEBIDO';
+    r.quantidadeRecebida = qtd;
+    r.obsRecebimento = obs;
+    r.recebidoEm = new Date().toISOString();
+    r.recebidoPorId = sessao  sessao.id : '';
+    r.recebidoPorNome = sessao  sessao.nome : '';
+    var itens = r.itens || (r.pecaId  [{ pecaId: r.pecaId, quantidade: r.quantidade }] : []);
+    itens.forEach(function(item) {
+      if (item.pecaId) {
+        DB.Movimentos.registrar({ tipo: 'ENTRADA', pecaId: item.pecaId,
+          quantidade: item.quantidade, data: new Date().toISOString(), responsavel: sessao  sessao.id : '',
+          observacao: 'Entrada automatica - Req. ' + (r.numero || r.id),
+          ordemServico: r.numero || '' });
+      }
+    });
+    DB.Requisicoes.salvar(r);
+    if (r.solicitanteId) {
+      DB.Notificacoes.criar({ userId: r.solicitanteId, tipo: 'REQ_RECEBIDA',
+        titulo: 'Material Recebido',
+        mensagem: 'Requisição ' + (r.numero || r.id) + ' confirmada como recebida. Qtd: ' + qtd,
+        referenciaId: r.id, referenciaTipo: 'req' });
+    }
+    Utils.toast('Recebimento confirmado!' + (itens.length > 0  ' Estoque atualizado.' : ''), 'success');
+    Utils.fecharModal('modal-detalhe');
+    renderTabela();
+    setTimeout(function() { verDetalhe(reqId); }, 200);
+  }
+
+  function migrarStatusAntigos() {
+    DB.Requisicoes.listar().forEach(function(r) {
+      if (r.status === 'APROVADA')  { r.status = 'SOLICITADO'; DB.Requisicoes.salvar(r); }
+      else if (r.status === 'COMPRADA')  { r.status = 'RECEBIDO';   DB.Requisicoes.salvar(r); }
+      else if (r.status === 'REJEITADA') { r.status = 'REJEITADO';  DB.Requisicoes.salvar(r); }
+    });
+  }
+
+  function abrirTelaSAPRapida(reqId) {
+    var r = DB.Requisicoes.buscarId(reqId);
+    if (!r) return;
+    var itens = Array.isArray(r.itens)  r.itens : [];
+    var itensHtml = itens.length  ('<ul style="margin:6px 0 0 16px;padding:0">' + itens.map(function(it) {
+          var desc = Utils.safe(it.descricao || it.nome || it.pecaId || 'Item');
+          var qtd = it.quantidade || 0;
+          var un = Utils.safe(it.unidade || 'UN');
+          return '<li style="margin:4px 0">' + desc + ' - ' + qtd + ' ' + un + '</li>';
+        }).join('') + '</ul>')
+      : '<div style="font-size:12px;color:var(--text-muted)">Sem itens detalhados.</div>';
+
+    document.getElementById('detalhe-titulo').textContent = 'SAP - Requisição ' + (r.numero || r.id);
+    document.getElementById('detalhe-body').innerHTML = ''
+      + '<div class="item-detail-info">'
+      + '<div class="detail-row"><span class="detail-label">Número</span><span class="detail-value" style="font-family:monospace;font-weight:700">' + Utils.safe(r.numero || r.id) + '</span></div>'
+      + '<div class="detail-row"><span class="detail-label">Solicitante</span><span class="detail-value">' + Utils.safe((DB.Usuarios.buscarId(r.solicitanteId) || {}).nome || '-') + '</span></div>'
+      + '<div class="detail-row"><span class="detail-label">Responsável</span><span class="detail-value">' + Utils.safe(r.responsavel || '-') + '</span></div>'
+      + '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">'
+      + '<div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase">Itens solicitados</div>'
+      + itensHtml
+      + '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">'
+      + '<div class="detail-row" style="flex-direction:column;align-items:stretch;gap:8px">'
+      + '<span class="detail-label" style="color:var(--primary);font-weight:700">Nº Ordem de Compra SAP</span>'
+      + '<div style="display:flex;gap:8px;align-items:center">'
+      + '<input type="text" id="input-ordem-sap" value="' + Utils.safe(r.numeroOrdemSAP || '') + '" placeholder="Ex: 4500012345" style="flex:1;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:monospace;font-size:13px;color:var(--text);background:var(--bg)">'
+      + '<button class="btn btn-primary btn-sm" onclick="salvarOrdemSAP(\'' + r.id + '\')">Confirmar SAP</button>'
+      + '</div>'
+      + '</div>'
+      + '</div>';
+
+    var footer = document.getElementById('detalhe-footer');
+    footer.innerHTML = '<button class="btn btn-secondary" onclick="Utils.fecharModal(\'modal-detalhe\')">Fechar</button>'
+      + '<button class="btn btn-secondary" onclick="verDetalhe(\'' + r.id + '\')">Abrir Requisição Completa</button>';
+    Utils.abrirModal('modal-detalhe');
+  }
+
+function _inicializar() {
+    getCfgReq();
+    preencherDatalists();
+    migrarStatusAntigos();
+    renderTabela();
+    (function() {
+      var p     = new URLSearchParams(window.location.search);
+      var reqId = p.get('id');
+      var acao = p.get('acao');
+      if (!reqId) return;
+      var rLink = DB.Requisicoes.buscarId(reqId);
+      if (rLink && !rLink.visualizado) {
+        rLink.visualizado = true;
+        rLink.visualizadoEm = new Date().toISOString();
+        DB.Requisicoes.salvar(rLink);
+      }
+      setTimeout(function() {
+        if (acao === 'sap') abrirTelaSAPRapida(reqId);
+        else verDetalhe(reqId);
+      }, 400);
+    })();
+  }
+</script> </body>
+</html> 

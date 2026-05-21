@@ -1,0 +1,582 @@
+﻿<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>Retirada de Material â€” Atlas PCM</title> <style> :root {
+      --primary: #1B3A8A;
+      --primary-dark: #101827;
+      --brand-blue: #1B3A8A;
+      --brand-orange: #F7941D;
+      --accent: #F7941D;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #fff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(15,23,42,.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(180deg, rgba(27,58,138,.08), rgba(247,148,29,.04) 280px, var(--bg) 520px);
+      color: var(--text);
+      min-height: 100dvh;
+    }
+
+    /* HEADER */
+    .rt-header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--brand-blue));
+      border-bottom: 3px solid var(--brand-orange);
+      color: #fff;
+      padding: 16px 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .rt-logo { width: 38px; height: 38px; border-radius: 10px; background: rgba(247,148,29,.18); border: 1.5px solid rgba(247,148,29,.35); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .rt-header-text .title { font-size: 17px; font-weight: 800; letter-spacing: .04em; }
+    .rt-header-text .sub   { font-size: 11px; color: rgba(255,255,255,.6); margin-top: 2px; }
+
+    /* BODY */
+    .rt-body { padding: 16px; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+
+    /* CARD */
+    .rt-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+    .rt-card-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+    /* FORM */
+    .rt-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; }
+    .rt-input {
+      width: 100%; padding: 14px 16px; font-size: 16px; border: 2px solid var(--border);
+      border-radius: 10px; background: var(--bg); color: var(--text); outline: none;
+      transition: border-color .15s;
+      -webkit-appearance: none;
+    }
+    .rt-input:focus { border-color: var(--primary); background: #fff; }
+    .rt-input.rt-input-lg { font-size: 20px; font-weight: 700; text-align: center; letter-spacing: .08em; }
+
+    .rt-btn {
+      width: 100%; padding: 16px; font-size: 16px; font-weight: 700;
+      border: none; border-radius: 10px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: opacity .15s, transform .1s;
+    }
+    .rt-btn:active { transform: scale(.97); opacity: .85; }
+    .rt-btn-primary   { background: var(--primary); color: #fff; }
+    .rt-btn-success   { background: var(--success); color: #fff; }
+    .rt-btn-secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
+    .rt-btn-danger    { background: var(--danger); color: #fff; }
+    .rt-btn-sm { padding: 10px 16px; font-size: 14px; width: auto; }
+
+    /* ITEM CARD */
+    .rt-item-card { background: linear-gradient(135deg, var(--primary-dark) 55%, var(--brand-blue)); color: #fff; border-radius: 12px; padding: 16px; border-bottom: 3px solid var(--brand-orange); }
+    .rt-item-nome { font-size: 18px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+    .rt-item-codigo { font-size: 13px; font-family: monospace; opacity: .8; }
+    .rt-item-loc { font-size: 12px; opacity: .7; margin-top: 4px; }
+    .rt-item-saldo { font-size: 13px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.2); display: flex; align-items: center; gap: 8px; }
+    .rt-saldo-val { font-size: 22px; font-weight: 900; }
+
+    /* BUSCA MANUAL */
+    .rt-busca-res { background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .rt-busca-item { padding: 14px 16px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background .1s; display: flex; align-items: center; gap: 12px; }
+    .rt-busca-item:last-child { border-bottom: none; }
+    .rt-busca-item:hover, .rt-busca-item:active { background: #eef2ff; }
+    .rt-busca-item .nome { font-size: 14px; font-weight: 600; }
+    .rt-busca-item .cod  { font-size: 12px; color: var(--text-muted); font-family: monospace; }
+
+    /* ITENS DO CARRINHO */
+    .rt-lista-itens { display: flex; flex-direction: column; gap: 8px; }
+    .rt-lista-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
+    .rt-lista-item .info { flex: 1; min-width: 0; }
+    .rt-lista-item .nome { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rt-lista-item .qtd  { font-size: 12px; color: var(--text-muted); }
+    .rt-lista-item .rem  { font-size: 18px; cursor: pointer; color: var(--danger); padding: 4px; }
+
+    /* STEPPER QTD */
+    .rt-stepper { display: flex; align-items: center; gap: 0; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--bg); }
+    .rt-stepper button { width: 52px; height: 52px; border: none; background: none; font-size: 22px; font-weight: 700; cursor: pointer; color: var(--primary); transition: background .1s; }
+    .rt-stepper button:active { background: #dbeafe; }
+    .rt-stepper input { flex: 1; border: none; background: none; text-align: center; font-size: 22px; font-weight: 800; color: var(--text); outline: none; min-width: 0; }
+    .rt-stepper input::-webkit-outer-spin-button,
+    .rt-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    /* BADGES */
+    .rt-badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+    .rt-badge-ok       { background: #dcfce7; color: #15803d; }
+    .rt-badge-low      { background: #fef9c3; color: #a16207; }
+    .rt-badge-critical { background: #fee2e2; color: #dc2626; }
+
+    /* TELAS */
+    .rt-screen { display: none; }
+    .rt-screen.active { display: flex; flex-direction: column; gap: 14px; }
+
+    /* SELECT SEARCH */
+    .rt-select-wrap { position: relative; }
+    .rt-select-res  { position: absolute; left: 0; right: 0; top: calc(100% + 4px); background: var(--card); border: 1.5px solid var(--primary); border-radius: 10px; z-index: 20; max-height: 240px; overflow-y: auto; box-shadow: 0 8px 30px rgba(0,0,0,.15); }
+    .rt-select-res .opt { padding: 12px 16px; cursor: pointer; font-size: 14px; border-bottom: 1px solid var(--border); }
+    .rt-select-res .opt:last-child { border-bottom: none; }
+    .rt-select-res .opt:hover, .rt-select-res .opt.hi { background: #eef2ff; }
+
+    /* SUCCESS */
+    .rt-success-icon { font-size: 64px; text-align: center; margin-bottom: 8px; }
+    .rt-success-title { font-size: 22px; font-weight: 900; color: var(--success); text-align: center; }
+    .rt-success-sub   { font-size: 14px; color: var(--text-muted); text-align: center; margin-top: 6px; }
+
+    /* TOAST */
+    #rt-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; opacity: 0; transition: all .3s; z-index: 9999; pointer-events: none; white-space: nowrap; }
+    #rt-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (min-width: 500px) {
+      .rt-body { padding: 24px 20px; }
+    }
+  </style> <link rel="stylesheet" href="atlas-industrial.cssv=1"> </head> <body> <div class="rt-header"> <div class="rt-logo" id="rt-logo-img-wrap"></div> <div class="rt-header-text"> <div class="title">ATLAS PCM</div> <div class="sub" id="rt-sub">Retirada de Material</div> </div> </div> <div class="rt-body" id="rt-body"> <!-- TELA 1: IdentificaÃ§Ã£o do usuÃ¡rio --> <div class="rt-screen active" id="tela-login"> <div class="rt-card"> <div class="rt-card-title"> IdentificaÃ§Ã£o</div> <label class="rt-label">Seu nome ou cÃ³digo de usuÃ¡rio</label> <input class="rt-input rt-input-lg" type="text" id="inp-usuario" placeholder="Ex: JOAO ou 1234"
+        autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')confirmarUsuario()"> <div style="margin-top:12px"> <button class="rt-btn rt-btn-primary" onclick="confirmarUsuario()">âœ… Continuar</button> </div> </div> <div style="font-size:12px;color:var(--text-muted);text-align:center"> Acesso exclusivo para retirada de materiais.<br> Para acesso ao sistema completo, use a <a href="index.html" style="color:var(--primary)">tela de login</a>.
+    </div> </div> <!-- TELA 1.5: Informar OS / Ativo (opcional) --> <div class="rt-screen" id="tela-os"> <div class="rt-card"> <div class="rt-card-title"> Ordem de ServiÃ§o / Ativo</div> <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px"> Opcional: Informe a OS ou ativo para associar Ã  retirada (ex: OS-0042 ou CMP-001).
+      </div> <label class="rt-label">OS / Ativo</label> <div class="rt-select-wrap" style="margin-bottom:14px"> <input class="rt-input" type="text" id="inp-os-global" placeholder="Ex: OS-0042 ou Compressor 001 â€” DescriÃ§Ã£o"
+          autocomplete="off" oninput="buscarAtivoGlobal()" onkeydown="navegarAtivoGlobal(event)" onblur="setTimeout(()=>fecharAtivosGlobal(),200)"> <div class="rt-select-res" id="ativo-global-res" style="display:none"></div> </div> <div style="display:flex;gap:10px"> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="pularOS()">Pular</button> <button class="rt-btn rt-btn-primary" onclick="confirmarOS()">âœ… Continuar</button> </div> </div> </div> <!-- TELA 2: Item (via QR ou busca manual) + adicionar ao carrinho --> <div class="rt-screen" id="tela-item"> <!-- Info do usuÃ¡rio logado --> <div style="display:flex;align-items:center;justify-content:space-between"> <span style="font-size:13px;color:var(--text-muted)">Operador: <strong id="rt-nome-usuario" style="color:var(--primary)">â€”</strong></span> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="voltarLogin()" style="width:auto">â¬… Sair</button> </div> <!-- Item carregado via QR --> <div id="bloco-item-qr" style="display:none"> <div class="rt-item-card" id="item-card"> <div class="rt-item-nome" id="item-nome">â€”</div> <div class="rt-item-codigo" id="item-codigo">â€”</div> <div class="rt-item-loc" id="item-loc"></div> <div class="rt-item-saldo"> <span style="opacity:.75;font-size:13px">Saldo atual:</span> <span class="rt-saldo-val" id="item-saldo">â€”</span> <span style="opacity:.75;font-size:13px" id="item-unidade"></span> <span id="item-status-badge" style="margin-left:auto"></span> </div> </div> <div class="rt-card"> <div class="rt-card-title"> Quantidade a retirar</div> <div class="rt-stepper" style="margin-bottom:14px"> <button onclick="stepQtd(-1)">âˆ’</button> <input type="number" id="inp-qtd" value="1" min="1" max="9999"> <button onclick="stepQtd(1)">+</button> </div> <label class="rt-label">Ordem de ServiÃ§o / MÃ¡quina (TAG ou descriÃ§Ã£o)</label> <div class="rt-select-wrap" style="margin-bottom:14px"> <input class="rt-input" type="text" id="inp-os" placeholder="Ex: OS-0042 ou CMP-001 â€” Compressor"
+            autocomplete="off" oninput="buscarAtivo()" onkeydown="navegarAtivo(event)" onblur="setTimeout(()=>fecharAtivos(),200)"> <div class="rt-select-res" id="ativo-res" style="display:none"></div> </div> <button class="rt-btn rt-btn-success" onclick="adicionarAoCarrinho()">âž• Adicionar ao carrinho</button> </div> </div> <!-- Busca manual --> <div class="rt-card"> <div class="rt-card-title"> Buscar outro item</div> <div style="display:flex;gap:8px;align-items:stretch;margin-bottom:10px"> <input class="rt-input" type="text" id="inp-busca-peca" placeholder="Digite o cÃ³digo ou nome da peÃ§a..."
+          autocomplete="off" oninput="buscarPecaManual()" style="flex:1"> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="escanearQR()" style="white-space:nowrap"> QR</button> </div> <div id="busca-res" style="margin-top:10px"></div> </div> <!-- Carrinho --> <div class="rt-card" id="bloco-carrinho" style="display:none"> <div class="rt-card-title" style="justify-content:space-between"> <span> Carrinho (<span id="carrinho-qtd">0</span> item(ns))</span> </div> <div class="rt-lista-itens" id="carrinho-lista"></div> <div style="margin-top:14px"> <button class="rt-btn rt-btn-primary" onclick="confirmarRetirada()">âœ… Confirmar Retirada</button> </div> </div> </div> <!-- TELA 3: Sucesso --> <div class="rt-screen" id="tela-sucesso"> <div class="rt-card" style="text-align:center;padding:32px 20px"> <div class="rt-success-icon">âœ…</div> <div class="rt-success-title">Retirada Registrada!</div> <div class="rt-success-sub" id="sucesso-msg">SaÃ­da registrada com sucesso no sistema.</div> <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px"> <button class="rt-btn rt-btn-primary" onclick="novaRetirada()"> Nova Retirada</button> </div> </div> </div> </div> <div id="rt-toast"></div> <script> /* â”€â”€ ComunicaÃ§Ã£o com a API (sem db.js â€” sem login) â”€â”€ */
+const API = '/api';
+let _store = { pecas: [], movimentos: [], ativos: [], config: {}, usuarios_retirada: [] };
+let _usuarioAtual = null; // { id, nome } do usuÃ¡rio de retirada
+let _itemAtual    = null; // peÃ§a carregada via QR
+let _carrinho     = [];   // [{ peca, qtd, os, ativoId }]
+let _saldos       = {};   // { [pecaId]: saldo }
+let _ativoHi      = -1;   // Ã­ndice selecionado na lista de ativos
+let _ativoOpts    = [];   // ativos filtrados pelo campo OS
+let _osGlobal     = null; // { tag, descricao, id } ou string
+let _ativoGlobalHi = -1;
+let _ativoGlobalOpts = [];
+
+/* â”€â”€ Toast â”€â”€ */
+function toast(msg, tipo) {
+  var el = document.getElementById('rt-toast');
+  el.textContent = msg;
+  el.style.background = tipo === 'error'  '#dc2626' : tipo === 'ok'  '#16a34a' : '#1e293b';
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 2800);
+}
+
+/* â”€â”€ Tela â”€â”€ */
+function mostrarTela(id) {
+  document.querySelectorAll('.rt-screen').forEach(function(s) { s.classList.remove('active'); });
+  var t = document.getElementById(id);
+  if (t) { t.classList.add('active'); window.scrollTo(0, 0); }
+}
+
+/* â”€â”€ Init â”€â”€ */
+async function init() {
+  try {
+    const r = await fetch(API + '/retirada-init', { credentials: 'same-origin' });
+    const data = await r.json();
+    _store.pecas   = data.pecas   || [];
+    _store.ativos  = data.ativos  || [];
+    _store.config  = data.config  || {};
+    _store.movimentos = data.movimentos || [];
+    _store.usuarios_retirada = data.usuarios_retirada || [];
+
+    // calcular saldos
+    _store.movimentos.forEach(function(m) {
+      if (!_saldos[m.pecaId]) _saldos[m.pecaId] = 0;
+      if (m.tipo === 'ENTRADA' || m.tipo === 'AJUSTE_ADD') _saldos[m.pecaId] += Number(m.quantidade);
+      else if (m.tipo === 'SAIDA' || m.tipo === 'AJUSTE_SUB') _saldos[m.pecaId] -= Number(m.quantidade);
+      else if (m.tipo === 'AJUSTE') _saldos[m.pecaId] += Number(m.quantidade);
+    });
+
+    // Logo
+    if (_store.config.logo) {
+      var wrap = document.getElementById('rt-logo-img-wrap');
+      wrap.innerHTML = '<img src="' + _store.config.logo + '" style="width:38px;height:38px;border-radius:10px;object-fit:contain;">';
+    }
+    if (_store.config.empresa) {
+      document.getElementById('rt-sub').textContent = _store.config.empresa + ' â€” Retirada';
+    }
+
+    // Verifica parÃ¢metro id= (QR code)
+    var params = new URLSearchParams(window.location.search);
+    var pecaId  = params.get('id');
+    if (pecaId) {
+      var p = _store.pecas.find(function(x) { return x.id === pecaId; });
+      if (p) {
+        _itemAtual = p;
+        // Vamos carregar o item apÃ³s o login
+      }
+    }
+  } catch(e) {
+    toast('Erro ao conectar com o servidor', 'error');
+  }
+}
+
+/* â”€â”€ Login â”€â”€ */
+function confirmarUsuario() {
+  var val = (document.getElementById('inp-usuario').value || '').trim();
+  if (!val) { toast('Informe seu nome ou cÃ³digo', 'error'); return; }
+
+  // Verifica contra lista de usuÃ¡rios de retirada
+  var lista = _store.usuarios_retirada || [];
+  if (lista.length > 0) {
+    var encontrado = lista.find(function(u) {
+      return u.ativo !== false && (
+        (u.nome  || '').toUpperCase() === val.toUpperCase() ||
+        (u.codigo|| '').toUpperCase() === val.toUpperCase()
+      );
+    });
+    if (!encontrado) {
+      toast('UsuÃ¡rio nÃ£o autorizado. Contate o almoxarifado.', 'error');
+      return;
+    }
+    _usuarioAtual = { id: encontrado.id, nome: encontrado.nome };
+  } else {
+    toast('Nenhum usuÃ¡rio de retirada autorizado foi configurado.', 'error');
+    return;
+  }
+
+  document.getElementById('rt-nome-usuario').textContent = _usuarioAtual.nome;
+  mostrarTela('tela-os');
+
+  // Se veio via QR, carregar item imediatamente
+  if (_itemAtual) carregarItem(_itemAtual);
+}
+
+function voltarLogin() {
+  _usuarioAtual = null;
+  _itemAtual = null;
+  _carrinho = [];
+  _osGlobal = null;
+  atualizarCarrinho();
+  document.getElementById('inp-usuario').value = '';
+  document.getElementById('inp-os-global').value = '';
+  document.getElementById('bloco-item-qr').style.display = 'none';
+  document.getElementById('inp-busca-peca').value = '';
+  document.getElementById('busca-res').innerHTML = '';
+  mostrarTela('tela-login');
+}
+
+/* â”€â”€ Carregar item no painel â”€â”€ */
+function carregarItem(p) {
+  _itemAtual = p;
+  var saldo = _saldos[p.id] || 0;
+  document.getElementById('item-nome').textContent   = p.nome;
+  document.getElementById('item-codigo').textContent = p.codigo;
+  var loc = p.localizacao || '';
+  var locEl = document.getElementById('item-loc');
+  locEl.textContent = loc  (' ' + loc) : '';
+  document.getElementById('item-saldo').textContent  = saldo;
+  document.getElementById('item-unidade').textContent = p.unidade || '';
+  // badge status
+  var st = saldo <= 0  'Zerado' : (p.estoqueMinimo && saldo < p.estoqueMinimo  'Baixo' : 'Normal');
+  var stCls = saldo <= 0  'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo  'low' : 'ok');
+  document.getElementById('item-status-badge').innerHTML = '<span class="rt-badge rt-badge-' + stCls + '">' + st + '</span>';
+  document.getElementById('inp-qtd').value = 1;
+  if (_osGlobal) {
+    if (typeof _osGlobal === 'string') {
+      document.getElementById('inp-os').value = _osGlobal;
+    } else {
+      document.getElementById('inp-os').value = _osGlobal.tag + ' â€” ' + _osGlobal.descricao;
+      document.getElementById('inp-os').dataset.ativoId = _osGlobal.id;
+    }
+  } else {
+    document.getElementById('inp-os').value = '';
+  }
+  document.getElementById('bloco-item-qr').style.display = '';
+  // limpar busca
+  document.getElementById('inp-busca-peca').value = '';
+  document.getElementById('busca-res').innerHTML = '';
+  // scroll up
+  window.scrollTo(0, 0);
+}
+
+/* â”€â”€ Stepper de quantidade â”€â”€ */
+function stepQtd(delta) {
+  var el = document.getElementById('inp-qtd');
+  var v = parseInt(el.value) || 1;
+  v = Math.max(1, v + delta);
+  el.value = v;
+}
+
+/* â”€â”€ Busca de ativo / OS â”€â”€ */
+function buscarAtivo() {
+  var val = (document.getElementById('inp-os').value || '').toLowerCase().trim();
+  var res = document.getElementById('ativo-res');
+  if (!val) { res.style.display = 'none'; _ativoOpts = []; return; }
+  _ativoOpts = (_store.ativos || []).filter(function(a) {
+    return a.ativo !== false && (
+      (a.tag || '').toLowerCase().includes(val) ||
+      (a.descricao || '').toLowerCase().includes(val) ||
+      (a.setor || '').toLowerCase().includes(val)
+    );
+  }).slice(0, 8);
+  if (!_ativoOpts.length) { res.style.display = 'none'; return; }
+  _ativoHi = -1;
+  res.style.display = '';
+  res.innerHTML = _ativoOpts.map(function(a, i) {
+    return '<div class="opt" data-i="' + i + '" onclick="selecionarAtivo(' + i + ')">' +
+      '<strong>' + escHtml(a.tag) + '</strong> â€” ' + escHtml(a.descricao) +
+      (a.setor  ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function navegarAtivo(e) {
+  if (!_ativoOpts.length) return;
+  var opts = document.querySelectorAll('#ativo-res .opt');
+  if (e.key === 'ArrowDown') { e.preventDefault(); _ativoHi = Math.min(_ativoHi + 1, opts.length - 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); _ativoHi = Math.max(_ativoHi - 1, 0); }
+  else if (e.key === 'Enter' && _ativoHi >= 0) { e.preventDefault(); selecionarAtivo(_ativoHi); return; }
+  else if (e.key === 'Escape') { fecharAtivos(); return; }
+  opts.forEach(function(o, i) { o.classList.toggle('hi', i === _ativoHi); });
+}
+
+function selecionarAtivo(i) {
+  var a = _ativoOpts[i];
+  if (!a) return;
+  document.getElementById('inp-os').value = a.tag + ' â€” ' + a.descricao;
+  document.getElementById('inp-os').dataset.ativoId = a.id;
+  fecharAtivos();
+}
+
+function fecharAtivos() {
+  document.getElementById('ativo-res').style.display = 'none';
+}
+
+/* â”€â”€ Busca de ativo GLOBAL â”€â”€ */
+function buscarAtivoGlobal() {
+  var val = (document.getElementById('inp-os-global').value || '').toLowerCase().trim();
+  var res = document.getElementById('ativo-global-res');
+  if (!val) { res.style.display = 'none'; _ativoGlobalOpts = []; return; }
+  _ativoGlobalOpts = (_store.ativos || []).filter(function(a) {
+    return a.ativo !== false && (
+      (a.tag || '').toLowerCase().includes(val) ||
+      (a.descricao || '').toLowerCase().includes(val) ||
+      (a.setor || '').toLowerCase().includes(val)
+    );
+  }).slice(0, 8);
+  if (!_ativoGlobalOpts.length) { res.style.display = 'none'; return; }
+  _ativoGlobalHi = -1;
+  res.style.display = '';
+  res.innerHTML = _ativoGlobalOpts.map(function(a, i) {
+    return '<div class="opt" data-i="' + i + '" onclick="selecionarAtivoGlobal(' + i + ')">' +
+      '<strong>' + escHtml(a.tag) + '</strong> â€” ' + escHtml(a.descricao) +
+      (a.setor  ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function navegarAtivoGlobal(e) {
+  if (!_ativoGlobalOpts.length) return;
+  var opts = document.querySelectorAll('#ativo-global-res .opt');
+  if (e.key === 'ArrowDown') { e.preventDefault(); _ativoGlobalHi = Math.min(_ativoGlobalHi + 1, opts.length - 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); _ativoGlobalHi = Math.max(_ativoGlobalHi - 1, 0); }
+  else if (e.key === 'Enter' && _ativoGlobalHi >= 0) { e.preventDefault(); selecionarAtivoGlobal(_ativoGlobalHi); return; }
+  else if (e.key === 'Escape') { fecharAtivosGlobal(); return; }
+  opts.forEach(function(o, i) { o.classList.toggle('hi', i === _ativoGlobalHi); });
+}
+
+function selecionarAtivoGlobal(i) {
+  var a = _ativoGlobalOpts[i];
+  if (!a) return;
+  document.getElementById('inp-os-global').value = a.tag + ' â€” ' + a.descricao;
+  _osGlobal = { tag: a.tag, descricao: a.descricao, id: a.id };
+  fecharAtivosGlobal();
+}
+
+function fecharAtivosGlobal() {
+  document.getElementById('ativo-global-res').style.display = 'none';
+}
+
+function pularOS() {
+  _osGlobal = null;
+  document.getElementById('inp-os-global').value = '';
+  mostrarTela('tela-item');
+  // Carregar item se veio via QR
+  if (_itemAtual) carregarItem(_itemAtual);
+}
+
+function confirmarOS() {
+  var val = document.getElementById('inp-os-global').value.trim();
+  if (val) {
+    if (_osGlobal && _osGlobal.tag + ' â€” ' + _osGlobal.descricao === val) {
+      // JÃ¡ selecionado
+    } else {
+      _osGlobal = val; // string simples
+    }
+  } else {
+    _osGlobal = null;
+  }
+  mostrarTela('tela-item');
+  // Carregar item se veio via QR
+  if (_itemAtual) carregarItem(_itemAtual);
+}
+
+/* â”€â”€ Adicionar ao carrinho â”€â”€ */
+function adicionarAoCarrinho() {
+  if (!_itemAtual) { toast('Nenhum item selecionado', 'error'); return; }
+  var qtd = parseInt(document.getElementById('inp-qtd').value) || 0;
+  if (qtd <= 0) { toast('Quantidade invÃ¡lida', 'error'); return; }
+  var osVal = document.getElementById('inp-os').value.trim();
+  var ativoId = document.getElementById('inp-os').dataset.ativoId || '';
+  if (!osVal && _osGlobal) {
+    if (typeof _osGlobal === 'string') {
+      osVal = _osGlobal;
+    } else {
+      osVal = _osGlobal.tag + ' â€” ' + _osGlobal.descricao;
+      ativoId = _osGlobal.id;
+    }
+  }
+  // Verificar saldo
+  var saldo = _saldos[_itemAtual.id] || 0;
+  if (qtd > saldo) {
+    toast('Quantidade maior que o saldo disponÃ­vel (' + saldo + ')', 'error');
+    return;
+  }
+  // Se jÃ¡ no carrinho, somar
+  var existe = _carrinho.find(function(c) { return c.peca.id === _itemAtual.id; });
+  if (existe) {
+    var novaQtd = existe.qtd + qtd;
+    if (novaQtd > saldo) { toast('Total excede o saldo disponÃ­vel (' + saldo + ')', 'error'); return; }
+    existe.qtd = novaQtd;
+    if (osVal) { existe.os = osVal; existe.ativoId = ativoId; }
+  } else {
+    _carrinho.push({ peca: _itemAtual, qtd: qtd, os: osVal, ativoId: ativoId });
+  }
+  atualizarCarrinho();
+  toast(qtd + 'x ' + _itemAtual.nome + ' adicionado', 'ok');
+  // Limpar campo de item
+  document.getElementById('bloco-item-qr').style.display = 'none';
+  _itemAtual = null;
+  document.getElementById('inp-busca-peca').value = '';
+  document.getElementById('busca-res').innerHTML = '';
+}
+
+function removerDoCarrinho(idx) {
+  _carrinho.splice(idx, 1);
+  atualizarCarrinho();
+}
+
+function atualizarCarrinho() {
+  var bloco = document.getElementById('bloco-carrinho');
+  var lista = document.getElementById('carrinho-lista');
+  var qtdEl = document.getElementById('carrinho-qtd');
+  if (!_carrinho.length) { bloco.style.display = 'none'; return; }
+  bloco.style.display = '';
+  qtdEl.textContent = _carrinho.length;
+  lista.innerHTML = _carrinho.map(function(c, i) {
+    return '<div class="rt-lista-item">' +
+      '<div class="info">' +
+        '<div class="nome">' + escHtml(c.peca.nome) + '</div>' +
+        '<div class="qtd">' + c.qtd + ' ' + (c.peca.unidade || 'UN') + (c.os  ' - ' + escHtml(c.os) : '') + '</div>' +
+      '</div>' +
+      '<span class="rem" onclick="removerDoCarrinho(' + i + ')"></span>' +
+    '</div>';
+  }).join('');
+}
+
+/* â”€â”€ Confirmar retirada â”€â”€ */
+async function confirmarRetirada() {
+  if (!_carrinho.length) { toast('Carrinho vazio', 'error'); return; }
+  var usuario = _usuarioAtual || { id: 'anonimo', nome: 'AnÃ´nimo' };
+  var erros = 0;
+  for (var c of _carrinho) {
+    try {
+      var mov = {
+        tipo:         'SAIDA',
+        pecaId:       c.peca.id,
+        quantidade:   c.qtd,
+        data:         new Date().toISOString(),
+        responsavel:  usuario.id,
+        responsavelNome: usuario.nome,
+        ordemServico: c.os || '',
+        ativoId:      c.ativoId || '',
+        observacao:   'Retirada via QR/Mobile',
+        origem:       'retirada-mobile'
+      };
+      var r = await fetch(API + '/retirada/movimentos', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mov)
+      });
+      if (!r.ok) erros++;
+      else {
+        // Atualiza saldo local
+        _saldos[c.peca.id] = (_saldos[c.peca.id] || 0) - c.qtd;
+      }
+    } catch(e) { erros++; }
+  }
+  if (erros > 0) { toast('Erro ao registrar ' + erros + ' item(ns)', 'error'); return; }
+  // Sucesso
+  var msg = _carrinho.map(function(c) { return c.qtd + 'x ' + c.peca.nome; }).join(', ');
+  document.getElementById('sucesso-msg').textContent = 'Registrado por ' + usuario.nome + ': ' + msg;
+  _carrinho = [];
+  atualizarCarrinho();
+  mostrarTela('tela-sucesso');
+}
+
+/* â”€â”€ Nova retirada â”€â”€ */
+function novaRetirada() {
+  _itemAtual = null;
+  _carrinho = [];
+  _osGlobal = null;
+  atualizarCarrinho();
+  document.getElementById('bloco-item-qr').style.display = 'none';
+  document.getElementById('inp-busca-peca').value = '';
+  document.getElementById('busca-res').innerHTML = '';
+  mostrarTela('tela-item');
+}
+
+/* â”€â”€ Busca manual de peÃ§a â”€â”€ */
+function buscarPecaManual() {
+  var val = (document.getElementById('inp-busca-peca').value || '').toLowerCase().trim();
+  var res = document.getElementById('busca-res');
+  if (!val || val.length < 2) { res.innerHTML = ''; return; }
+  var matches = (_store.pecas || []).filter(function(p) {
+    return p.ativo !== false && (
+      (p.codigo || '').toLowerCase().includes(val) ||
+      (p.nome   || '').toLowerCase().includes(val)
+    );
+  }).slice(0, 10);
+  if (!matches.length) { res.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:10px 0">Nenhuma peÃ§a encontrada</div>'; return; }
+  res.innerHTML = '<div class="rt-busca-res">' + matches.map(function(p) {
+    var saldo = _saldos[p.id] || 0;
+    var st = saldo <= 0  'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo  'low' : 'ok');
+    return '<div class="rt-busca-item" onclick="selecionarPecaBusca(\'' + p.id + '\')">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="nome">' + escHtml(p.nome) + '</div>' +
+        '<div class="cod">' + escHtml(p.codigo) + '</div>' +
+      '</div>' +
+      '<span class="rt-badge rt-badge-' + st + '">' + saldo + ' ' + (p.unidade||'UN') + '</span>' +
+    '</div>';
+  }).join('') + '</div>';
+}
+
+function selecionarPecaBusca(id) {
+  var p = (_store.pecas || []).find(function(x) { return x.id === id; });
+  if (!p) return;
+  carregarItem(p);
+}
+
+/* â”€â”€ Escanear QR â”€â”€ */
+function escanearQR() {
+  var url = prompt('Cole a URL do QR code escaneado (ex: http://localhost:8080/retirada.htmlid=peca123):');
+  if (!url) return;
+  try {
+    var parsed = new URL(url);
+    var pecaId = parsed.searchParams.get('id');
+    if (!pecaId) { toast('URL invÃ¡lida â€” nÃ£o contÃ©m id=', 'error'); return; }
+    var p = (_store.pecas || []).find(function(x) { return x.id === pecaId; });
+    if (!p) { toast('PeÃ§a nÃ£o encontrada', 'error'); return; }
+    carregarItem(p);
+  } catch(e) {
+    toast('URL invÃ¡lida', 'error');
+  }
+}
+
+/* â”€â”€ Utils â”€â”€ */
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* â”€â”€ Start â”€â”€ */
+init();
+</script> </body> </html> 

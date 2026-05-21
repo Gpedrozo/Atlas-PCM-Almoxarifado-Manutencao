@@ -1,0 +1,344 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Peças - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1">
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
+    <div class="sub">PCM Almoxarifado</div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Principal</div>
+    <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
+    <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
+    <div class="nav-group-label">Cadastros</div>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
+    <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
+    <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
+    <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
+    <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
+    <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
+    <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
+  </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Cadastro de Peças</div> <div class="topbar-subtitle">Gerencie o catálogo de peças e materiais</div> </div> <div class="topbar-actions"> <button class="btn btn-secondary btn-sm" onclick="Utils.abrirModal('modal-importar')"> Importar em Massa</button> <button class="btn btn-primary" onclick="abrirNovaPeca()">+ Nova Peça</button> <button class="btn-theme" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- Filtros --> <div class="card" style="margin-bottom:18px;padding:14px 20px;"> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"> <div class="search-bar" style="flex:1;min-width:200px;"> <input type="text" id="busca" placeholder="Buscar por código, nome ou categoria..." oninput="renderTabela()"> </div> <select id="filtro-categoria" onchange="renderTabela()" style="min-width:160px;"> <option value="">Todas as Categorias</option> </select> <select id="filtro-status" onchange="renderTabela()" style="min-width:140px;"> <option value="">Todos</option> <option value="ativo">Ativos</option> <option value="inativo">Inativos</option> </select> </div> </div> <!-- Tabela --> <div class="card"> <div class="table-wrapper"> <table id="tabela-pecas"> <thead> <tr> <th>Código</th> <th>Nome</th> <th>Categoria</th> <th>Un.</th> <th>Mín.</th> <th style="text-align:right">Preço</th> <th>Local</th> <th>Status</th> <th style="text-align:center">Ações</th> </tr> </thead> <tbody id="tbody-pecas"></tbody> </table> </div> <div id="empty-state-pecas" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma peça encontrada</p> </div> </div> </div> </div>
+</div> <!-- MODAL NOVA / EDITAR PEÇA -->
+<div class="modal-overlay" id="modal-peca" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:920px"> <div class="modal-header"> <div class="modal-title" id="modal-peca-titulo">Nova Peça</div> <button class="modal-close" onclick="Utils.fecharModal('modal-peca')"></button> </div> <form id="form-peca" onsubmit="salvarPeca(event)" autocomplete="off"> <input type="hidden" id="peca-id"> <div class="wizard-stack"> <section class="wizard-section"> <div class="wizard-section-title">1. Identificação</div> <div class="form-grid"> <div class="form-group"> <label>Código *</label> <input type="text" id="peca-codigo" placeholder="ex: ROL-001" required> </div> <div class="form-group"> <label>Nome *</label> <input type="text" id="peca-nome" placeholder="Nome da peça" required> </div> <div class="form-group"> <label>Categoria *</label> <input type="text" id="peca-categoria" placeholder="ex: Rolamentos" required list="lista-categorias"> <datalist id="lista-categorias"></datalist> </div> <div class="form-group"> <label>Unidade *</label> <select id="peca-unidade" required> <option value="UN">UN - Unidade</option> <option value="MT">MT - Metro</option> <option value="KG">KG - Quilograma</option> <option value="LT">LT - Litro</option> <option value="CX">CX - Caixa</option> <option value="PC">PC - Peça</option> <option value="PR">PR - Par</option> <option value="RL">RL - Rolo</option> </select> </div> </div> </section> <section class="wizard-section"> <div class="wizard-section-title">2. Estoque e compra</div> <div class="form-grid"> <div class="form-group"> <label>Estoque Mínimo *</label> <input type="number" id="peca-estoque-minimo" min="0" placeholder="0" required> </div> <div class="form-group"> <label>Localização</label> <input type="text" id="peca-localizacao" placeholder="ex: Prateleira A1"> </div> <div class="form-group"> <label>Fornecedor</label> <input type="text" id="peca-fornecedor" placeholder="Nome do fornecedor"> </div> <div class="form-group"> <label>Preço Unitário (R$)</label> <input type="number" id="peca-preco" min="0" step="0.01" placeholder="0,00"> </div> </div> </section> <section class="wizard-section"> <div class="wizard-section-title">3. Detalhes e fotos</div> <div class="form-grid"> <div class="form-group full"> <label>Descrição</label> <textarea id="peca-descricao" placeholder="Detalhes técnicos da peça..."></textarea> </div> <div class="form-group full"> <label>Fotos do Item</label> <div id="foto-galeria-edit" class="foto-galeria"></div> <input type="file" id="peca-foto-input" accept="image/*" multiple style="display:none" onchange="adicionarFotos(event)"> <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Clique em <strong>+</strong> para adicionar fotos. Múltiplas imagens melhoram a identificação do item.</p> </div> </div> </section> </div> <div class="modal-footer"> <button type="button" class="btn btn-outline" onclick="Utils.fecharModal('modal-peca')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar Peça</button> </div> </form> </div>
+</div> <!-- MODAL CONFIRMAR DESATIVAÇÃO -->
+<div class="modal-overlay" id="modal-confirmar" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:400px"> <div class="modal-header"> <div class="modal-title">Confirmar Desativação</div> <button class="modal-close" onclick="Utils.fecharModal('modal-confirmar')"></button> </div> <p style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Tem certeza que deseja desativar a peça <strong id="confirmar-nome"></strong></p> <p style="font-size:12px;color:var(--text-muted)">A peça não será excluída, apenas marcada como inativa.</p> <div class="modal-footer"> <button class="btn btn-outline" onclick="Utils.fecharModal('modal-confirmar')">Cancelar</button> <button class="btn btn-danger" id="btn-confirmar-desativar">Desativar</button> </div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('pecas');
+    Utils.aplicarPermissoes();
+    _inicializar();
+  });
+
+  let pecaImagens = []; // array de filenames da peça em edição
+
+  // -- Galeria de fotos no modal -------------------------
+  function renderGaleriaEdit() {
+    const g = document.getElementById('foto-galeria-edit');
+    if (!g) return;
+    const thumbs = pecaImagens.map(function(fn) {
+      const url = '/api/imagens/' + encodeURIComponent(fn);
+      return '<div class="foto-galeria-thumb" onclick="Utils.abrirLightbox(\'' + url + '\',\'\')">'
+        + '<img src="' + url + '" loading="lazy">'
+        + '<button class="del-foto" onclick="event.stopPropagation();removerFoto(\'' + fn + '\')" title="Remover foto"></button>'
+        + '</div>';
+    }).join('');
+    const btn = '<button type="button" class="foto-galeria-upload-btn" onclick="document.getElementById(\'peca-foto-input\').click()" title="Adicionar foto">'
+      + '<span>Adicionar</span></button>';
+    g.innerHTML = thumbs + btn;
+  }
+
+  function adicionarFotos(event) {
+    const files = Array.from(event.target.files);
+    event.target.value = '';
+    if (!files.length) return;
+    const pecaId = document.getElementById('peca-id').value || 'novo';
+    const btn = document.querySelector('.foto-galeria-upload-btn');
+    if (btn) btn.classList.add('enviando');
+
+    const uploads = files.map(function(file) {
+      return Utils.lerArquivoBase64(file).then(function(base64) {
+        return fetch('/api/imagens', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ base64: base64, pecaId: pecaId })
+        }).then(function(r) { return r.json(); });
+      }).then(function(res) {
+        if (res.filename) pecaImagens.push(res.filename);
+      }).catch(function() { Utils.toast('Erro ao fazer upload de uma imagem.', 'error'); });
+    });
+
+    Promise.all(uploads).then(function() {
+      if (btn) btn.classList.remove('enviando');
+      renderGaleriaEdit();
+    });
+  }
+
+  function removerFoto(filename) {
+    if (!confirm('Remover esta foto')) return;
+    fetch('/api/imagens/' + encodeURIComponent(filename), { method: 'DELETE' })
+      .then(function() {
+        pecaImagens = pecaImagens.filter(function(f) { return f !== filename; });
+        // Atualiza _store local
+        const id = document.getElementById('peca-id').value;
+        if (id) { const p = DB.Pecas.buscarId(id); if (p) p.imagens = pecaImagens.slice(); }
+        renderGaleriaEdit();
+      })
+      .catch(function() { Utils.toast('Erro ao remover foto.', 'error'); });
+  }
+
+  // -- Filtros e tabela ----------------------------------
+  function getCategorias() {    const set = new Set(DB.Pecas.listar().map(p => p.categoria).filter(Boolean));
+    return [...set].sort();
+  }
+
+  function populaFiltros() {
+    const sel = document.getElementById('filtro-categoria');
+    const atual = sel.value;
+    sel.innerHTML = '<option value="">Todas as Categorias</option>';
+    getCategorias().forEach(c => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      if (c === atual) o.selected = true;
+      sel.appendChild(o);
+    });
+
+    const dl = document.getElementById('lista-categorias');
+    dl.innerHTML = getCategorias().map(c => `<option value="${Utils.safe(c)}">`).join('');
+  }
+
+  function renderTabela() {
+    const busca = document.getElementById('busca').value.toLowerCase();
+    const catFiltro = document.getElementById('filtro-categoria').value;
+    const stFiltro = document.getElementById('filtro-status').value;
+
+    const pecas = DB.Pecas.listar().filter(p => {
+      const matchBusca = !busca || p.codigo.toLowerCase().includes(busca) || p.nome.toLowerCase().includes(busca) || (p.categoria||'').toLowerCase().includes(busca);
+      const matchCat = !catFiltro || p.categoria === catFiltro;
+      const matchSt = !stFiltro || (stFiltro === 'ativo'  p.ativo !== false : p.ativo === false);
+      return matchBusca && matchCat && matchSt;
+    });
+
+    const tbody = document.getElementById('tbody-pecas');
+    const empty = document.getElementById('empty-state-pecas');
+
+    if (pecas.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+    empty.style.display = 'none';
+
+    const isAdmin = Auth.isAdmin();
+    tbody.innerHTML = pecas.map(p => `
+      <tr> <td><code style="font-size:11px;background:var(--bg);padding:2px 6px;border-radius:4px;">${Utils.safe(p.codigo)}</code></td> <td style="max-width:220px"><strong style="font-size:13px">${Utils.safe(p.nome)}</strong></td> <td><span class="badge badge-pending" style="font-size:11px">${Utils.safe(p.categoria)}</span></td> <td style="font-size:12px">${Utils.safe(p.unidade)}</td> <td style="font-size:12px">${p.estoqueMinimo}</td> <td style="text-align:right;font-size:12px">${p.precoUnitario  Utils.fmtMoeda(Number(p.precoUnitario)) : '-'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localização||p.localizacao||'-')}</td> <td>${p.ativo !== false  '<span class="badge badge-ok">Ativo</span>' : '<span class="badge badge-critical">Inativo</span>'}</td> <td style="text-align:center;white-space:nowrap;padding:6px 8px"> <button class="btn-icon" title="Editar" onclick="editarPeca('${p.id}')"></button> <a class="btn-icon" title="Gerar Etiqueta" href="etiquetas.html" onclick="localStorage.setItem('etiqueta_quick','${p.id}')"></a> ${isAdmin && p.ativo !== false  `<button class="btn-icon" title="Desativar" onclick="confirmarDesativar('${p.id}','${Utils.safe(p.nome)}')"></button>` : ''}
+          ${isAdmin && p.ativo === false  `<button class="btn-icon" title="Reativar" onclick="reativarPeca('${p.id}')"></button>` : ''}
+        </td> </tr> `).join('');
+  }
+
+  function abrirNovaPeca() {
+    document.getElementById('form-peca').reset();
+    document.getElementById('peca-id').value = '';
+    document.getElementById('modal-peca-titulo').textContent = 'Nova Peça';
+    pecaImagens = [];
+    populaFiltros();
+    renderGaleriaEdit();
+    Utils.abrirModal('modal-peca');
+  }
+
+  function editarPeca(id) {
+    const p = DB.Pecas.buscarId(id);
+    if (!p) return;
+    document.getElementById('peca-id').value = p.id;
+    document.getElementById('peca-codigo').value = p.codigo;
+    document.getElementById('peca-nome').value = p.nome;
+    document.getElementById('peca-categoria').value = p.categoria;
+    document.getElementById('peca-unidade').value = p.unidade;
+    document.getElementById('peca-estoque-minimo').value = p.estoqueMinimo;
+    document.getElementById('peca-localizacao').value = p.localizacao || p.localização || '';
+    document.getElementById('peca-fornecedor').value = p.fornecedor || '';
+    document.getElementById('peca-preco').value = p.precoUnitario || '';
+    document.getElementById('peca-descricao').value = p.descricao || '';
+    pecaImagens = (p.imagens || []).slice();
+    populaFiltros();
+    renderGaleriaEdit();
+    document.getElementById('modal-peca-titulo').textContent = 'Editar Peça';
+    Utils.abrirModal('modal-peca');
+  }
+
+  function salvarPeca(e) {
+    e.preventDefault();
+    const id = document.getElementById('peca-id').value;
+    const peca = {
+      id: id || undefined,
+      codigo: document.getElementById('peca-codigo').value.trim().toUpperCase(),
+      nome: document.getElementById('peca-nome').value.trim(),
+      categoria: document.getElementById('peca-categoria').value.trim(),
+      unidade: document.getElementById('peca-unidade').value,
+      estoqueMinimo: Number(document.getElementById('peca-estoque-minimo').value),
+      precoUnitario: parseFloat(document.getElementById('peca-preco').value) || 0,
+      localização: document.getElementById('peca-localizacao').value.trim(),
+      fornecedor: document.getElementById('peca-fornecedor').value.trim(),
+      descricao: document.getElementById('peca-descricao').value.trim(),
+      imagens: pecaImagens.slice(),
+      ativo: true,
+    };
+
+    // Verificar código duplicado
+    const existente = DB.Pecas.listar().find(p => p.codigo === peca.codigo && p.id !== id);
+    if (existente) { Utils.toast('Código já cadastrado para outra peça.', 'error'); return; }
+
+    DB.Pecas.salvar(peca);
+    Utils.fecharModal('modal-peca');
+    Utils.toast(id  'Pea atualizada com sucesso!' : 'Pea cadastrada com sucesso!', 'success');
+    populaFiltros();
+    renderTabela();
+  }
+
+  function confirmarDesativar(id, nome) {
+    document.getElementById('confirmar-nome').textContent = nome;
+    document.getElementById('btn-confirmar-desativar').onclick = () => {
+      DB.Pecas.remover(id);
+      Utils.fecharModal('modal-confirmar');
+      Utils.toast('Peça desativada.', 'warning');
+      renderTabela();
+    };
+    Utils.abrirModal('modal-confirmar');
+  }
+
+  function reativarPeca(id) {
+    const p = DB.Pecas.buscarId(id);
+    if (!p) return;
+    p.ativo = true;
+    DB.Pecas.salvar(p);
+    Utils.toast('Peça reativada com sucesso!', 'success');
+    renderTabela();
+  }
+
+  function _inicializar() { populaFiltros(); renderTabela(); }
+</script> <!-- ------------------------------------------------------
+     MODAL IMPORTAÇÃO EM MASSA (CSV)
+-------------------------------------------------------- -->
+<div class="modal-overlay" id="modal-importar" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:680px"> <div class="modal-header"> <div class="modal-title"> Importar Peças em Massa (CSV)</div> <button class="modal-close" onclick="Utils.fecharModal('modal-importar')"></button> </div> <div style="margin-bottom:16px"> <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px"> Faça upload de um arquivo CSV com as peças. Baixe o modelo abaixo para garantir o formato correto.
+      </p> <div style="background:var(--bg);border-radius:8px;padding:12px 16px;font-size:12px;font-family:monospace;margin-bottom:12px;border:1px solid var(--border)"> codigo,nome,categoria,unidade,estoqueMinimo,precoUnitario,localizacao,fornecedor
+      </div> <button class="btn btn-secondary btn-sm" onclick="downloadTemplate()"> Baixar Modelo CSV</button> </div> <div class="drop-zone" id="drop-zone-importar"
+         ondragover="event.preventDefault();this.classList.add('drag-over')"
+         ondragleave="this.classList.remove('drag-over')"
+         ondrop="onDropImport(event)"
+         onclick="document.getElementById('csv-input').click()"> <div class="icon"></div> <p>Clique ou arraste o arquivo CSV aqui</p> <input type="file" id="csv-input" accept=".csv,text/csv" style="display:none" onchange="lerCSV(this.files[0])"> </div> <div id="import-preview" style="display:none;margin-top:16px"> <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"> <strong id="import-resumo" style="font-size:13px"></strong> <button class="btn btn-primary btn-sm" onclick="confirmarImport()">Confirmar Importação</button> </div> <div class="table-wrapper" style="max-height:260px;overflow-y:auto"> <table id="import-table" style="font-size:12px"> <thead> <tr> <th>Código</th><th>Nome</th><th>Categoria</th><th>Unidade</th> <th>Mín</th><th>Preço</th><th>Local</th><th>Fornecedor</th> </tr> </thead> <tbody id="import-tbody"></tbody> </table> </div> </div> <div id="import-erro" style="display:none;color:var(--danger);font-size:13px;margin-top:10px"></div> </div>
+</div> <script> var importDados = [];
+
+  function downloadTemplate() {
+    var csv = 'codigo,nome,categoria,unidade,estoqueMinimo,precoUnitario,localizacao,fornecedor\n'
+            + 'EX-001,Exemplo de Peça,Rolamentos,UN,5,49.90,Prateleira A1,Fornecedor ABC';
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = 'modelo_importacao.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function onDropImport(e) {
+    e.preventDefault();
+    document.getElementById('drop-zone-importar').classList.remove('drag-over');
+    var file = e.dataTransfer.files[0];
+    if (file) lerCSV(file);
+  }
+
+  function lerCSV(file) {
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        parsearCSV(e.target.result);
+      } catch(err) {
+        document.getElementById('import-erro').style.display = '';
+        document.getElementById('import-erro').textContent = 'Erro ao ler o arquivo: ' + err.message;
+        document.getElementById('import-preview').style.display = 'none';
+      }
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  function parsearCSV(texto) {
+    var linhas = texto.split(/\r\n/).filter(function(l){ return l.trim(); });
+    if (linhas.length < 2) throw new Error('Arquivo vazio ou sem dados.');
+    var cabecalho = linhas[0].split(',').map(function(h){ return h.trim().toLowerCase(); });
+    var campos = ['codigo','nome','categoria','unidade','estoqueminimo','precounitario','localizacao','fornecedor'];
+    var ok = campos.slice(0,4).every(function(c){ return cabecalho.indexOf(c) >= 0; });
+    if (!ok) throw new Error('Colunas obrigatórias ausentes: codigo, nome, categoria, unidade.');
+
+    importDados = [];
+    var erros = [];
+    for (var i = 1; i < linhas.length; i++) {
+      var vals = linhas[i].split(',').map(function(v){ return v.trim(); });
+      var obj = {};
+      cabecalho.forEach(function(h, idx){ obj[h] = vals[idx] || ''; });
+      if (!obj.codigo || !obj.nome) { erros.push('Linha ' + (i+1) + ': código e nome são obrigatórios.'); continue; }
+      importDados.push({
+        codigo:        obj.codigo,
+        nome:          obj.nome,
+        categoria:     obj.categoria || 'Geral',
+        unidade:       obj.unidade   || 'UN',
+        estoqueMinimo: parseInt(obj.estoqueminimo)||0,
+        precoUnitario: parseFloat(obj.precounitario)||0,
+        localizacao:   obj.localizacao || '',
+        fornecedor:    obj.fornecedor  || '',
+        ativo: true
+      });
+    }
+
+    var errEl = document.getElementById('import-erro');
+    if (erros.length) { errEl.style.display=''; errEl.textContent = erros.join(' | '); }
+    else              { errEl.style.display='none'; }
+
+    document.getElementById('import-resumo').textContent = importDados.length + ' peça(s) prontas para importar';
+    document.getElementById('import-tbody').innerHTML = importDados.map(function(p){
+      return '<tr><td>' + Utils.safe(p.codigo) + '</td><td>' + Utils.safe(p.nome) + '</td>'
+        + '<td>' + Utils.safe(p.categoria) + '</td><td>' + Utils.safe(p.unidade) + '</td>'
+        + '<td>' + p.estoqueMinimo + '</td><td>' + Utils.fmtMoeda(p.precoUnitario) + '</td>'
+        + '<td>' + Utils.safe(p.localizacao) + '</td><td>' + Utils.safe(p.fornecedor) + '</td></tr>';
+    }).join('');
+    document.getElementById('import-preview').style.display = importDados.length  '' : 'none';
+  }
+
+  function confirmarImport() {
+    if (!importDados.length) return;
+    var novos = 0, atualizados = 0;
+    importDados.forEach(function(p) {
+      var existente = DB.Pecas.listar().find(function(x){ return x.codigo === p.codigo; });
+      if (existente) { DB.Pecas.salvar(Object.assign({}, existente, p)); atualizados++; }
+      else           { DB.Pecas.salvar(p); novos++; }
+    });
+    Utils.fecharModal('modal-importar');
+    Utils.toast(novos + ' adicionadas, ' + atualizados + ' atualizadas.', 'success');
+    document.getElementById('import-preview').style.display = 'none';
+    document.getElementById('csv-input').value = '';
+    importDados = [];
+    populaFiltros();
+    renderTabela();
+  }
+</script>
+</body>
+</html> 

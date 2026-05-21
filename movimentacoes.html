@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Movimentações - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <style> .tipo-entrada { color: var(--success); font-weight: 700; }
+    .tipo-saida   { color: var(--danger);  font-weight: 700; }
+    .tipo-ajuste  { color: var(--warning); font-weight: 700; }
+    .form-mov-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 24px; margin-bottom: 22px; }
+    .tipo-selector { display: flex; gap: 10px; margin-bottom: 4px; }
+    .tipo-btn { flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--border); background: var(--bg); cursor: pointer; font-size: 14px; font-weight: 600; text-align: center; transition: all .15s; }
+    .tipo-btn.selected-entrada { border-color: var(--success); background: #e6f4ea; color: var(--success); }
+    .tipo-btn.selected-saida   { border-color: var(--danger);  background: #fce8e6; color: var(--danger); }
+    .saldo-info { background: var(--bg); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 16px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
+    <div class="sub">PCM Almoxarifado</div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Principal</div>
+    <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
+    <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
+    <div class="nav-group-label">Cadastros</div>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
+    <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
+    <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
+    <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
+    <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
+    <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
+    <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
+  </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Movimentações</div> <div class="topbar-subtitle">Registre entradas e saídas de estoque</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- FORMULÁRIO DE REGISTRO --> <div class="form-mov-card"> <div class="card-title">+ Registrar Movimentação</div> <form id="form-mov" onsubmit="registrarMovimentacao(event)" autocomplete="off"> <!-- Tipo --> <div class="form-group" style="margin-bottom:16px"> <label>Tipo de Movimentação *</label> <div class="tipo-selector"> <button type="button" class="tipo-btn selected-entrada" id="btn-tipo-entrada" onclick="selecionarTipo('ENTRADA')"> ENTRADA<br><span style="font-size:11px;font-weight:400;opacity:.8">Recebimento de material</span> </button> <button type="button" class="tipo-btn" id="btn-tipo-saida" onclick="selecionarTipo('SAIDA')"> SAÍDA<br><span style="font-size:11px;font-weight:400;opacity:.8">Uso em manutenção</span> </button> </div> <input type="hidden" id="mov-tipo" value="ENTRADA"> </div> <div class="form-grid"> <!-- Peça --> <div class="form-group" style="grid-column:1/-1"> <label>Peça / Material *</label> <select id="mov-peca" required onchange="atualizarSaldoInfo()"> <option value="">- Selecione a peça -</option> </select> <div id="saldo-info" style="display:none" class="saldo-info"> <span style="font-size:13px;color:var(--text-muted)">Saldo atual:</span> <span id="saldo-valor" style="font-size:20px;font-weight:800;color:var(--primary)">0</span> <span id="saldo-unidade" style="font-size:12px;color:var(--text-muted)"></span> <span id="saldo-badge"></span> </div> </div> <!-- Quantidade --> <div class="form-group"> <label>Quantidade *</label> <input type="number" id="mov-quantidade" min="1" step="1" placeholder="0" required> </div> <!-- Preço Unitário (visível apenas em ENTRADA) --> <div class="form-group" id="grupo-preco"> <label>Preço Unitário (nesta compra) <span style="font-size:11px;color:var(--text-muted);font-weight:400">R$</span></label> <input type="number" id="mov-preco" min="0" step="0.01" placeholder="0,00"> <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Informe o valor pago por unidade nesta entrada. Pode ser diferente do cadastro.</div> </div> <!-- Data --> <div class="form-group"> <label>Data *</label> <input type="date" id="mov-data" required> </div> <!-- Ordem de Serviço --> <div class="form-group"> <label>Ordem de Serviço</label> <input type="text" id="mov-os" placeholder="ex: OS-2026-001"> </div> <!-- Ativo / Máquina (mostrado em SAÍDA) --> <div class="form-group" id="grupo-ativo" style="display:none"> <label>Ativo / TAG da Máquina</label> <div style="display:flex;gap:8px"> <select id="mov-ativo" onchange="onAtivoChange()" style="flex:1"> <option value="">- Selecione o ativo (opcional) -</option> </select> </div> <div id="ativo-info" style="display:none;font-size:12px;color:var(--text-muted);margin-top:4px"></div> </div> <!-- Observação --> <div class="form-group full"> <label>Observação</label> <input type="text" id="mov-obs" placeholder="Informações adicionais..."> </div> </div> <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"> <button type="button" class="btn btn-outline" onclick="limparFormulario()">Limpar</button> <button type="submit" class="btn btn-primary" id="btn-registrar">Registrar</button> </div> </form> </div> <!-- HISTÓRICO --> <div class="card"> <div class="card-title" style="justify-content:space-between"> <span> Histórico de Movimentações</span> <div style="display:flex;gap:10px;align-items:center"> <div class="search-bar" style="width:220px;padding:5px 10px"> <span class="icon" style="font-size:13px"></span> <input type="text" id="busca-hist" placeholder="Buscar por peça..." oninput="renderHistorico()" style="font-size:13px"> </div> <select id="filtro-tipo" onchange="renderHistorico()" style="font-size:13px;padding:5px 10px;border:1.5px solid var(--border);border-radius:7px"> <option value="">Todos os tipos</option> <option value="ENTRADA">Entradas</option> <option value="SAIDA">Saídas</option> <option value="AJUSTE">Ajustes</option> </select> </div> </div> <div class="table-wrapper"> <table> <thead> <tr> <th>Data</th> <th>Tipo</th> <th>Peça</th> <th>Ativo / TAG</th> <th>Qtd</th> <th>Preço Unit.</th> <th>OS</th> <th>Responsável</th> <th>Observação</th> </tr> </thead> <tbody id="tbody-hist"></tbody> </table> </div> <div id="empty-hist" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma movimentação encontrada</p> </div> <div id="paginacao" style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;align-items:center"></div> </div> </div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('movimentacoes');
+    Utils.aplicarPermissoes();
+    _inicializar();
+  });
+
+  let tipoSelecionado = 'ENTRADA';
+  let paginaAtual = 1;
+  const POR_PAGINA = 15;
+
+  // Preenche data de hoje
+  document.getElementById('mov-data').value = Utils.dataHoje();
+
+  // Preenche select de peças
+  function populaPecas(pecaPreSelecionada) {
+    const sel = document.getElementById('mov-peca');
+    const pecas = DB.Pecas.ativas();
+    sel.innerHTML = '<option value="">- Selecione a peça -</option>';
+    pecas.forEach(p => {
+      const o = document.createElement('option');
+      o.value = p.id;
+      o.textContent = `[${p.codigo}] ${p.nome}`;
+      if (p.id === pecaPreSelecionada) o.selected = true;
+      sel.appendChild(o);
+    });
+    if (pecaPreSelecionada) atualizarSaldoInfo();
+    Utils.initSearchSelect('mov-peca');
+  }
+
+  function populaAtivos() {
+    const sel = document.getElementById('mov-ativo');
+    const ativos = DB.Ativos.ativos();
+    sel.innerHTML = '<option value="">- Selecione o ativo (opcional) -</option>';
+    ativos.forEach(a => {
+      const o = document.createElement('option');
+      o.value = a.id;
+      o.textContent = a.tag + ' - ' + a.descricao;
+      sel.appendChild(o);
+    });
+  }
+
+  function onAtivoChange() {
+    const id = document.getElementById('mov-ativo').value;
+    const info = document.getElementById('ativo-info');
+    if (!id) { info.style.display = 'none'; return; }
+    const a = DB.Ativos.buscarId(id);
+    if (a) {
+      info.textContent = a.setor + (a.fabricante  ' | ' + a.fabricante : '') + (a.modelo  ' ' + a.modelo : '');
+      info.style.display = '';
+    }
+  }
+
+  function selecionarTipo(tipo) {
+    tipoSelecionado = tipo;
+    document.getElementById('mov-tipo').value = tipo;
+    const btnE = document.getElementById('btn-tipo-entrada');
+    const btnS = document.getElementById('btn-tipo-saida');
+    btnE.className = 'tipo-btn' + (tipo === 'ENTRADA'  ' selected-entrada' : '');
+    btnS.className = 'tipo-btn' + (tipo === 'SAIDA'  ' selected-saida' : '');
+    document.getElementById('btn-registrar').textContent = tipo === 'ENTRADA'  'Registrar Entrada' : 'Registrar Sada';
+    // Mostrar/ocultar campo ativo
+    document.getElementById('grupo-ativo').style.display = tipo === 'SAIDA'  '' : 'none';
+    document.getElementById('grupo-preco').style.display = tipo === 'ENTRADA'  '' : 'none';
+    document.getElementById('ativo-info').style.display = 'none';
+  }
+
+  function atualizarSaldoInfo() {
+    const id = document.getElementById('mov-peca').value;
+    const infoEl = document.getElementById('saldo-info');
+    if (!id) { infoEl.style.display = 'none'; return; }
+    const p = DB.Pecas.buscarId(id);
+    const saldo = DB.Movimentos.saldoPeca(id);
+    const st = Utils.statusEstoque(saldo, p.estoqueMinimo);
+    document.getElementById('saldo-valor').textContent = Utils.fmt(saldo);
+    document.getElementById('saldo-unidade').textContent = p.unidade;
+    document.getElementById('saldo-badge').innerHTML = Utils.badgeEstoque(saldo, p.estoqueMinimo);
+    infoEl.style.display = 'flex';
+    // Pré-preenche preço com último preço de entrada registrado para essa peça
+    const movsPeca = DB.Movimentos.listar().filter(m => m.pecaId === id && m.tipo === 'ENTRADA' && m.precoUnitario > 0);
+    const ultimoPreco = movsPeca.length > 0  movsPeca[0].precoUnitario : (p.precoUnitario || 0);
+    const precoInput = document.getElementById('mov-preco');
+    if (ultimoPreco > 0) precoInput.value = Number(ultimoPreco).toFixed(2);
+    else precoInput.value = '';
+  }
+
+  function registrarMovimentacao(e) {
+    e.preventDefault();
+    const pecaId = document.getElementById('mov-peca').value;
+    const tipo   = document.getElementById('mov-tipo').value;
+    const qtd    = Number(document.getElementById('mov-quantidade').value);
+    const data   = document.getElementById('mov-data').value;
+    const os     = document.getElementById('mov-os').value.trim();
+    const obs    = document.getElementById('mov-obs').value.trim();
+    const ativoId = tipo === 'SAIDA'  (document.getElementById('mov-ativo').value || null) : null;
+    const precoUnitario = tipo === 'ENTRADA'  (parseFloat(document.getElementById('mov-preco').value) || 0) : 0;
+
+    if (!pecaId) { Utils.toast('Selecione uma peça.', 'error'); return; }
+    if (qtd <= 0) { Utils.toast('Quantidade deve ser maior que zero.', 'error'); return; }
+
+    // Verificar saldo para saída
+    if (tipo === 'SAIDA') {
+      const saldoAtual = DB.Movimentos.saldoPeca(pecaId);
+      if (qtd > saldoAtual) {
+        Utils.toast(`Saldo insuficiente! Disponível: ${saldoAtual}`, 'error');
+        return;
+      }
+    }
+
+    const sessao = Auth.getSessao();
+    DB.Movimentos.registrar({ tipo, pecaId, quantidade: qtd, data: new Date(data).toISOString(), responsavel: sessao.id, ordemServico: os, observacao: obs, ativoId, precoUnitario });
+    // Atualizar preço cadastrado da peça se for entrada com preço informado
+    if (tipo === 'ENTRADA' && precoUnitario > 0) {
+      const peca = DB.Pecas.buscarId(pecaId);
+      if (peca) { peca.precoUnitario = precoUnitario; DB.Pecas.salvar(peca); }
+    }
+    Utils.toast(`${tipo === 'ENTRADA'  'Entrada' : 'Sada'} registrada com sucesso!`, 'success');
+    limparFormulario();
+    renderHistorico();
+    atualizarSaldoInfo();
+  }
+
+  function limparFormulario() {
+    document.getElementById('form-mov').reset();
+    document.getElementById('mov-data').value = Utils.dataHoje();
+    document.getElementById('saldo-info').style.display = 'none';
+    selecionarTipo('ENTRADA');
+  }
+
+  function renderHistorico() {
+    const busca = document.getElementById('busca-hist').value.toLowerCase();
+    const tipoFiltro = document.getElementById('filtro-tipo').value;
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+
+    let movs = DB.Movimentos.listar().filter(m => {
+      const peca = pecasMap[m.pecaId];
+      const matchBusca = !busca || (peca && (peca.nome.toLowerCase().includes(busca) || peca.codigo.toLowerCase().includes(busca)));
+      const matchTipo = !tipoFiltro || m.tipo === tipoFiltro || (tipoFiltro === 'AJUSTE' && (m.tipo === 'AJUSTE' || m.tipo === 'AJUSTE_ADD' || m.tipo === 'AJUSTE_SUB'));
+      return matchBusca && matchTipo;
+    });
+
+    const total = movs.length;
+    const totalPags = Math.max(1, Math.ceil(total / POR_PAGINA));
+    if (paginaAtual > totalPags) paginaAtual = totalPags;
+    const inicio = (paginaAtual - 1) * POR_PAGINA;
+    const pagina = movs.slice(inicio, inicio + POR_PAGINA);
+
+    const tbody = document.getElementById('tbody-hist');
+    const empty = document.getElementById('empty-hist');
+
+    if (pagina.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = '';
+    } else {
+      empty.style.display = 'none';
+      tbody.innerHTML = pagina.map(m => {
+        const peca = pecasMap[m.pecaId];
+        const ativo = m.ativoId  DB.Ativos.buscarId(m.ativoId) : null;
+        const cls = m.tipo === 'ENTRADA'  'tipo-entrada' : m.tipo === 'SAIDA'  'tipo-saida' : 'tipo-ajuste';
+        return `<tr> <td style="white-space:nowrap">${Utils.formatarDataHora(m.data)}</td> <td><span class="${cls}">${Utils.labelTipo(m.tipo)}</span></td> <td> <div style="font-weight:600">${peca  Utils.safe(peca.nome) : '-'}</div> <div style="font-size:11px;color:var(--text-muted)">${peca  Utils.safe(peca.codigo) : ''}</div> </td> <td style="font-size:12px">${ativo  '<code style="font-size:11px">' + Utils.safe(ativo.tag) + '</code>' : '-'}</td> <td style="font-weight:700;font-size:15px">${m.tipo === 'SAIDA' || m.tipo === 'AJUSTE_SUB'  '-' : '+'}${m.quantidade} ${peca  Utils.safe(peca.unidade) : ''}</td> <td style="font-size:12px;color:var(--text-muted)">${m.tipo === 'ENTRADA' && m.precoUnitario > 0  Utils.fmtMoeda(m.precoUnitario) : '-'}</td> <td style="font-size:12px">${m.ordemServico  Utils.safe(m.ordemServico) : '-'}</td> <td style="font-size:12px">${Utils.safe(usuariosMap[m.responsavel] || m.responsavel || '-')}</td> <td style="font-size:12px;color:var(--text-muted)">${m.observacao  Utils.safe(m.observacao) : '-'}</td> </tr>`;
+      }).join('');
+    }
+
+    // Paginação
+    const pag = document.getElementById('paginacao');
+    if (totalPags <= 1) { pag.innerHTML = ''; return; }
+    let html = `<span style="font-size:12px;color:var(--text-muted)">${total} registros</span>`;
+    html += `<button class="btn btn-outline btn-sm" ${paginaAtual === 1  'disabled' : ''} onclick="irPagina(${paginaAtual-1})">Ant</button>`;
+    html += `<span style="font-size:13px;font-weight:600;padding:0 8px">${paginaAtual} / ${totalPags}</span>`;
+    html += `<button class="btn btn-outline btn-sm" ${paginaAtual === totalPags  'disabled' : ''} onclick="irPagina(${paginaAtual+1})">Prx</button>`;
+    pag.innerHTML = html;
+  }
+
+  function irPagina(n) { paginaAtual = n; renderHistorico(); }
+
+  function _inicializar() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pecaParam = urlParams.get('peca');
+    const tipoParam = urlParams.get('tipo');
+    populaPecas(pecaParam);
+    populaAtivos();
+    if (tipoParam === 'SAIDA') selecionarTipo('SAIDA');
+    renderHistorico();
+  }
+</script>
+</body>
+</html> 

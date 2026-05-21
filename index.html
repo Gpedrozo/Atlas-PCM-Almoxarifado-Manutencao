@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Atlas PCM — Acesso ao Sistema</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> </head> <body> <div class="login-page"> <div class="login-box"> <div class="login-logo"> <div id="login-logo-area"></div> <div class="sub">PCM Almoxarifado · Controle de Estoque</div> </div> <h2>Acesso ao Sistema</h2> <form id="form-login" autocomplete="off"> <div class="form-group"> <label for="email">E-mail</label> <input type="email" id="email" placeholder="seu@email.com" required autocomplete="username"> </div> <div class="form-group" style="margin-top:14px"> <label for="senha">Senha</label> <input type="password" id="senha" placeholder="••••••••" required autocomplete="current-password"> </div> <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:16px;font-size:13px;color:var(--text-muted)"> <input type="checkbox" id="manter-conectado"> Manter-me conectado
+        </label> <button type="submit" class="login-btn" style="margin-top:14px">Entrar</button> <div class="login-error" id="login-error"></div> </form> <div style="margin-top:20px;text-align:right"> <button class="btn-theme" onclick="Utils.toggleTheme()" id="btn-theme" title="Alternar tema">🌙</button> </div> </div> </div> <script src="db.js"></script> <script src="auth.js"></script> <script src="utils.js"></script> <script> fetch('/api/public-config', { credentials: 'same-origin' })
+      .then(function(r) { return r.ok  r.json() : {}; })
+      .then(function(cfg) {
+        if (window.__atlasLoader) window.__atlasLoader.dismiss(cfg);
+        const area = document.getElementById('login-logo-area');
+        if (area && cfg.logo) {
+          area.innerHTML = '<img src="' + cfg.logo + '" alt="Logo" style="max-height:72px;max-width:220px;object-fit:contain;margin-bottom:8px">';
+        } else {
+          Utils.renderLoginLogo();
+        }
+      })
+      .catch(function() { if (window.__atlasLoader) window.__atlasLoader.dismiss({}); });
+
+    Auth.me().then(function(sessao) {
+      Utils.applyTheme();
+      if (sessao) { window.location.href = 'dashboard.html'; return; }
+    });
+
+    document.getElementById('form-login').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+      const err   = document.getElementById('login-error');
+      err.style.display = 'none';
+      const lembrar = document.getElementById('manter-conectado').checked;
+      const res = await Auth.login(email, senha, lembrar);
+      if (res.ok) {
+        window.location.href = 'dashboard.html';
+      } else {
+        err.textContent = res.msg;
+        err.style.display = 'block';
+      }
+    });
+  </script> </body> </html> 

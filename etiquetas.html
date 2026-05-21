@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Etiquetas - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script> <style> .etiqueta-topbar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .etiqueta-info { font-size:12.5px; color:var(--text-muted); }
+    .etiqueta-grid-screen { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; }
+    .etiqueta-item-screen { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all .15s; }
+    .etiqueta-item-screen:hover { border-color:var(--primary); }
+    .etiqueta-item-screen.selected { border-color:var(--primary); background:var(--primary-light); }
+    .etiqueta-item-screen .check { font-size:18px; }
+    .etiqueta-item-screen .info { flex:1; min-width:0; }
+    .etiqueta-item-screen .nome { font-size:13px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .etiqueta-item-screen .codigo { font-size:11px; color:var(--text-muted); font-family:monospace; }
+    .etiqueta-item-screen .loc { font-size:11px; color:var(--text-muted); }
+    .filtro-cat { padding:7px 12px; font-size:13px; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); }
+
+    /* ===== ETIQUETA: estilos base (compartilhados tela/impressão) ===== */
+    #area-impressao { display: none; }
+
+    .label-item {
+      width: 60mm;
+      height: 40mm;
+      border: 1px solid #ccc;
+      border-radius: 2mm;
+      display: flex;
+      overflow: hidden;
+      box-sizing: border-box;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      background: #fff;
+    }
+    .label-qr-col {
+      width: 20mm;
+      min-width: 20mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2mm;
+      border-right: 1px solid #eee;
+      box-sizing: border-box;
+    }
+    .label-qr-col canvas,
+    .label-qr-col img { width: 16mm !important; height: 16mm !important; }
+    .label-info-col {
+      flex: 1;
+      padding: 2mm 2mm 1.5mm 2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .label-logo { max-height: 6mm; max-width: 32mm; object-fit: contain; margin-bottom: 1.5mm; }
+    .label-nome { font-size: 7.5pt; font-weight: 700; color: #1e3a5f; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word; }
+    .label-codigo { font-size: 6.5pt; font-family: monospace; color: #444; margin-top: 1mm; word-break: break-all; }
+    .label-loc { font-size: 6pt; color: #666; margin-top: 0.5mm; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .label-empresa { font-size: 5.5pt; color: #888; margin-top: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ===== IMPRESSÃO ===== */
+    @media print {
+      @page {
+        size: A4;
+        margin: 5mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        width: auto;
+        height: auto;
+      }
+
+      .no-print,
+      .sidebar,
+      .topbar,
+      #area-tela { display: none !important; }
+
+      .app-layout,
+      .main-content,
+      .page-body {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+        max-width: none !important;
+        background: #fff !important;
+        box-shadow: none !important;
+      }
+
+      /* Grade de impressão:
+         A4 = 210mm. @page margin 5mm cada lado => 200mm úteis.
+         3 colunas × 60mm = 180mm + 2 gaps × 3mm = 186mm  cabe em 200mm.
+         Sem padding extra (a margem da @page já cuida das bordas). */
+      #area-impressao {
+        display: grid !important;
+        grid-template-columns: repeat(3, 60mm);
+        column-gap: 3mm;
+        row-gap: 3mm;
+        justify-content: start;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: auto !important;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      .label-item {
+        width: 60mm !important;
+        height: 40mm !important;
+        margin: 0 !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+  </style> </head> <body> <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar no-print" id="sidebar"> <div class="sidebar-logo"> <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none"> <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div> <div class="sub">PCM Almoxarifado</div> </div> <nav> <div class="nav-group-label">Principal</div> <a href="dashboard.html" data-page="dashboard">Dashboard</a> <a href="estoque.html" data-page="estoque">Estoque</a> <a href="movimentacoes.html" data-page="movimentacoes">Movimentações</a> <div class="nav-group-label">Cadastros</div> <a href="pecas.html" data-page="pecas">Peças</a> <a href="ativos.html" data-page="ativos">Ativos</a> <a href="requisicoes.html" data-page="requisicoes">Req. de Compra</a> <a href="consertos.html" data-page="consertos">Consertos Externos</a> <div class="nav-group-label">Análise</div> <a href="relatorios.html" data-page="relatorios">Relatórios</a> <a href="etiquetas.html" data-page="etiquetas">Etiquetas</a> <div class="nav-group-label" data-admin>Administração</div> <a href="aprovacoes.html" data-page="aprovacoes" data-admin><span class="icon"></span> Solicitações</a> <a href="ajustes.html" data-page="ajustes" data-admin>Ajuste de Saldo</a> <a href="configuracoes.html" data-page="configuracoes" data-admin>Configurações</a> </nav> <div class="sidebar-footer"> <div class="user-info" id="sidebar-user-name">-</div> <div class="user-role" id="sidebar-user-role">-</div> <button class="btn-logout" onclick="Auth.logout()">Sair do Sistema</button> </div> </aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar no-print"> <div> <div class="topbar-title">Etiquetas</div> <div class="topbar-subtitle">Geração e impressão de etiquetas com QR code</div> </div> <div class="topbar-actions"> <button class="btn btn-primary btn-sm" id="btn-imprimir" onclick="imprimirSelecionados()" disabled> Imprimir Selecionados (<span id="qtd-sel">0</span>)</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- BARRA DE CONTROLES --> <div class="etiqueta-topbar no-print"> <div class="search-bar" style="flex:1;min-width:220px"> <input type="text" id="etq-busca" placeholder="Buscar por código ou nome..." oninput="renderTela()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select class="filtro-cat" id="filtro-cat" onchange="renderTela()"> <option value="">Todas as categorias</option> </select> <button class="btn btn-secondary btn-sm" onclick="selecionarTodos()"> Selecionar Todos</button> <button class="btn btn-secondary btn-sm" onclick="desselecionar()">Limpar Seleção</button> <span class="etiqueta-info" id="info-contagem">0 itens</span> </div> <!-- ÁREA DE TELA --> <div id="area-tela"> <div class="etiqueta-grid-screen" id="grid-etiquetas"></div> </div> <!-- ÁREA DE IMPRESSÃO (oculta, visível só no print) --> <div id="area-impressao"></div> </div> </div> </div> <script src="db.js"></script> <script src="auth.js"></script> <script src="utils.js"></script> <script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('etiquetas');
+    Utils.aplicarPermissoes();
+    _inicializar();
+  });
+
+  let selecionados = new Set();
+  let pecasFiltradas = [];
+
+  function renderTela() {
+    const catFiltro = document.getElementById('filtro-cat').value;
+    const busca     = (document.getElementById('etq-busca').value || '').toLowerCase().trim();
+    const pecas = DB.Pecas.ativas();
+
+    // Popular categorias no filtro
+    const cats = [...new Set(pecas.map(p => p.categoria).filter(Boolean))].sort();
+    const sel = document.getElementById('filtro-cat');
+    const catAtual = sel.value;
+    sel.innerHTML = '<option value="">Todas as categorias</option>' +
+      cats.map(c => `<option value="${Utils.safe(c)}" ${c === catAtual  'selected' : ''}>${Utils.safe(c)}</option>`).join('');
+
+    pecasFiltradas = pecas.filter(p => {
+      if (catFiltro && p.categoria !== catFiltro) return false;
+      if (busca) {
+        const txt = ((p.codigo||'') + ' ' + (p.nome||'')).toLowerCase();
+        if (!txt.includes(busca)) return false;
+      }
+      return true;
+    });
+
+    const grid = document.getElementById('grid-etiquetas');
+    if (pecasFiltradas.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Nenhuma peça cadastrada</p></div>';
+      document.getElementById('info-contagem').textContent = '0 itens';
+      return;
+    }
+
+    grid.innerHTML = pecasFiltradas.map(p => `
+      <div class="etiqueta-item-screen ${selecionados.has(p.id)  'selected' : ''}" onclick="toggleSel('${p.id}', this)"> <div class="check">${selecionados.has(p.id)  'Selecionado' : ''}</div> <div class="info"> <div class="nome">${Utils.safe(p.nome)}</div> <div class="codigo">${Utils.safe(p.codigo)}</div> <div class="loc"> ${Utils.safe(p.localização||p.localizacao||'-')}</div> </div> </div> `).join('');
+
+    document.getElementById('info-contagem').textContent = `${pecasFiltradas.length} itens`;
+    atualizarBotao();
+  }
+
+  function toggleSel(id, el) {
+    if (selecionados.has(id)) { selecionados.delete(id); el.classList.remove('selected'); el.querySelector('.check').textContent = ''; }
+    else                      { selecionados.add(id);    el.classList.add('selected');    el.querySelector('.check').textContent = ''; }
+    atualizarBotao();
+  }
+
+  function selecionarTodos() {
+    pecasFiltradas.forEach(p => selecionados.add(p.id));
+    renderTela();
+  }
+
+  function desselecionar() {
+    selecionados.clear();
+    renderTela();
+  }
+
+  function atualizarBotao() {
+    const btn = document.getElementById('btn-imprimir');
+    btn.disabled = selecionados.size === 0;
+    document.getElementById('qtd-sel').textContent = selecionados.size;
+  }
+
+  function imprimirSelecionados() {
+    if (selecionados.size === 0) return;
+
+    if (typeof QRCode === 'undefined') {
+      Utils.toast('Biblioteca QR Code não carregada. Verifique a conexão com a internet.', 'error');
+      return;
+    }
+
+    var cfg   = DB.Config.get();
+    var pecas = [...selecionados].map(function(id){ return DB.Pecas.buscarId(id); }).filter(Boolean);
+    var total = pecas.length;
+
+    // -- Overlay -------------------------------------------------
+    var overlay = document.createElement('div');
+    overlay.id = 'print-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:sans-serif;gap:14px';
+    overlay.innerHTML =
+      '<div style="font-size:20px;font-weight:700"> Gerando etiquetas...</div>' +
+      '<div id="ov-progress" style="font-size:14px;opacity:.85">Preparando 0 de ' + total + '...</div>' +
+      '<div style="width:320px;height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden">' +
+        '<div id="ov-bar" style="height:100%;background:#fff;border-radius:4px;width:0%;transition:width .08s"></div>' +
+      '</div>' +
+      '<button onclick="window.__cancelarImpressao()" style="margin-top:4px;padding:7px 22px;border:2px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:8px;cursor:pointer;font-size:13px">Cancelar</button>';
+    document.body.appendChild(overlay);
+
+    var area = document.getElementById('area-impressao');
+    area.innerHTML = '';
+
+    var cancelado = false;
+    window.__cancelarImpressao = function() {
+      cancelado = true;
+      limparOverlay();
+      area.innerHTML = '';
+    };
+
+    function limparOverlay() {
+      try {
+        if (document.body.contains(overlay)) document.body.removeChild(overlay);
+      } catch(e) {}
+    }
+
+    // qrcodejs@1.0.0 falha silenciosamente com caracteres acentuados (í, ã, ç...)
+    // deixando o canvas em branco sem lançar exceção.
+    // Solução: normalizar para ASCII puro antes de codificar.
+    function normQR(str) {
+      return String(str)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')   // remove diacríticos (acentos)
+        .replace(/[^\x00-\x7F]/g, '');    // qualquer outro não-ASCII ''
+    }
+
+    function criarEtiqueta(p) {
+      var div = document.createElement('div');
+      div.className = 'label-item';
+
+      var qrCol = document.createElement('div');
+      qrCol.className = 'label-qr-col';
+      var qrDiv = document.createElement('div');
+      qrDiv.dataset.codigo = p.codigo; // guardado para fallback
+      qrCol.appendChild(qrDiv);
+      div.appendChild(qrCol);
+
+      var infoCol = document.createElement('div');
+      infoCol.className = 'label-info-col';
+      var loc = p.localização || p.localizacao || '';
+      infoCol.innerHTML = (cfg.logo  '<img src="' + cfg.logo + '" class="label-logo" alt="Logo">'
+        : '<div style="font-size:7pt;font-weight:700;color:#1e3a5f;margin-bottom:2mm">' + Utils.safe(cfg.empresa || 'Atlas PCM') + '</div>')
+        + '<div class="label-nome">' + Utils.safe(p.nome) + '</div>'
+        + '<div class="label-codigo">' + Utils.safe(p.codigo) + '</div>'
+        + (loc  '<div class="label-loc">' + Utils.safe(loc) + '</div>' : '')
+        + '<div class="label-empresa">' + Utils.safe(cfg.empresa || 'Atlas Ind. Eletrodomésticos') + '</div>';
+      div.appendChild(infoCol);
+      area.appendChild(div);
+
+      try {
+        var qrText = window.location.origin + '/retirada.htmlid=' + encodeURIComponent(p.id);
+        var qrPx = 61; // ~16mm a 96dpi
+        new QRCode(qrDiv, { text: qrText, width: qrPx, height: qrPx, correctLevel: QRCode.CorrectLevel.M });
+      } catch(e) {
+        qrDiv.style.cssText = 'width:61px;height:61px;display:flex;align-items:center;justify-content:center;background:#f0f0f0;font-size:7px;text-align:center;color:#333;padding:3px;box-sizing:border-box';
+        qrDiv.textContent = p.codigo;
+      }
+    }
+
+    var BATCH = 30;
+    var idx = 0;
+
+    function processarLote() {
+      if (cancelado) return;
+      try {
+        var fim = Math.min(idx + BATCH, total);
+        for (; idx < fim; idx++) {
+          criarEtiqueta(pecas[idx]);
+        }
+        var pct = Math.round(idx / total * 100);
+        var elProg = document.getElementById('ov-progress');
+        var elBar  = document.getElementById('ov-bar');
+        if (elProg) elProg.textContent = 'Preparando ' + idx + ' de ' + total + '...';
+        if (elBar)  elBar.style.width  = pct + '%';
+
+        if (idx < total) {
+          setTimeout(processarLote, 0);
+          return;
+        }
+
+        // -- TODOS CRIADOS ----------------------------------------
+        // qrcodejs desenha o <canvas> de forma SÍNCRONA.
+        // Convertemos cada canvas para img data URL aqui mesmo,
+        // garantindo que o browser não perca os pixels ao imprimir.
+        // (não dependemos mais do setTimeout(0) interno da lib)
+        if (elProg) elProg.textContent = 'Finalizando...';
+        setTimeout(function() {
+          if (cancelado) return;
+
+          // canvas img data URL (síncrono após o DOM estar estável)
+          var canvases = area.querySelectorAll('.label-qr-col canvas');
+          canvases.forEach(function(canvas) {
+            var parent = canvas.parentNode; // = qrDiv
+            try {
+              var dataURL = canvas.toDataURL('image/png');
+              // Canvas em branco produz data URL muito curta (< 500 chars).
+              // Isso ocorre quando qrcodejs falha silenciosamente.
+              if (!dataURL || dataURL.length < 500) {
+                var cod = (parent.dataset && parent.dataset.codigo)  parent.dataset.codigo : '';
+                parent.style.cssText = 'width:61px;height:61px;display:flex;align-items:center;justify-content:center;background:#f0f0f0;font-size:7px;text-align:center;color:#333;padding:3px;box-sizing:border-box;border-radius:3px';
+                parent.innerHTML = '<div>' + cod + '</div>';
+              } else {
+                // QR OK: substituir canvas por img estática (impressão garantida)
+                var img = document.createElement('img');
+                img.src = dataURL;
+                img.style.cssText = 'width:61px;height:61px;display:block';
+                parent.innerHTML = '';
+                parent.appendChild(img);
+              }
+            } catch(e) {
+              // toDataURL falhou (improvável em arquivo local) - manter como está
+            }
+          });
+
+          limparOverlay();
+
+          var cleanup = function() {
+            area.innerHTML = '';
+            window.removeEventListener('afterprint', cleanup);
+          };
+          window.addEventListener('afterprint', cleanup);
+
+          window.print();
+
+          setTimeout(function() {
+            if (area.innerHTML !== '') area.innerHTML = '';
+          }, 4000);
+
+        }, 200); // 200ms: DOM estável; canvas já foi desenhado de forma síncrona
+
+      } catch(err) {
+        limparOverlay();
+        area.innerHTML = '';
+        Utils.toast('Erro ao gerar etiquetas: ' + (err.message || err), 'error');
+      }
+    }
+
+    processarLote();
+  }
+
+  function _inicializar() { renderTela(); }
+  // Init - chamado via DB.init().then()
+</script> </body> </html> 

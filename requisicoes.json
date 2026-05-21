@@ -1,0 +1,956 @@
+[
+  {
+    "id": "mp2k3xzjj4e0",
+    "itens": [
+      {
+        "pecaId": "mp1k0byw2542",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "ALTA",
+    "justificativa": "a",
+    "fornecedorSugerido": "Dalla",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0001",
+    "criadoEm": "2026-05-12T11:37:57.199Z",
+    "status": "RECEBIDO",
+    "aprovadoPor": "u1",
+    "aprovadoPorNome": "Gustavo Pedrozo",
+    "aprovadoEm": "2026-05-12T11:44:15.321Z"
+  },
+  {
+    "id": "mp2pcxap30vt",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzaz9tg",
+        "quantidade": 11
+      }
+    ],
+    "urgencia": "ALTA",
+    "justificativa": "123",
+    "fornecedorSugerido": "123",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0002",
+    "criadoEm": "2026-05-12T14:04:54.290Z",
+    "status": "REJEITADO"
+  },
+  {
+    "id": "mp2pj6e2pmo2",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzisnas",
+        "quantidade": 111
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "123",
+    "fornecedorSugerido": "teste",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0003",
+    "criadoEm": "2026-05-12T14:09:46.010Z",
+    "status": "RECEBIDO"
+  },
+  {
+    "id": "mp2q3gtsgafc",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzhm7ss",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "ALTA",
+    "justificativa": "DWDEWED",
+    "fornecedorSugerido": "\\FD",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0004",
+    "criadoEm": "2026-05-12T14:25:32.656Z",
+    "status": "RECEBIDO"
+  },
+  {
+    "id": "mp2ulgjerhol",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzdg65f",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "sdf",
+    "fornecedorSugerido": "sdef",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0005",
+    "criadoEm": "2026-05-12T16:31:30.554Z",
+    "status": "PENDENTE"
+  },
+  {
+    "id": "mp2vw736kofk",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzkyygi",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "ALTA",
+    "justificativa": "asd",
+    "fornecedorSugerido": "asd",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0006",
+    "criadoEm": "2026-05-12T17:07:51.138Z",
+    "status": "REJEITADO"
+  },
+  {
+    "id": "mp2w866g3i25",
+    "itens": [
+      {
+        "pecaId": "mp1k0bz1xzr4",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "ALTA",
+    "justificativa": "asdasd",
+    "fornecedorSugerido": "werasd",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0007",
+    "criadoEm": "2026-05-12T17:17:09.832Z",
+    "status": "REJEITADO"
+  },
+  {
+    "id": "mp2wv5vsp5iz",
+    "itens": [
+      {
+        "pecaId": "mp1k0bze7nmp",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "123",
+    "centroCusto": "123asd",
+    "numeroOI": "213",
+    "fornecedor": "123",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "dataEntrega": "2026-05-12",
+    "ativoDestino": null,
+    "classificacao": "123",
+    "fluxoEntrada": "RETIRAR",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0008",
+    "criadoEm": "2026-05-12T17:35:02.536Z",
+    "status": "PENDENTE",
+    "orcamento": {
+      "filename": "mp2wv5vsp5iz_mp2wv5wl.png",
+      "nomeOriginal": "atlas.png",
+      "tamanho": 66217,
+      "uploadadoEm": "2026-05-12T17:35:02.574Z"
+    }
+  },
+  {
+    "id": "mp2x0x7iiwwv",
+    "itens": [
+      {
+        "pecaId": "mp1k0byw2542",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "asd",
+    "centroCusto": "asd",
+    "numeroOI": "asd",
+    "fornecedor": "ads",
+    "numeroOrcamento": "ad",
+    "valor": 123,
+    "dataEntrega": "2026-05-12",
+    "ativoDestino": null,
+    "classificacao": null,
+    "fluxoEntrada": "RETIRAR",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0009",
+    "criadoEm": "2026-05-12T17:39:31.230Z",
+    "status": "SOLICITADO"
+  },
+  {
+    "id": "mp2x401mu19q",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzfhk4f",
+        "quantidade": 123
+      }
+    ],
+    "urgencia": "ALTA",
+    "justificativa": "",
+    "centroCusto": "teste",
+    "numeroOI": "teste 123",
+    "fornecedor": "123",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "dataEntrega": "2026-05-12",
+    "ativoDestino": null,
+    "classificacao": "123",
+    "fluxoEntrada": "RETIRAR",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0010",
+    "criadoEm": "2026-05-12T17:41:54.874Z",
+    "status": "SOLICITADO",
+    "orcamento": {
+      "filename": "mp2x401mu19q_mp2x401t.png",
+      "nomeOriginal": "Logo-Atlas-1.png",
+      "tamanho": 74865,
+      "uploadadoEm": "2026-05-12T17:41:54.884Z"
+    }
+  },
+  {
+    "id": "mp2yv0mpngtx",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzkyygi",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "123",
+    "centroCusto": "3",
+    "numeroOI": "2c2c",
+    "fornecedor": "zcx",
+    "numeroOrcamento": "qwe",
+    "valor": 123,
+    "dataEntrega": "2026-05-15",
+    "ativoDestino": null,
+    "classificacao": "zxc",
+    "fluxoEntrada": "RETIRAR",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0011",
+    "criadoEm": "2026-05-12T18:30:54.961Z",
+    "status": "SOLICITADO",
+    "orcamento": {
+      "filename": "mp2yv0mpngtx_mp2yv0n7.png",
+      "nomeOriginal": "atlas.png",
+      "tamanho": 66217,
+      "uploadadoEm": "2026-05-12T18:30:54.984Z"
+    }
+  },
+  {
+    "id": "mp2z0x0k6hjr",
+    "itens": [
+      {
+        "pecaId": "mp1k0byy8pe4",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "asd",
+    "centroCusto": "asd",
+    "numeroOI": "asd",
+    "fornecedor": "asd",
+    "numeroOrcamento": "asd",
+    "valor": 1,
+    "dataEntrega": "2026-05-15",
+    "ativoDestino": null,
+    "classificacao": null,
+    "fluxoEntrada": "RETIRAR",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0012",
+    "criadoEm": "2026-05-12T18:35:30.212Z",
+    "status": "SOLICITADO",
+    "orcamento": {
+      "filename": "mp2z0x0k6hjr_mp2z0x0r.png",
+      "nomeOriginal": "atlas.png",
+      "tamanho": 66217,
+      "uploadadoEm": "2026-05-12T18:35:30.222Z"
+    }
+  },
+  {
+    "id": "mp30ijni9nmk",
+    "itens": [
+      {
+        "pecaId": "mp1k0bzisnas",
+        "quantidade": 1
+      }
+    ],
+    "urgencia": "NORMAL",
+    "justificativa": "",
+    "centroCusto": "teste",
+    "numeroOI": "teste",
+    "fornecedor": "teste",
+    "numeroOrcamento": "teste",
+    "valor": 123,
+    "dataEntrega": "2026-05-15",
+    "ativoDestino": null,
+    "classificacao": "teste",
+    "fluxoEntrada": "RETIRAR",
+    "ativoParadoId": null,
+    "solicitanteId": "u1",
+    "numero": "REQ-0013",
+    "criadoEm": "2026-05-12T19:17:12.318Z",
+    "status": "REJEITADO",
+    "orcamento": {
+      "filename": "mp30ijni9nmk_mp30ijnt.png",
+      "nomeOriginal": "atlas.png",
+      "tamanho": 66217,
+      "uploadadoEm": "2026-05-12T19:17:12.333Z"
+    },
+    "rejeitadoEm": "2026-05-13T10:49:08.802Z",
+    "rejeitadoPorId": "u1",
+    "rejeitadoPorNome": "Gustavo Pedrozo",
+    "motivoRejeicao": "asdasd"
+  },
+  {
+    "id": "mp31j373059b",
+    "urgencia": "NORMAL",
+    "tipoCCOI": "CC",
+    "centroCusto": "asd",
+    "numeroOI": "",
+    "descricaoMaterial": "asdasd",
+    "maquinaEquipamento": "dasd",
+    "classificacao": "asdasd",
+    "fluxoEntrada": "MATERIAL_RETIRAR",
+    "fornecedor": "asd",
+    "numeroOrcamento": "asd",
+    "valor": 123,
+    "dataEntrega": "2026-05-15",
+    "justificativa": "asd",
+    "observacoes": "asd",
+    "ativoParadoId": null,
+    "itens": [],
+    "solicitanteId": "u1",
+    "numero": "REQ-0014",
+    "criadoEm": "2026-05-12T19:45:37.263Z",
+    "status": "PENDENTE",
+    "orcamento": {
+      "filename": "mp31j373059b_mp31j38f.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-12T19:45:37.316Z"
+    }
+  },
+  {
+    "id": "mp31u6p9p0i1",
+    "urgencia": "NORMAL",
+    "tipoCCOI": "OI",
+    "centroCusto": "",
+    "numeroOI": "102030",
+    "descricaoMaterial": "regulador de fluxo",
+    "maquinaEquipamento": "teste 01",
+    "classificacao": "102030",
+    "fluxoEntrada": "MATERIAL_ENTREGAR",
+    "fornecedor": "teste",
+    "numeroOrcamento": "101010",
+    "valor": 1580.25,
+    "dataEntrega": "2026-05-15",
+    "justificativa": "teste",
+    "observacoes": "",
+    "ativoParadoId": null,
+    "itens": [
+      {
+        "pecaId": "mp1k0byw2542",
+        "quantidade": 1
+      }
+    ],
+    "solicitanteId": "u1",
+    "numero": "REQ-0015",
+    "criadoEm": "2026-05-12T19:54:15.021Z",
+    "status": "SOLICITADO",
+    "orcamento": {
+      "filename": "mp31u6p9p0i1_mp31u6qh.png",
+      "nomeOriginal": "Logo-Atlas-1.png",
+      "tamanho": 74865,
+      "uploadadoEm": "2026-05-12T19:54:15.069Z"
+    },
+    "numeroOrdemSAP": "asdasd",
+    "solicitadoEm": "2026-05-13T10:49:01.684Z",
+    "solicitadoPorId": "u1",
+    "solicitadoPorNome": "Gustavo Pedrozo"
+  },
+  {
+    "id": "mp32orrztlc2",
+    "prioridade": "NORMAL",
+    "responsavel": "123",
+    "tipoCCOI": "CC",
+    "centroCustoK": "13",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "123",
+    "maquinaEquipamento": "123",
+    "classificacao": "31203003",
+    "fluxoEntrada": "MATERIAL_NORMAL",
+    "fornecedor": "123",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-05-15",
+    "justificativa": "123",
+    "observacoes": "123",
+    "solicitanteId": "u1",
+    "numero": "REQ-0016",
+    "criadoEm": "2026-05-12T20:18:02.015Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp32orrztlc2_mp32ort7.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-12T20:18:02.067Z"
+      },
+      {
+        "filename": "mp32orrztlc2_mp32ortk.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-12T20:18:02.075Z"
+      },
+      {
+        "filename": "mp32orrztlc2_mp32ortp.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-12T20:18:02.080Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp32orrztlc2_mp32ort7.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-12T20:18:02.067Z"
+    }
+  },
+  {
+    "id": "mp3xnqn59twi",
+    "prioridade": "NORMAL",
+    "responsavel": "Gustavo",
+    "tipoCCOI": "CC",
+    "centroCustoK": "123",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "123",
+    "maquinaEquipamento": "123",
+    "classificacao": "31203003",
+    "fluxoEntrada": "MATERIAL_NORMAL",
+    "fornecedor": "123",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-05-15",
+    "justificativa": "123",
+    "observacoes": "123",
+    "solicitanteId": "u1",
+    "numero": "REQ-0017",
+    "criadoEm": "2026-05-13T10:45:01.985Z",
+    "status": "SOLICITADO",
+    "orcamentos": [
+      {
+        "filename": "mp3xnqn59twi_mp3xnqon.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T10:45:02.045Z"
+      },
+      {
+        "filename": "mp3xnqn59twi_mp3xnqow.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T10:45:02.052Z"
+      },
+      {
+        "filename": "mp3xnqn59twi_mp3xnqp2.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T10:45:02.059Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3xnqn59twi_mp3xnqon.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T10:45:02.045Z"
+    },
+    "numeroOrdemSAP": "adasd",
+    "solicitadoEm": "2026-05-13T10:48:56.316Z",
+    "solicitadoPorId": "u1",
+    "solicitadoPorNome": "Gustavo Pedrozo"
+  },
+  {
+    "id": "mp3xqk4kg60s",
+    "prioridade": "URGENTE",
+    "responsavel": "123",
+    "tipoCCOI": "CC",
+    "centroCustoK": "123",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "123",
+    "maquinaEquipamento": "123",
+    "classificacao": "31203003",
+    "fluxoEntrada": "MATERIAL_NORMAL",
+    "fornecedor": "123",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-05-15",
+    "justificativa": "123",
+    "observacoes": "123",
+    "solicitanteId": "u1",
+    "numero": "REQ-0018",
+    "criadoEm": "2026-05-13T10:47:13.508Z",
+    "status": "RECEBIDO",
+    "orcamentos": [
+      {
+        "filename": "mp3xqk4kg60s_mp3xqk4v.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T10:47:13.526Z"
+      },
+      {
+        "filename": "mp3xqk4kg60s_mp3xqk54.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T10:47:13.531Z"
+      },
+      {
+        "filename": "mp3xqk4kg60s_mp3xqk59.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T10:47:13.538Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3xqk4kg60s_mp3xqk4v.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T10:47:13.526Z"
+    },
+    "numeroOrdemSAP": "123",
+    "solicitadoEm": "2026-05-13T10:48:42.826Z",
+    "solicitadoPorId": "u1",
+    "solicitadoPorNome": "Gustavo Pedrozo",
+    "quantidadeRecebida": 12,
+    "obsRecebimento": "",
+    "recebidoEm": "2026-05-13T10:50:31.290Z",
+    "recebidoPorId": "u1",
+    "recebidoPorNome": "Gustavo Pedrozo"
+  },
+  {
+    "id": "mp3xx0n9dnw7",
+    "prioridade": "URGENTE",
+    "responsavel": "aasdasdasd",
+    "tipoCCOI": "CC",
+    "centroCustoK": "asdasd",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "asdasdasd",
+    "maquinaEquipamento": "asdasdad",
+    "classificacao": "31203002",
+    "fluxoEntrada": "MATERIAL_NORMAL",
+    "fornecedor": "asdasd",
+    "numeroOrcamento": "asd12213",
+    "valor": 123213,
+    "valorTexto": "123213",
+    "dataEntrega": "2026-05-13",
+    "justificativa": "asdasd",
+    "observacoes": "123123",
+    "solicitanteId": "u1",
+    "numero": "REQ-0019",
+    "criadoEm": "2026-05-13T10:52:14.853Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp3xx0n9dnw7_mp3xx0nl.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T10:52:14.868Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3xx0n9dnw7_mp3xx0nl.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T10:52:14.868Z"
+    }
+  },
+  {
+    "id": "mp3y7h24182y",
+    "prioridade": "URGENTE",
+    "responsavel": "asdasasd",
+    "tipoCCOI": "CC",
+    "centroCustoK": "asdasd",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "asdasda",
+    "maquinaEquipamento": "asdasd",
+    "classificacao": "31203001",
+    "fluxoEntrada": "MATERIAL_RETIRAR",
+    "fornecedor": "asdasd",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-05-15",
+    "justificativa": "asdasdas",
+    "observacoes": "123123",
+    "solicitanteId": "u1",
+    "numero": "REQ-0020",
+    "criadoEm": "2026-05-13T11:00:22.684Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp3y7h24182y_mp3y7h38.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T11:00:22.728Z"
+      },
+      {
+        "filename": "mp3y7h24182y_mp3y7h3e.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T11:00:22.733Z"
+      },
+      {
+        "filename": "mp3y7h24182y_mp3y7h3l.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T11:00:22.742Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3y7h24182y_mp3y7h38.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T11:00:22.728Z"
+    }
+  },
+  {
+    "id": "mp3yg99ges15",
+    "prioridade": "URGENTE",
+    "responsavel": "RAFAEL",
+    "tipoCCOI": "CC",
+    "centroCustoK": "123",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "123",
+    "maquinaEquipamento": "123",
+    "classificacao": "SERV_TERCEIROS_CIVIL",
+    "fluxoEntrada": "SERVICO_INTERNO",
+    "fornecedor": "12123",
+    "numeroOrcamento": "123",
+    "valor": 1512,
+    "valorTexto": "1512",
+    "dataEntrega": "2026-05-16",
+    "justificativa": "124 v12",
+    "observacoes": "qa123",
+    "solicitanteId": "u1",
+    "numero": "REQ-0021",
+    "criadoEm": "2026-05-13T11:07:12.484Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp3yg99ges15_mp3yg99s.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T11:07:12.499Z"
+      },
+      {
+        "filename": "mp3yg99ges15_mp3yg9a2.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T11:07:12.509Z"
+      },
+      {
+        "filename": "mp3yg99ges15_mp3yg99x.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T11:07:12.504Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3yg99ges15_mp3yg99s.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T11:07:12.499Z"
+    }
+  },
+  {
+    "id": "mp3yi4lg7m13",
+    "prioridade": "NORMAL",
+    "responsavel": "VALTER",
+    "tipoCCOI": "CC",
+    "centroCustoK": "asd",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "asd",
+    "maquinaEquipamento": "asd",
+    "classificacao": "SERRALHERIA",
+    "fluxoEntrada": "MATERIAL_NORMAL",
+    "fornecedor": "asd",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-08-16",
+    "justificativa": "ads",
+    "observacoes": "asd",
+    "solicitanteId": "u1",
+    "numero": "REQ-0022",
+    "criadoEm": "2026-05-13T11:08:39.748Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp3yi4lg7m13_mp3yi4m9.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T11:08:39.781Z"
+      },
+      {
+        "filename": "mp3yi4lg7m13_mp3yi4mf.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T11:08:39.785Z"
+      },
+      {
+        "filename": "mp3yi4lg7m13_mp3yi4mk.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T11:08:39.790Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3yi4lg7m13_mp3yi4m9.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T11:08:39.781Z"
+    }
+  },
+  {
+    "id": "mp3ylwyzgor8",
+    "prioridade": "NORMAL",
+    "responsavel": "CAIO",
+    "tipoCCOI": "CC",
+    "centroCustoK": "asd",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "asd",
+    "maquinaEquipamento": "asd",
+    "classificacao": "31203002",
+    "fluxoEntrada": "MATERIAL_RETIRAR",
+    "fornecedor": "asd",
+    "numeroOrcamento": "123",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-08-16",
+    "justificativa": "asd",
+    "observacoes": "asd",
+    "solicitanteId": "u1",
+    "numero": "REQ-0023",
+    "criadoEm": "2026-05-13T11:11:36.491Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp3ylwyzgor8_mp3ylwz7.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T11:11:36.503Z"
+      },
+      {
+        "filename": "mp3ylwyzgor8_mp3ylwze.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T11:11:36.508Z"
+      },
+      {
+        "filename": "mp3ylwyzgor8_mp3ylwzi.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T11:11:36.512Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3ylwyzgor8_mp3ylwz7.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T11:11:36.503Z"
+    }
+  },
+  {
+    "id": "mp3yp298uc7q",
+    "prioridade": "NORMAL",
+    "responsavel": "MAIRON",
+    "tipoCCOI": "CC",
+    "centroCustoK": "asd",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "asd",
+    "maquinaEquipamento": "asd",
+    "classificacao": "31203005",
+    "fluxoEntrada": "MATERIAL_RETIRAR",
+    "fornecedor": "asd",
+    "numeroOrcamento": "123aasd",
+    "valor": 123,
+    "valorTexto": "123",
+    "dataEntrega": "2026-10-10",
+    "justificativa": "asd",
+    "observacoes": "asasd",
+    "solicitanteId": "u1",
+    "numero": "REQ-0024",
+    "criadoEm": "2026-05-13T11:14:03.308Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp3yp298uc7q_mp3yp29l.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T11:14:03.325Z"
+      },
+      {
+        "filename": "mp3yp298uc7q_mp3yp29r.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T11:14:03.330Z"
+      },
+      {
+        "filename": "mp3yp298uc7q_mp3yp29w.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T11:14:03.335Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp3yp298uc7q_mp3yp29l.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T11:14:03.325Z"
+    },
+    "visualizado": true,
+    "visualizadoEm": "2026-05-13T11:14:26.185Z"
+  },
+  {
+    "id": "mp40icgtsi7g",
+    "prioridade": "URGENTE",
+    "responsavel": "VALTER",
+    "tipoCCOI": "OI2",
+    "centroCustoK": "",
+    "centroCustoI": "",
+    "numeroOI": "123123",
+    "descricaoMaterial": "123",
+    "maquinaEquipamento": "elevador de peças",
+    "classificacao": "31203003",
+    "fluxoEntrada": "MATERIAL_NORMAL",
+    "fornecedor": "asdasd",
+    "numeroOrcamento": "123",
+    "valor": 1250,
+    "valorTexto": "R$ 1.250,00",
+    "moeda": "BRL",
+    "cotacaoMoeda": 1,
+    "valorMoedaOriginal": 1250,
+    "itens": [
+      {
+        "descricao": "[A0001] Parafuso Allen Cabeça Cilíndrica Aço Liga M4x16",
+        "codigo": "",
+        "unidade": "UN",
+        "quantidade": 1000,
+        "precoUnitario": 1.25
+      }
+    ],
+    "dataEntrega": "2026-05-15",
+    "justificativa": "asd",
+    "observacoes": "asd",
+    "solicitanteId": "u1",
+    "numero": "REQ-0025",
+    "criadoEm": "2026-05-13T12:04:49.181Z",
+    "status": "PENDENTE",
+    "orcamentos": [
+      {
+        "filename": "mp40icgtsi7g_mp40ichs.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T12:04:49.223Z"
+      },
+      {
+        "filename": "mp40icgtsi7g_mp40ici1.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T12:04:49.228Z"
+      },
+      {
+        "filename": "mp40icgtsi7g_mp40ici5.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T12:04:49.232Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp40icgtsi7g_mp40ichs.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T12:04:49.223Z"
+    }
+  },
+  {
+    "id": "mp41ghowmcq3",
+    "prioridade": "BAIXA",
+    "responsavel": "VALTER",
+    "tipoCCOI": "CC",
+    "centroCustoK": "asdasd",
+    "centroCustoI": "",
+    "numeroOI": "",
+    "descricaoMaterial": "asd",
+    "maquinaEquipamento": "asd",
+    "classificacao": "31203001",
+    "fluxoEntrada": "MATERIAL_RETIRAR",
+    "fornecedor": "dalla",
+    "numeroOrcamento": "123",
+    "valor": 543.410157,
+    "valorTexto": "R$ 543,41",
+    "moeda": "USD",
+    "cotacaoMoeda": 4.895587,
+    "valorMoedaOriginal": 111,
+    "itens": [
+      {
+        "descricao": "[A0001] Parafuso Allen Cabeça Cilíndrica Aço Liga M4x16",
+        "codigo": "",
+        "unidade": "UN",
+        "quantidade": 111,
+        "precoUnitario": 1
+      }
+    ],
+    "dataEntrega": "2026-05-15",
+    "justificativa": "asdads",
+    "observacoes": "asdads",
+    "solicitanteId": "u1",
+    "numero": "REQ-0026",
+    "criadoEm": "2026-05-13T12:31:22.256Z",
+    "status": "SOLICITADO",
+    "orcamentos": [
+      {
+        "filename": "mp41ghowmcq3_mp41ghp6.jpg",
+        "nomeOriginal": "Atlas 1200x675.jpg",
+        "tamanho": 168648,
+        "uploadadoEm": "2026-05-13T12:31:22.269Z"
+      },
+      {
+        "filename": "mp41ghowmcq3_mp41ghpb.png",
+        "nomeOriginal": "atlas.png",
+        "tamanho": 66217,
+        "uploadadoEm": "2026-05-13T12:31:22.273Z"
+      },
+      {
+        "filename": "mp41ghowmcq3_mp41ghpf.png",
+        "nomeOriginal": "Logo-Atlas-1.png",
+        "tamanho": 74865,
+        "uploadadoEm": "2026-05-13T12:31:22.280Z"
+      }
+    ],
+    "orcamento": {
+      "filename": "mp41ghowmcq3_mp41ghp6.jpg",
+      "nomeOriginal": "Atlas 1200x675.jpg",
+      "tamanho": 168648,
+      "uploadadoEm": "2026-05-13T12:31:22.269Z"
+    },
+    "numeroOrdemSAP": "5645465465",
+    "solicitadoEm": "2026-05-13T16:06:15.149Z",
+    "solicitadoPorId": "u1",
+    "solicitadoPorNome": "Gustavo Pedrozo"
+  }
+]

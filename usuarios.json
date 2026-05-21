@@ -1,0 +1,20 @@
+[
+  {
+    "id": "u1",
+    "nome": "Gustavo Pedrozo",
+    "email": "gustavo.pedrozo@atlas.ind.br",
+    "senha": "QEdwcDI4MDY5Mw==",
+    "nivel": "ADMIN",
+    "ativo": true,
+    "criadoEm": "2026-05-11T18:24:29.204Z"
+  },
+  {
+    "nome": "joao",
+    "email": "joao@joao.com",
+    "senha": "MTIz",
+    "nivel": "PCM",
+    "ativo": true,
+    "id": "mp2xmy2f7ft8",
+    "criadoEm": "2026-05-12T17:56:38.775Z"
+  }
+]

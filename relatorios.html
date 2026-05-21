@@ -1,0 +1,919 @@
+﻿
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Relatórios - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <style> /* -- Layout relatórios: flexbox para menu recolhível -- */
+    .relatorio-layout { display: flex; gap: 16px; align-items: flex-start; }
+
+    /* Menu lateral: ícones por padrão, expande ao passar o mouse */
+    .relatorio-menu {
+      flex-shrink: 0;
+      width: 48px;
+      overflow: hidden;
+      transition: width .22s cubic-bezier(.4,0,.2,1);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+    .relatorio-menu:hover { width: 192px; }
+
+    /* Item do menu - padrão colapsado (centralizado) */
+    .relatorio-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 8px 0;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: background .15s, color .15s, border-color .15s, padding .15s, gap .15s, justify-content .15s;
+      border-top: none; border-right: none; border-bottom: none;
+      background: none;
+      text-align: left;
+      width: 100%;
+      white-space: nowrap;
+    }
+    /* Expandido ao hover no menu */
+    .relatorio-menu:hover .relatorio-menu-item {
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 7px 10px 7px 12px;
+    }
+    .relatorio-menu-item:hover { background: var(--bg); color: var(--text); border-left-color: rgba(247,148,29,0.5); }
+    .relatorio-menu-item.active { background: var(--primary); color: #fff; border-left-color: var(--accent); }
+    .relatorio-menu-item .ri { font-size: 16px; flex-shrink: 0; min-width: 20px; text-align: center; }
+
+    /* Label: oculto (sem espaço) por padrão, aparece no hover do menu */
+    .relatorio-menu-item .rm-label {
+      overflow: hidden;
+      max-width: 0;
+      opacity: 0;
+      transition: max-width .22s cubic-bezier(.4,0,.2,1), opacity .15s;
+    }
+    .relatorio-menu:hover .relatorio-menu-item .rm-label { max-width: 180px; opacity: 1; }
+
+    .relatorio-panel { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; min-width: 0; overflow-x: hidden; }
+    .relatorio-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .relatorio-titulo { font-size: 17px; font-weight: 700; color: var(--text); }
+    .relatorio-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .filtro-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filtro-row label { font-size: 12.5px; color: var(--text-muted); }
+    .filtro-row input, .filtro-row select { padding: 6px 10px; font-size: 13px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); }
+    .sumario-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .sumario-kpi { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .sumario-kpi-val { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.1; }
+    .sumario-kpi-lbl { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+
+    /* PRINT */
+    @media print {
+      .no-print { display: none !important; }
+      .sidebar { display: none !important; }
+      .topbar  { display: none !important; }
+      .relatorio-menu { display: none !important; }
+      .relatorio-layout { grid-template-columns: 1fr; }
+      .relatorio-panel { border: none; padding: 0; }
+      .print-header { display: flex !important; align-items: center; gap: 16px; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 2px solid #1e3a5f; }
+      .relatorio-header { display: none !important; }
+      .relatorio-menu { display: none !important; }
+      .relatorio-layout { grid-template-columns: 1fr !important; }
+      .relatorio-panel { border: none !important; padding: 0 !important; }
+    }
+    .print-header { display: none; }
+    .print-header .print-logo { max-height: 48px; }
+    .print-header .print-info { flex: 1; }
+    .print-header .print-report-name { font-size: 18px; font-weight: 700; color: #1e3a5f; }
+    .print-header .print-date { font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
+    <div class="sub">PCM Almoxarifado</div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Principal</div>
+    <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
+    <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
+    <div class="nav-group-label">Cadastros</div>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
+    <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
+    <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
+    <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
+    <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
+    <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
+    <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
+  </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar no-print"> <div> <div class="topbar-title">Relatórios</div> <div class="topbar-subtitle">Análise e consultas gerenciais</div> </div> <div class="topbar-actions"> <button class="btn btn-secondary btn-sm" onclick="document.body.setAttribute('data-print-date', new Date().toLocaleDateString('pt-BR')); document.getElementById('print-date').textContent = 'Gerado em: ' + new Date().toLocaleString('pt-BR'); window.print()"> Imprimir</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <div class="relatorio-layout"> <!-- Menu de relatórios --> <div class="relatorio-menu no-print"> <button class="relatorio-menu-item active" onclick="mostrarRelatorio('inventario', this)" title="Inventário Geral"><span class="rm-label">Inventário Geral</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('catalogo', this)" title="Catálogo de Materiais"><span class="rm-label">Catálogo de Materiais</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('consumo', this)" title="Consumo por Item"><span class="rm-label">Consumo por Item</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('periodo', this)" title="Movim. por Período"><span class="rm-label">Movim. por Período</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('criticidade', this)" title="Análise de Criticidade"><span class="rm-label">Análise de Criticidade</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('fornecedor', this)" title="Custo por Fornecedor"><span class="rm-label">Custo por Fornecedor</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('ativos_mat', this)" title="Materiais por Ativo"><span class="rm-label">Materiais por Ativo</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('ativos_custo', this)" title="Custo por Ativo"><span class="rm-label">Custo por Ativo</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('requisicoes', this)" title="Requisições de Compra"><span class="rm-label">Requisições de Compra</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('ajustes', this)" title="Histórico de Ajustes"><span class="rm-label">Histórico de Ajustes</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('executivo', this)" title="Resumo Executivo"><span class="rm-label">Resumo Executivo</span></button> <button class="relatorio-menu-item" onclick="mostrarRelatorio('consertos', this)" title="Consertos Externos"><span class="rm-label">Consertos Externos</span></button> </div> <!-- Painel de relatório --> <div class="relatorio-panel" id="relatorio-panel"> <div class="print-header" id="print-header"> <img id="print-logo" class="print-logo" src="" alt="" style="display:none"> <div class="print-info"> <div class="print-report-name" id="print-report-name">-</div> <div class="print-date" id="print-date">-</div> </div> </div> <div id="relatorio-content"> <!-- conteúdo dinâmico --> </div> </div> </div> </div> </div>
+</div> <!-- MODAL DETALHE -->
+<div class="modal-overlay" id="modal-drill" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:800px"> <div class="modal-header"> <div class="modal-title" id="drill-titulo">-</div> <button class="modal-close" onclick="Utils.fecharModal('modal-drill')"></button> </div> <div id="drill-body" style="max-height:65vh;overflow-y:auto"></div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('relatorios');
+    Utils.aplicarPermissoes();
+    // Injeta atributos de dados no <body> para rodapé CSS no print
+    (function() {
+      const cfg = DB.Config.get();
+      document.body.setAttribute('data-empresa', cfg.empresa || 'Atlas Ind. Eletrodomésticos');
+      document.body.setAttribute('data-print-date', new Date().toLocaleDateString('pt-BR'));
+    })();
+    _inicializar();
+  });
+
+  // Estado
+  let relatorioAtual = 'inventario';
+
+  function mostrarRelatorio(tipo, btn) {
+    relatorioAtual = tipo;
+    document.querySelectorAll('.relatorio-menu-item').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderRelatorio(tipo);
+  }
+
+  function renderRelatorio(tipo) {
+    const el = document.getElementById('relatorio-content');
+    const nomes = {
+      inventario:    ' Inventário Geral',
+      catalogo:      ' Catálogo de Materiais',
+      consumo:       ' Consumo por Item',
+      periodo:       ' Movimentações por Período',
+      criticidade:   ' Análise de Criticidade',
+      fornecedor:    ' Custo por Fornecedor',
+      ativos_mat:    ' Materiais por Ativo',
+      ativos_custo:  ' Custo por Ativo',
+      requisicoes:   ' Requisições de Compra',
+      ajustes:       ' Histórico de Ajustes',
+      executivo:     ' Resumo Executivo',
+      consertos:     ' Consertos Externos'
+    };
+    document.getElementById('print-report-name').textContent = nomes[tipo] || tipo;
+    document.getElementById('print-date').textContent =
+      'Gerado em: ' + new Date().toLocaleString('pt-BR');
+    // Atualiza logo de impressão
+    const cfg = DB.Config.get();
+    const printLogo = document.getElementById('print-logo');
+    if (cfg.logo) { printLogo.src = cfg.logo; printLogo.style.display = 'block'; }
+    else { printLogo.style.display = 'none'; }
+
+    switch(tipo) {
+      case 'inventario':   el.innerHTML = relInventario();   paginar('tbody-inventario', 10); break;
+      case 'catalogo':     el.innerHTML = relCatalogo();     paginar('tbody-catalogo', 10);   break;
+      case 'consumo':      el.innerHTML = relConsumo();      paginar('tbody-consumo', 10);    break;
+      case 'periodo':      el.innerHTML = relPeriodo(); Utils.initSearchSelect('filt-peca'); paginar('tbody-periodo', 10); break;
+      case 'criticidade':  el.innerHTML = relCriticidade();  paginar('tbody-criticos', 10); paginar('tbody-baixos', 10); break;
+      case 'fornecedor':   el.innerHTML = relFornecedor();   paginar('tbody-fornecedor', 10); break;
+      case 'ativos_mat':   el.innerHTML = relAtivosMat();    break;
+      case 'ativos_custo': el.innerHTML = relAtivosCusto();  paginar('tbody-ativos-custo', 10); break;
+      case 'requisicoes':  el.innerHTML = relRequisicoes();  paginar('tbody-requisicoes', 10); break;
+      case 'ajustes':      el.innerHTML = relAjustes();      paginar('tbody-ajustes', 10);    break;
+      case 'executivo':    el.innerHTML = relExecutivo();    break;
+      case 'consertos':    el.innerHTML = relConsertos();   paginar('tbody-consertos-rel', 15); break;
+    }
+  }
+
+  // -- INVENTÁRIO GERAL ----------------------------------
+  function mediaUltEntradas(pecaId, n) {
+    const entradas = DB.Movimentos.listar()
+      .filter(m => m.pecaId === pecaId && m.tipo === 'ENTRADA' && Number(m.precoUnitario) > 0)
+      .sort((a,b) => (b.data||'').localeCompare(a.data||''))
+      .slice(0, n);
+    if (!entradas.length) return 0;
+    return entradas.reduce((s,m) => s + Number(m.precoUnitario), 0) / entradas.length;
+  }
+
+  function relInventario() {
+    const pecas  = DB.Pecas.ativas();
+    const saldos = DB.Movimentos.saldoTodos();
+    let valorTotal = 0, okCnt = 0, baixoCnt = 0, criticoCnt = 0;
+    const rows = pecas.map(p => {
+      const s = saldos[p.id] || 0;
+      const preco = Number(p.precoUnitario) || 0;
+      const total = s * preco;
+      valorTotal += total;
+      const m3 = mediaUltEntradas(p.id, 3);
+      const m5 = mediaUltEntradas(p.id, 5);
+      const st = Utils.statusEstoque(s, p.estoqueMinimo);
+      if (st.classe === 'ok') okCnt++;
+      else if (st.classe === 'low') baixoCnt++;
+      else criticoCnt++;
+      const pct = p.estoqueMinimo > 0  Math.min(100, (s / p.estoqueMinimo) * 100) : 100;
+      const barColor = st.classe === 'ok'  'var(--success)' : st.classe === 'low'  'var(--warning)' : 'var(--danger)';
+      return `<tr class="inv-row"
+          data-busca="${(p.codigo||'').toLowerCase()} ${(p.nome||'').toLowerCase()} ${(p.categoria||'').toLowerCase()}"
+          data-status="${st.classe}"
+          style="cursor:pointer"
+          onclick="verEntradasItem(${JSON.stringify(p.id)},${JSON.stringify(p.nome)})"
+          title="Clique para ver últimas entradas"> <td><code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono)">${Utils.safe(p.codigo)}</code></td> <td> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${Utils.safe(p.nome)}</div> <div style="font-size:11px;color:var(--text-muted);margin-top:1px">${Utils.safe(p.categoria||'-')}</div> </td> <td> <div style="display:flex;align-items:center;gap:6px"> <span style="font-weight:700;min-width:28px">${s} <span style="font-size:10px;font-weight:400;color:var(--text-muted)">${Utils.safe(p.unidade)}</span></span> <div style="flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;min-width:40px"> <div style="height:100%;border-radius:3px;background:${barColor};width:${pct}%"></div> </div> <span style="font-size:10px;color:var(--text-muted)">${p.estoqueMinimo}</span> </div> </td> <td style="text-align:right">${preco > 0  Utils.fmtMoeda(preco) : '<span style="color:var(--text-muted)">-</span>'}</td> <td style="text-align:right;font-size:11px;color:var(--text-muted)">${m3 > 0  Utils.fmtMoeda(m3) : '-'}</td> <td style="text-align:right;font-size:11px;color:var(--text-muted)">${m5 > 0  Utils.fmtMoeda(m5) : '-'}</td> <td style="text-align:right;font-weight:600">${total > 0  Utils.fmtMoeda(total) : '<span style="color:var(--text-muted)">-</span>'}</td> <td>${Utils.badgeEstoque(s, p.estoqueMinimo)}</td> </tr>`;
+    });
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Inventário Geral</div> <div class="relatorio-subtitle">Posição atual de todos os itens ativos - clique num item para ver as últimas entradas</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${pecas.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Itens Ativos</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${okCnt}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Nível Normal</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${baixoCnt}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Estoque Baixo</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${criticoCnt}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Críticos / Zerados</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:15px;font-weight:800;color:var(--text);line-height:1.2">${Utils.fmtMoeda(valorTotal)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Valor em Estoque</div></div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="inv-busca" placeholder="Buscar por código, nome ou categoria..." oninput="filtrarInventario()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select id="inv-filtro-status" onchange="filtrarInventario()" style="padding:7px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> <option value="">Todos os Status</option> <option value="ok">Nível Normal</option> <option value="low">Estoque Baixo</option> <option value="critical">Crítico / Zerado</option> </select> <span id="inv-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${pecas.length} itens</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead> <tr> <th style="width:90px">Código</th> <th>Nome / Categoria</th> <th style="width:180px">Saldo / Nível</th> <th style="text-align:right;width:100px">Preço Unit.</th> <th style="text-align:right;width:90px">Méd. 3 ult.</th> <th style="text-align:right;width:90px">Méd. 5 ult.</th> <th style="text-align:right;width:100px">Valor Total</th> <th style="text-align:center;width:80px">Status</th> </tr> </thead> <tbody id="tbody-inventario"> ${rows.join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-muted)">Nenhum item cadastrado</td></tr>'}
+            </tbody> </table> </div> <div id="inv-empty" style="display:none;text-align:center;padding:40px 20px;color:var(--text-muted)"> <div style="font-size:36px;opacity:.3;margin-bottom:8px"></div> <p style="font-size:14px">Nenhum item encontrado</p> </div> </div> `;
+  }
+
+  function filtrarInventario() {
+    const busca = (document.getElementById('inv-busca').value || '').toLowerCase().trim();
+    const stFil = document.getElementById('inv-filtro-status').value || '';
+    const rows  = document.querySelectorAll('#tbody-inventario .inv-row');
+    let visivel = 0;
+    rows.forEach(tr => {
+      const show = (!busca || (tr.dataset.busca||'').includes(busca)) && (!stFil || tr.dataset.status === stFil);
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('inv-contagem');
+    if (contEl) contEl.textContent = visivel + ' itens';
+    const emptyEl = document.getElementById('inv-empty');
+    if (emptyEl) emptyEl.style.display = visivel === 0  '' : 'none';
+    if (_pag['tbody-inventario']) { _pag['tbody-inventario'].page = 1; _applyPaginacao('tbody-inventario'); }
+  }
+
+  function relConsumo() {
+    const movs = DB.Movimentos.listar();
+    const consumo = {};
+    movs.filter(m => m.tipo === 'SAIDA').forEach(m => {
+      consumo[m.pecaId] = (consumo[m.pecaId] || 0) + Number(m.quantidade);
+    });
+    const lista = Object.entries(consumo)
+      .map(([id, qtd]) => ({ peca: DB.Pecas.buscarId(id), qtd }))
+      .filter(x => x.peca)
+      .sort((a,b) => b.qtd - a.qtd);
+    const maxQ = lista[0].qtd || 1;
+    const totalSaidas = lista.reduce((s,x) => s + x.qtd, 0);
+    const rows = lista.map((c, i) => `<tr class="cons-row"
+        data-busca="${(c.peca.codigo||'').toLowerCase()} ${(c.peca.nome||'').toLowerCase()} ${(c.peca.categoria||'').toLowerCase()}"> <td style="text-align:center"> <span style="display:inline-block;width:26px;height:26px;border-radius:50%;background:${i < 3  'var(--primary)' : 'var(--bg)'};color:${i < 3  '#fff' : 'var(--text-muted)'};font-size:11px;font-weight:800;line-height:26px;text-align:center;border:1px solid var(--border)">${i+1}</span> </td> <td><code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono)">${Utils.safe(c.peca.codigo)}</code></td> <td> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${Utils.safe(c.peca.nome)}</div> <div style="font-size:11px;color:var(--text-muted);margin-top:1px">${Utils.safe(c.peca.categoria||'-')}</div> </td> <td style="text-align:center;font-weight:700">${c.qtd} <span style="font-size:10px;font-weight:400;color:var(--text-muted)">${Utils.safe(c.peca.unidade||'UN')}</span></td> <td style="min-width:120px"> <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"> <div style="height:100%;width:${(c.qtd/maxQ*100).toFixed(1)}%;background:var(--primary);border-radius:3px"></div> </div> </td> <td style="text-align:right;font-size:11px;color:var(--text-muted)">${totalSaidas > 0  (c.qtd / totalSaidas * 100).toFixed(1) + '%' : '-'}</td> </tr>`);
+    const topNome = lista[0]  Utils.safe(lista[0].peca.nome).slice(0,24) + (lista[0].peca.nome.length > 24  '...' : '') : '-';
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Consumo por Item</div> <div class="relatorio-subtitle">Itens mais consumidos ordenados por total de saídas registradas</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${lista.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Itens com Saídas</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totalSaidas}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total de Saídas</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF0DC;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:13px;font-weight:800;color:var(--text);line-height:1.2">${topNome}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Mais Consumido</div></div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="cons-busca" placeholder="Buscar por código, nome ou categoria..." oninput="filtrarConsumo()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <span id="cons-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${lista.length} itens</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead> <tr> <th style="text-align:center;width:44px">#</th> <th style="width:90px">Código</th> <th>Nome / Categoria</th> <th style="text-align:center;width:100px">Total Saídas</th> <th style="width:140px">Consumo Relativo</th> <th style="text-align:right;width:70px">% Total</th> </tr> </thead> <tbody id="tbody-consumo"> ${rows.join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Nenhuma saída registrada</td></tr>'}
+            </tbody> </table> </div> </div> `;
+  }
+
+  function filtrarConsumo() {
+    const busca = (document.getElementById('cons-busca').value || '').toLowerCase().trim();
+    const rows  = document.querySelectorAll('#tbody-consumo .cons-row');
+    let visivel = 0;
+    rows.forEach(tr => {
+      const show = !busca || (tr.dataset.busca||'').includes(busca);
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('cons-contagem');
+    if (contEl) contEl.textContent = visivel + ' itens';
+    if (_pag['tbody-consumo']) { _pag['tbody-consumo'].page = 1; _applyPaginacao('tbody-consumo'); }
+  }
+
+  // -- MOVIMENTAÇÕES POR PERÍODO -------------------------
+  function relPeriodo(de, ate, filtPeca) {
+    const hoje = Utils.dataHoje();
+    const primeroDiaMes = hoje.slice(0,7) + '-01';
+    de  = de  || primeroDiaMes;
+    ate = ate || hoje;
+    filtPeca = filtPeca || '';
+    const todasPecas = DB.Pecas.listar();
+    const pecasMap = {};
+    todasPecas.forEach(p => pecasMap[p.id] = p);
+    const movs = DB.Movimentos.listar().filter(m => {
+      if (!m.data || m.data.slice(0,10) < de || m.data.slice(0,10) > ate) return false;
+      if (filtPeca && m.pecaId !== filtPeca) return false;
+      return true;
+    });
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    let totEntrada = 0, totSaida = 0, totAjuste = 0;
+    const rows = movs.map(m => {
+      const p = pecasMap[m.pecaId];
+      if (m.tipo === 'ENTRADA') totEntrada += Number(m.quantidade);
+      else if (m.tipo === 'SAIDA') totSaida += Number(m.quantidade);
+      else totAjuste += Number(m.quantidade);
+      const cls = m.tipo === 'ENTRADA'  'mov-tipo-entrada' : m.tipo === 'SAIDA'  'mov-tipo-saida' : 'mov-tipo-ajuste';
+      return `<tr> <td>${Utils.formatarDataHora(m.data)}</td> <td>${p  Utils.safe(p.nome) : '-'}</td> <td><span class="${cls}">${Utils.labelTipo(m.tipo)}</span></td> <td style="text-align:center;font-weight:600">${m.quantidade}</td> <td>${Utils.safe(m.ordemServico||'-')}</td> <td>${Utils.safe(usuariosMap[m.responsavel]||'-')}</td> </tr>`;
+    });
+    const pecaOptions = todasPecas.map(p => `<option value="${p.id}" ${p.id === filtPeca  'selected' : ''}>[${Utils.safe(p.codigo)}] ${Utils.safe(p.nome)}</option>`
+    ).join('');
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Movimentações por Período</div> <div class="relatorio-subtitle">Filtro de datas - exibe entradas, saídas e ajustes</div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px" class="no-print"> <div style="display:flex;align-items:center;gap:8px"> <label style="font-size:12px;color:var(--text-muted);white-space:nowrap">De:</label> <input type="date" id="filt-de" value="${de}" oninput="atualizarPeriodo()" style="padding:7px 10px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> </div> <div style="display:flex;align-items:center;gap:8px"> <label style="font-size:12px;color:var(--text-muted);white-space:nowrap">Até:</label> <input type="date" id="filt-ate" value="${ate}" oninput="atualizarPeriodo()" style="padding:7px 10px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> </div> <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px"> <label style="font-size:12px;color:var(--text-muted);white-space:nowrap">Peça:</label> <select id="filt-peca" onchange="atualizarPeriodo()" style="flex:1;padding:7px 10px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);min-width:180px;max-width:320px"> <option value="">Todas</option>${pecaOptions}
+          </select> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${movs.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total de Registros</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totEntrada}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total Entradas</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totSaida}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total Saídas</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totAjuste}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total Ajustes</div></div> </div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead><tr><th>Data/Hora</th><th>Peça</th><th>Tipo</th><th style="text-align:center">Qtd</th><th>OS</th><th>Responsável</th></tr></thead> <tbody id="tbody-periodo">${rows.join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Nenhuma movimentação no período</td></tr>'}</tbody> </table> </div> </div> `;
+  }
+
+  function atualizarPeriodo() {
+    const de  = document.getElementById('filt-de').value;
+    const ate = document.getElementById('filt-ate').value;
+    const filtPeca = document.getElementById('filt-peca').value || '';
+    document.getElementById('relatorio-content').innerHTML = relPeriodo(de, ate, filtPeca);
+    Utils.initSearchSelect('filt-peca');
+    paginar('tbody-periodo', 10);
+  }
+
+  // -- ANÁLISE DE CRITICIDADE ---------------------------
+  function dataNivelCritico(pecaId, minimo) {
+    const movs = DB.Movimentos.listar().filter(m => m.pecaId === pecaId)
+      .sort((a,b) => (a.data||'').localeCompare(b.data||''));
+    let saldo = 0, dataBaixo = null, dataCritico = null;
+    movs.forEach(m => {
+      const ant = saldo;
+      if (m.tipo==='ENTRADA'||m.tipo==='AJUSTE_ADD') saldo += Number(m.quantidade);
+      else if (m.tipo==='SAIDA'||m.tipo==='AJUSTE_SUB') saldo -= Number(m.quantidade);
+      else if (m.tipo==='AJUSTE') saldo = Number(m.saldoNovo||saldo);
+      if (ant >= minimo && saldo < minimo && !dataBaixo) dataBaixo = m.data;
+      if (ant > 0 && saldo <= 0 && !dataCritico) dataCritico = m.data;
+    });
+    return { dataBaixo, dataCritico };
+  }
+
+  function relCriticidade() {
+    const pecas  = DB.Pecas.ativas();
+    const saldos = DB.Movimentos.saldoTodos();
+    const criticos = pecas.filter(p => Utils.statusEstoque(saldos[p.id]||0, p.estoqueMinimo).classe === 'critical');
+    const baixos   = pecas.filter(p => Utils.statusEstoque(saldos[p.id]||0, p.estoqueMinimo).classe === 'low');
+    const thCols = `<th style="width:90px">Código</th><th>Nome</th><th style="text-align:center;width:90px">Saldo</th><th style="text-align:center;width:70px">Mínimo</th><th style="width:120px">Em Baixo desde</th><th style="width:110px">Zerado desde</th><th style="width:90px">Localização</th><th>Fornecedor</th>`;
+    const buildRows = (lista, colorVar) => lista.map(p => {
+      const s = saldos[p.id] || 0;
+      const datas = dataNivelCritico(p.id, p.estoqueMinimo);
+      return `<tr class="crit-row" data-busca="${(p.codigo||'').toLowerCase()} ${(p.nome||'').toLowerCase()} ${(p.fornecedor||'').toLowerCase()}"> <td><code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono)">${Utils.safe(p.codigo)}</code></td> <td> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${Utils.safe(p.nome)}</div> <div style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.categoria||'-')}</div> </td> <td style="text-align:center;font-weight:700;color:${colorVar}">${s} <span style="font-size:10px;color:var(--text-muted)">${Utils.safe(p.unidade)}</span></td> <td style="text-align:center">${p.estoqueMinimo}</td> <td style="font-size:11.5px;color:${colorVar}">${datas.dataBaixo  Utils.formatarData(datas.dataBaixo) : '-'}</td> <td style="font-size:11.5px;color:var(--danger);font-weight:${colorVar === 'var(--danger)'  '700' : '400'}">${datas.dataCritico  Utils.formatarData(datas.dataCritico) : '-'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localização||p.localizacao||'-')}</td> <td style="font-size:12px">${Utils.safe(p.fornecedor||'-')}</td> </tr>`;
+    });
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Análise de Criticidade</div> <div class="relatorio-subtitle">Itens que necessitam reposição imediata ou atenção</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${criticos.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Críticos / Zerados</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${baixos.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Estoque Baixo</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${pecas.length - criticos.length - baixos.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Nível Normal</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${pecas.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total Ativos</div></div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="crit-busca" placeholder="Buscar por código, nome ou fornecedor..." oninput="filtrarCriticidade()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <span id="crit-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${criticos.length + baixos.length} itens atenção</span> </div> ${criticos.length  `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"> <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--danger)"></span> <h3 style="font-size:14px;font-weight:700;color:var(--danger);margin:0">Críticos e Zerados (${criticos.length})</h3> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px"> <div class="table-wrapper"> <table id="tabela-criticos"><thead><tr>${thCols}</tr></thead><tbody id="tbody-criticos">${buildRows(criticos,'var(--danger)').join('')}</tbody></table> </div> </div>` : ''}
+      ${baixos.length  `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"> <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--warning)"></span> <h3 style="font-size:14px;font-weight:700;color:var(--warning);margin:0">Estoque Baixo (${baixos.length})</h3> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table id="tabela-baixos"><thead><tr>${thCols}</tr></thead><tbody id="tbody-baixos">${buildRows(baixos,'var(--warning)').join('')}</tbody></table> </div> </div>` : ''}
+      ${!criticos.length && !baixos.length  '<div class="empty-state"><div class="icon"></div><p>Todos os itens estão em nível normal</p></div>' : ''}
+    `;
+  }
+
+  function filtrarCriticidade() {
+    const busca = (document.getElementById('crit-busca').value || '').toLowerCase().trim();
+    let visivel = 0;
+    document.querySelectorAll('.crit-row').forEach(tr => {
+      const show = !busca || (tr.dataset.busca||'').includes(busca);
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('crit-contagem');
+    if (contEl) contEl.textContent = visivel + ' itens atenção';
+    if (_pag['tbody-criticos']) { _pag['tbody-criticos'].page = 1; _applyPaginacao('tbody-criticos'); }
+    if (_pag['tbody-baixos']) { _pag['tbody-baixos'].page = 1; _applyPaginacao('tbody-baixos'); }
+  }
+
+  // -- CATÁLOGO DE MATERIAIS -----------------------------
+  function verEntradasItem(pecaId, nome) {
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const entradas = DB.Movimentos.listar()
+      .filter(m => m.pecaId === pecaId && m.tipo === 'ENTRADA')
+      .sort((a,b) => (b.data||'').localeCompare(a.data||''))
+      .slice(0, 20);
+    const rows = entradas.map(m => `<tr> <td>${Utils.formatarData(m.data)}</td> <td style="text-align:center">${m.quantidade}</td> <td style="text-align:right">${Number(m.precoUnitario) > 0  Utils.fmtMoeda(Number(m.precoUnitario)) : '-'}</td> <td style="text-align:right;font-weight:700">${Number(m.precoUnitario) > 0  Utils.fmtMoeda(Number(m.precoUnitario) * Number(m.quantidade)) : '-'}</td> <td>${Utils.safe(usuariosMap[m.responsavel]||'-')}</td> <td>${Utils.safe(m.ordemServico||'-')}</td> </tr>`);
+    document.getElementById('drill-titulo').textContent = ' ' + nome + ' - últimas entradas';
+    document.getElementById('drill-body').innerHTML = rows.length === 0  '<div class="empty-state"><p>Nenhuma entrada registrada para este item.</p></div>'
+      : `<div class="table-wrapper"><table> <thead><tr><th>Data</th><th style="text-align:center">Qtd</th><th style="text-align:right">Preço Unit.</th><th style="text-align:right">Total</th><th>Responsável</th><th>OS</th></tr></thead> <tbody>${rows.join('')}</tbody> </table></div>`;
+    Utils.abrirModal('modal-drill');
+  }
+
+  function verVistaExplodida(pecaId) {
+    const p = DB.Pecas.buscarId(pecaId);
+    if (!p) return;
+    document.getElementById('drill-titulo').textContent = ' ' + p.nome + ' - Vista Explodida';
+    let bodyHtml = '';
+    if (p.imagemExplodida) {
+      bodyHtml = `<div style="text-align:center;padding:16px"> <img src="${p.imagemExplodida}" style="max-width:100%;max-height:70vh;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.2)" alt="Vista Explodida"> <div style="margin-top:10px;font-size:13px;color:var(--text-muted)">${Utils.safe(p.codigo)} - ${Utils.safe(p.nome)}</div> </div>`;
+    } else {
+      bodyHtml = `<div class="empty-state" style="padding:40px"> <div class="icon"></div> <p>Nenhuma vista explodida cadastrada para este item.</p> <p style="font-size:12px">Para adicionar, vá em <strong>Peças Editar Vista Explodida</strong>.</p> </div>`;
+    }
+    document.getElementById('drill-body').innerHTML = bodyHtml;
+    Utils.abrirModal('modal-drill');
+  }
+
+  function relCatalogo() {
+    const todasPecas = DB.Pecas.listar();
+    const saldos     = DB.Movimentos.saldoTodos();
+
+    // KPIs
+    const total    = todasPecas.length;
+    const ativos   = todasPecas.filter(p => p.ativo !== false).length;
+    const inativos = total - ativos;
+    const comFoto  = todasPecas.filter(p => (p.imagens && p.imagens.length > 0) || (p.imagem && p.imagem.length > 10)).length;
+    const valorTotal = todasPecas.reduce((s,p) => {
+      const sal = saldos[p.id] || p.qtdAtual || 0;
+      return s + (Number(p.precoUnitario)||0) * sal;
+    }, 0);
+
+    // Categorias únicas para o filtro
+    const cats = [...new Set(todasPecas.map(p => p.categoria).filter(Boolean))].sort();
+
+    // Grupos por categoria (para view agrupada)
+    const grupos = {};
+    todasPecas.forEach(p => {
+      const g = p.categoria || 'Sem Categoria';
+      if (!grupos[g]) grupos[g] = [];
+      grupos[g].push(p);
+    });
+
+    // Gera linhas da tabela (todas as peças, filtradas via JS inline)
+    const rows = todasPecas.map(p => {
+      const saldo = saldos[p.id] || (p.qtdAtual || 0);
+      const st    = Utils.statusEstoque(saldo, p.estoqueMinimo);
+      const pct   = p.estoqueMinimo > 0  Math.min(100, (saldo / p.estoqueMinimo) * 100) : 100;
+      const ativo = p.ativo !== false;
+      const cat   = (p.categoria || '').toLowerCase();
+      const nome  = (p.nome || '').toLowerCase();
+      const cod   = (p.codigo || '').toLowerCase();
+      return `<tr class="cat-row"
+          data-ativo="${ativo}"
+          data-cat="${Utils.safe(p.categoria||'')}"
+          data-busca="${cod} ${nome} ${cat} ${(p.localização||p.localizacao||'').toLowerCase()}"
+          style="cursor:pointer"
+          onclick="verVistaExplodida(${JSON.stringify(p.id)})"
+          title="Ver ficha completa"> <td> <code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono);letter-spacing:.3px">${Utils.safe(p.codigo)}</code> </td> <td> <div style="display:flex;align-items:center;gap:10px"> ${(p.imagens && p.imagens.length > 0)  `<img src="/api/imagens/${encodeURIComponent(p.imagens[0])}" alt="" style="width:34px;height:34px;object-fit:contain;border-radius:6px;border:1px solid var(--border);background:var(--bg);flex-shrink:0">`
+              : `<div style="width:34px;height:34px;border-radius:6px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:var(--text-muted)"></div>`
+            }
+            <div> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${Utils.safe(p.nome)}</div> ${p.descricao && p.descricao !== p.nome  `<div style="font-size:11px;color:var(--text-muted);margin-top:1px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Utils.safe(p.descricao)}</div>` : ''}
+            </div> </div> </td> <td> <span style="display:inline-block;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;letter-spacing:.3px"> ${Utils.safe(p.categoria||'-')}
+          </span> </td> <td style="font-size:12px;text-align:center">${Utils.safe(p.unidade||'UN')}</td> <td> <div style="display:flex;align-items:center;gap:6px"> <span style="font-weight:700;font-size:13px;min-width:28px">${saldo}</span> <div style="flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;min-width:40px"> <div style="height:100%;border-radius:3px;background:${st.classe === 'ok'  'var(--success)' : st.classe === 'low'  'var(--warning)' : 'var(--danger)'};width:${pct}%"></div> </div> <span style="font-size:10px;color:var(--text-muted)">${p.estoqueMinimo}</span> </div> </td> <td style="font-size:12px;text-align:right">${Number(p.precoUnitario) > 0  Utils.fmtMoeda(Number(p.precoUnitario)) : '<span style="color:var(--text-muted)">-</span>'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localização||p.localizacao||'-')}</td> <td style="text-align:center"> <span class="badge badge-${ativo  'ok' : 'critical'}">${ativo  'Ativo' : 'Inativo'}</span> </td> </tr>`;
+    });
+
+    return `
+      <!-- HEADER --> <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Catálogo de Materiais</div> <div class="relatorio-subtitle">Todos os materiais cadastrados - ${total} itens em ${cats.length} categorias</div> </div> </div> <!-- KPIs --> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${total}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total de Itens</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${ativos}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Ativos</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${inativos}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Inativos</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF0DC;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${comFoto}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Com Foto</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:15px;font-weight:800;color:var(--text);line-height:1.2">${Utils.fmtMoeda(valorTotal)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Valor em Estoque</div></div> </div> </div> <!-- FILTROS --> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="cat-busca" placeholder="Buscar por código, nome, categoria ou local..." oninput="filtrarCatalogo()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select id="cat-filtro-cat" onchange="filtrarCatalogo()" style="padding:7px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> <option value="">Todas as Categorias (${cats.length})</option> ${cats.map(c => `<option value="${Utils.safe(c)}">${Utils.safe(c)}</option>`).join('')}
+        </select> <select id="cat-filtro-status" onchange="filtrarCatalogo()" style="padding:7px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> <option value="">Todos os Status</option> <option value="true">Somente Ativos</option> <option value="false">Somente Inativos</option> </select> <span id="cat-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${total} itens</span> </div> <!-- TABELA --> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table id="tabela-catalogo"> <thead> <tr> <th style="width:90px">Código</th> <th>Nome / Descrição</th> <th>Categoria</th> <th style="text-align:center;width:50px">Un.</th> <th style="width:160px">Saldo / Nível</th> <th style="text-align:right;width:100px">Preço Unit.</th> <th style="width:80px">Local</th> <th style="text-align:center;width:72px">Status</th> </tr> </thead> <tbody id="tbody-catalogo"> ${rows.join('')}
+            </tbody> </table> </div> <div id="cat-empty" style="display:none;text-align:center;padding:40px 20px;color:var(--text-muted)"> <div style="font-size:36px;opacity:.3;margin-bottom:8px"></div> <p style="font-size:14px">Nenhum item encontrado</p> </div> </div> `;
+  }
+
+  function filtrarCatalogo() {
+    const busca   = (document.getElementById('cat-busca').value || '').toLowerCase().trim();
+    const catFil  = (document.getElementById('cat-filtro-cat').value || '').toLowerCase();
+    const stFil   = document.getElementById('cat-filtro-status').value || '';
+    const rows    = document.querySelectorAll('#tbody-catalogo .cat-row');
+    let visivel   = 0;
+    rows.forEach(tr => {
+      const b   = tr.dataset.busca || '';
+      const cat = (tr.dataset.cat || '').toLowerCase();
+      const ativo = tr.dataset.ativo;
+      const okB = !busca || b.includes(busca);
+      const okC = !catFil || cat === catFil;
+      const okS = !stFil || ativo === stFil;
+      const show = okB && okC && okS;
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('cat-contagem');
+    if (contEl) contEl.textContent = visivel + ' itens';
+    const emptyEl = document.getElementById('cat-empty');
+    if (emptyEl) emptyEl.style.display = visivel === 0  '' : 'none';
+    if (_pag['tbody-catalogo']) { _pag['tbody-catalogo'].page = 1; _applyPaginacao('tbody-catalogo'); }
+  }
+
+  // -- CUSTO POR FORNECEDOR ------------------------------
+  function relFornecedor() {
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const fornMap  = {};
+    DB.Movimentos.listar().filter(m => m.tipo === 'ENTRADA').forEach(m => {
+      const p = pecasMap[m.pecaId];
+      if (!p) return;
+      const f = p.fornecedor || '(sem fornecedor)';
+      if (!fornMap[f]) fornMap[f] = { qtd: 0, valor: 0, itens: new Set(), movs: [] };
+      fornMap[f].qtd   += Number(m.quantidade);
+      fornMap[f].valor += Number(m.quantidade) * (Number(m.precoUnitario)||Number(p.precoUnitario)||0);
+      fornMap[f].itens.add(p.id);
+      fornMap[f].movs.push(m);
+    });
+    const lista = Object.entries(fornMap).sort((a,b) => b[1].valor - a[1].valor);
+    const total  = lista.reduce((s,[,v]) => s + v.valor, 0);
+    const maxVal = (lista[0]  lista[0][1].valor : 0) || 1;
+    const rows   = lista.map(([forn, v]) => `<tr class="forn-row"
+        data-busca="${forn.toLowerCase()}"
+        style="cursor:pointer"
+        onclick="verDetalheFornecedor(${JSON.stringify(forn)})"
+        title="Clique para ver detalhes"> <td style="font-weight:600;color:var(--primary-dark)">${Utils.safe(forn)}</td> <td style="text-align:center">${v.itens.size}</td> <td style="text-align:center">${v.qtd}</td> <td style="text-align:right;font-weight:700">${Utils.fmtMoeda(v.valor)}</td> <td style="min-width:100px"> <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"> <div style="height:100%;width:${(v.valor/maxVal*100).toFixed(1)}%;background:var(--primary);border-radius:3px"></div> </div> </td> <td style="text-align:right;color:var(--text-muted)">${total > 0  (v.valor / total * 100).toFixed(1) + '%' : '-'}</td> </tr>`);
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Custo por Fornecedor</div> <div class="relatorio-subtitle">Valor de entradas agrupado por fornecedor - clique para ver detalhes</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${lista.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Fornecedores</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${lista.reduce((s,[,v])=>s+v.qtd,0)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Itens Recebidos</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:15px;font-weight:800;color:var(--text);line-height:1.2">${Utils.fmtMoeda(total)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total em Entradas</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF0DC;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:13px;font-weight:800;color:var(--text);line-height:1.2">${lista[0]  Utils.safe(lista[0][0]).slice(0,22) + (lista[0][0].length > 22  '...' : '') : '-'}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Maior Fornecedor</div></div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="forn-busca" placeholder="Buscar por fornecedor..." oninput="filtrarFornecedor()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <span id="forn-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${lista.length} fornecedores</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead> <tr> <th>Fornecedor</th> <th style="text-align:center;width:100px">Tipos de Itens</th> <th style="text-align:center;width:120px">Qtd. Entradas</th> <th style="text-align:right;width:110px">Valor Total</th> <th style="width:120px">Participação</th> <th style="text-align:right;width:70px">% Total</th> </tr> </thead> <tbody id="tbody-fornecedor"> ${rows.join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Nenhuma entrada com fornecedor cadastrado</td></tr>'}
+            </tbody> </table> </div> </div> `;
+  }
+
+  function filtrarFornecedor() {
+    const busca = (document.getElementById('forn-busca').value || '').toLowerCase().trim();
+    const rows  = document.querySelectorAll('#tbody-fornecedor .forn-row');
+    let visivel = 0;
+    rows.forEach(tr => {
+      const show = !busca || (tr.dataset.busca||'').includes(busca);
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('forn-contagem');
+    if (contEl) contEl.textContent = visivel + ' fornecedores';
+    if (_pag['tbody-fornecedor']) { _pag['tbody-fornecedor'].page = 1; _applyPaginacao('tbody-fornecedor'); }
+  }
+
+  function verDetalheFornecedor(nomeFornecedor) {
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const movs = DB.Movimentos.listar().filter(m => {
+      if (m.tipo !== 'ENTRADA') return false;
+      const p = pecasMap[m.pecaId];
+      const f = p  (p.fornecedor || '(sem fornecedor)') : '(sem fornecedor)';
+      return f === nomeFornecedor;
+    }).sort((a,b) => (b.data||'').localeCompare(a.data||''));
+    const rows = movs.map(m => {
+      const p = pecasMap[m.pecaId];
+      const preco = Number(m.precoUnitario) || Number(p.precoUnitario) || 0;
+      const total = preco * Number(m.quantidade);
+      return `<tr> <td style="font-size:12px">${Utils.formatarData(m.data)}</td> <td>${p  Utils.safe(p.nome) : '-'}</td> <td style="text-align:center">${m.quantidade} ${p  Utils.safe(p.unidade) : ''}</td> <td style="text-align:right">${preco > 0  Utils.fmtMoeda(preco) : '-'}</td> <td style="text-align:right;font-weight:700">${total > 0  Utils.fmtMoeda(total) : '-'}</td> <td style="font-size:12px">${Utils.safe(usuariosMap[m.responsavel]||'-')}</td> <td style="font-size:12px">${Utils.safe(m.ordemServico||'-')}</td> </tr>`;
+    });
+    document.getElementById('drill-titulo').textContent = ' ' + nomeFornecedor;
+    document.getElementById('drill-body').innerHTML = rows.length === 0  '<div class="empty-state"><p>Nenhuma entrada encontrada.</p></div>'
+      : `<div class="table-wrapper"><table> <thead><tr><th>Data</th><th>Peça</th><th style="text-align:center">Qtd</th><th style="text-align:right">Preço Unit.</th><th style="text-align:right">Total</th><th>Responsável</th><th>OS</th></tr></thead> <tbody>${rows.join('')}</tbody> </table></div>`;
+    Utils.abrirModal('modal-drill');
+  }
+
+  // -- MATERIAIS POR ATIVO -------------------------------
+  function relAtivosMat() {
+    const ativos   = DB.Ativos.listar();
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const movSaida = DB.Movimentos.listar().filter(m => m.tipo === 'SAIDA' && m.ativoId);
+    const ativoMap = {};
+    movSaida.forEach(m => {
+      if (!ativoMap[m.ativoId]) ativoMap[m.ativoId] = {};
+      ativoMap[m.ativoId][m.pecaId] = (ativoMap[m.ativoId][m.pecaId]||0) + Number(m.quantidade);
+    });
+    const ativosComConsumo = ativos.filter(a => ativoMap[a.id]);
+    const totalItensConsum = Object.values(ativoMap).reduce((s,m) => s + Object.keys(m).length, 0);
+    const totalQtdConsum   = movSaida.reduce((s,m) => s + Number(m.quantidade), 0);
+    const sections = ativosComConsumo.map(a => {
+      const itens = Object.entries(ativoMap[a.id]).sort((x,y) => y[1]-x[1]);
+      const rows  = itens.map(([pid, qtd]) => {
+        const p = pecasMap[pid];
+        return `<tr> <td><code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono)">${p  Utils.safe(p.codigo) : '-'}</code></td> <td><div style="font-weight:600;font-size:13px">${p  Utils.safe(p.nome) : pid}</div></td> <td style="text-align:center;font-weight:700">${qtd} <span style="font-size:10px;color:var(--text-muted)">${p  Utils.safe(p.unidade) : ''}</span></td> </tr>`;
+      });
+      return `<div style="margin-bottom:20px"> <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"> <code style="font-size:12px;background:var(--primary);color:#fff;padding:3px 10px;border-radius:6px;font-weight:700">${Utils.safe(a.tag)}</code> <span style="font-size:13px;font-weight:600;color:var(--primary-dark)">${Utils.safe(a.descricao)}</span> <span style="font-size:11px;color:var(--text-muted);margin-left:auto">${itens.length} tipo(s) de item</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"><table><thead><tr><th style="width:90px">Código</th><th>Material</th><th style="text-align:center;width:120px">Qtd. Consumida</th></tr></thead><tbody>${rows.join('')}</tbody></table></div> </div> </div>`;
+    });
+    const semAtivo = movSaida.length === 0  '' : (() => {
+      const movSemAtivo = DB.Movimentos.listar().filter(m => m.tipo === 'SAIDA' && !m.ativoId);
+      if (!movSemAtivo.length) return '';
+      const map = {};
+      movSemAtivo.forEach(m => map[m.pecaId] = (map[m.pecaId]||0)+Number(m.quantidade));
+      const rows = Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([pid,qtd]) => {
+        const p = pecasMap[pid];
+        return `<tr><td><code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono)">${p  Utils.safe(p.codigo) : '-'}</code></td><td>${p  Utils.safe(p.nome) : pid}</td><td style="text-align:center">${qtd}</td></tr>`;
+      });
+      return `<div style="margin-bottom:20px"> <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"> <span style="font-size:13px;font-weight:600;color:var(--text-muted)">Saídas sem ativo vinculado</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"><table><thead><tr><th>Código</th><th>Material</th><th style="text-align:center">Qtd.</th></tr></thead><tbody>${rows.join('')}</tbody></table></div> </div> </div>`;
+    })();
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Materiais por Ativo</div> <div class="relatorio-subtitle">Materiais consumidos agrupados por máquina / equipamento</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${ativosComConsumo.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Ativos com Consumo</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF0DC;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totalItensConsum}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Tipos de Itens</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totalQtdConsum}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Itens Consumidos</div></div> </div> </div> ${sections.length  sections.join('') + semAtivo : '<div class="empty-state"><div class="icon"></div><p>Nenhuma saída com ativo vinculado registrada</p><p style="font-size:12px;color:var(--text-muted)">Ao registrar saídas, selecione o ativo para aparecer aqui</p></div>'}
+    `;
+  }
+
+  // -- CUSTO POR ATIVO -----------------------------------
+  function relAtivosCusto() {
+    const ativos   = DB.Ativos.listar();
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const movSaida = DB.Movimentos.listar().filter(m => m.tipo === 'SAIDA' && m.ativoId);
+    const ativoValor = {};
+    const ativoQtd   = {};
+    const ativoNmovs = {};
+    movSaida.forEach(m => {
+      const p = pecasMap[m.pecaId];
+      const v = Number(m.quantidade) * (p  Number(p.precoUnitario || 0) : 0);
+      ativoValor[m.ativoId] = (ativoValor[m.ativoId]||0) + v;
+      ativoQtd[m.ativoId]   = (ativoQtd[m.ativoId]||0)  + Number(m.quantidade);
+      ativoNmovs[m.ativoId] = (ativoNmovs[m.ativoId]||0) + 1;
+    });
+    const lista = ativos.filter(a => ativoValor[a.id] || ativoQtd[a.id])
+      .sort((a,b) => (ativoValor[b.id]||0)-(ativoValor[a.id]||0));
+    const total = lista.reduce((s,a) => s+(ativoValor[a.id]||0), 0);
+    const rows  = lista.map(a => `<tr> <td><code style="font-size:11px;background:var(--bg);padding:1px 6px;border-radius:4px;font-family:monospace">${Utils.safe(a.tag)}</code></td> <td style="font-weight:600">${Utils.safe(a.descricao)}</td> <td>${Utils.safe(a.setor||'-')}</td> <td style="text-align:center">${ativoNmovs[a.id]||0}</td> <td style="text-align:center">${ativoQtd[a.id]||0}</td> <td style="text-align:right;font-weight:700">${Utils.fmtMoeda(ativoValor[a.id]||0)}</td> <td style="text-align:right;color:var(--text-muted)">${total > 0  ((ativoValor[a.id] || 0) / total * 100).toFixed(1) + '%' : '-'}</td> </tr>`);
+    const maxAtivoCusto = lista[0]  (ativoValor[lista[0].id] || 0) : 1;
+    const rowsEnhanced = lista.map(a => `<tr> <td><code style="font-size:11px;background:var(--bg);padding:2px 7px;border-radius:4px;font-family:var(--font-mono)">${Utils.safe(a.tag)}</code></td> <td> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${Utils.safe(a.descricao)}</div> <div style="font-size:11px;color:var(--text-muted)">${Utils.safe(a.setor||'-')}</div> </td> <td style="text-align:center">${ativoNmovs[a.id]||0}</td> <td style="text-align:center">${ativoQtd[a.id]||0}</td> <td style="text-align:right;font-weight:700">${Utils.fmtMoeda(ativoValor[a.id]||0)}</td> <td style="min-width:80px"> <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"> <div style="height:100%;width:${((ativoValor[a.id]||0)/maxAtivoCusto*100).toFixed(1)}%;background:var(--primary);border-radius:3px"></div> </div> </td> <td style="text-align:right;color:var(--text-muted)">${total > 0  ((ativoValor[a.id] || 0) / total * 100).toFixed(1) + '%' : '-'}</td> </tr>`);
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Custo por Ativo</div> <div class="relatorio-subtitle">Valor total de materiais consumidos por máquina / equipamento</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${lista.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Ativos c/ Custo</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${movSaida.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Movimentações</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:15px;font-weight:800;color:var(--text);line-height:1.2">${Utils.fmtMoeda(total)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total Consumido</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF0DC;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:13px;font-weight:800;color:var(--text);line-height:1.2">${lista[0]  Utils.safe(lista[0].tag) : '-'}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Maior Custo</div></div> </div> </div> ${rowsEnhanced.length  `
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"><table> <thead><tr> <th style="width:90px">TAG</th> <th>Ativo / Setor</th> <th style="text-align:center;width:110px">Movimentações</th> <th style="text-align:center;width:90px">Qtd. Itens</th> <th style="text-align:right;width:110px">Custo Total</th> <th style="width:100px">Participação</th> <th style="text-align:right;width:70px">% Total</th> </tr></thead> <tbody id="tbody-ativos-custo">${rowsEnhanced.join('')}</tbody> </table></div> </div>` : '<div class="empty-state"><div class="icon"></div><p>Nenhuma saída com ativo vinculado</p></div>'}
+    `;
+  }
+
+  function relRequisicoes() {
+    const reqs = DB.Requisicoes.listar();
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const porStatus = { PENDENTE: 0, APROVADO: 0, REPROVADO: 0, CONCLUIDO: 0 };
+    reqs.forEach(r => { if (porStatus[r.status] !== undefined) porStatus[r.status]++; });
+    const rows = reqs.sort((a,b) => b.criadoEm.localeCompare(a.criadoEm||'')).map(r => {
+      const p = pecasMap[r.pecaId];
+      const bdg = { PENDENTE:'warning', APROVADO:'ok', REPROVADO:'critical', CONCLUIDO:'ok' };
+      return `<tr class="req-row"
+          data-busca="${(p.nome||'').toLowerCase()} ${(p.codigo||'').toLowerCase()} ${(r.observacao||'').toLowerCase()}"
+          data-status="${r.status}"> <td style="font-size:12px">${Utils.formatarData(r.criadoEm)}</td> <td> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${p  Utils.safe(p.nome) : '-'}</div> ${p  `<code style="font-size:10px;color:var(--text-muted)">${Utils.safe(p.codigo)}</code>` : ''}
+        </td> <td style="text-align:center;font-weight:700">${r.quantidade}</td> <td style="text-align:center"><span class="badge badge-${bdg[r.status]||'ok'}">${r.status}</span></td> <td style="font-size:12px">${Utils.safe(usuariosMap[r.solicitanteId]||'-')}</td> <td style="font-size:12px;color:var(--text-muted)">${Utils.safe(r.observacao||'-')}</td> </tr>`;
+    });
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Requisições de Compra</div> <div class="relatorio-subtitle">Histórico e status de todas as requisições de compra</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${reqs.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${porStatus.PENDENTE}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Pendentes</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${porStatus.APROVADO + porStatus.CONCLUIDO}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Aprovadas / Concluídas</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${porStatus.REPROVADO}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Reprovadas</div></div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="req-busca" placeholder="Buscar por peça ou observação..." oninput="filtrarRequisicoes()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select id="req-filtro-status" onchange="filtrarRequisicoes()" style="padding:7px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> <option value="">Todos os Status</option> <option value="PENDENTE">Pendentes</option> <option value="APROVADO">Aprovadas</option> <option value="REPROVADO">Reprovadas</option> <option value="CONCLUIDO">Concluídas</option> </select> <span id="req-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${reqs.length} requisições</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead><tr><th style="width:90px">Data</th><th>Peça</th><th style="text-align:center;width:60px">Qtd</th><th style="text-align:center;width:100px">Status</th><th style="width:120px">Solicitante</th><th>Observação</th></tr></thead> <tbody id="tbody-requisicoes"> ${rows.join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">Nenhuma requisição cadastrada</td></tr>'}
+            </tbody> </table> </div> </div> `;
+  }
+
+  function filtrarRequisicoes() {
+    const busca = (document.getElementById('req-busca').value || '').toLowerCase().trim();
+    const stFil = document.getElementById('req-filtro-status').value || '';
+    const rows  = document.querySelectorAll('#tbody-requisicoes .req-row');
+    let visivel = 0;
+    rows.forEach(tr => {
+      const show = (!busca || (tr.dataset.busca||'').includes(busca)) && (!stFil || tr.dataset.status === stFil);
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('req-contagem');
+    if (contEl) contEl.textContent = visivel + ' requisições';
+    if (_pag['tbody-requisicoes']) { _pag['tbody-requisicoes'].page = 1; _applyPaginacao('tbody-requisicoes'); }
+  }
+
+  // -- HISTÓRICO DE AJUSTES ------------------------------
+  function relAjustes() {
+    const ajustes = DB.Ajustes.listar();
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const rows = ajustes.sort((a,b) => b.criadoEm.localeCompare(a.criadoEm||'')).map(a => {
+      const p = pecasMap[a.pecaId];
+      const diff = Number(a.saldoNovo) - Number(a.saldoAnterior);
+      return `<tr class="ajuste-row"
+          data-busca="${(p.nome||'').toLowerCase()} ${(p.codigo||'').toLowerCase()} ${(a.motivo||'').toLowerCase()}"
+          data-tipo="${diff >= 0  'add' : 'sub'}"> <td style="font-size:12px">${Utils.formatarDataHora(a.criadoEm)}</td> <td> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${p  Utils.safe(p.nome) : '-'}</div> ${p  `<code style="font-size:10px;color:var(--text-muted)">${Utils.safe(p.codigo)}</code>` : ''}
+        </td> <td style="text-align:center">${a.saldoAnterior}</td> <td style="text-align:center">${a.saldoNovo}</td> <td style="text-align:center"> <span style="font-weight:700;color:${diff >= 0  'var(--success)' : 'var(--danger)'};background:${diff >= 0  '#E6F4EA' : '#FCE8E6'};padding:2px 8px;border-radius:10px;font-size:12px">${diff >= 0  '+' : ''}${diff}</span> </td> <td style="font-size:12px">${Utils.safe(usuariosMap[a.responsavelId]||'-')}</td> <td style="font-size:12px;color:var(--text-muted)">${Utils.safe(a.motivo||'-')}</td> </tr>`;
+    });
+    const totalAdds = ajustes.filter(a => Number(a.saldoNovo) >= Number(a.saldoAnterior)).length;
+    const totalSubs = ajustes.length - totalAdds;
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Histórico de Ajustes</div> <div class="relatorio-subtitle">Todos os ajustes manuais de saldo registrados</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${ajustes.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Total de Ajustes</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totalAdds}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Adições</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${totalSubs}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Subtrações</div></div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="ajuste-busca" placeholder="Buscar por peça ou motivo..." oninput="filtrarAjustes()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select id="ajuste-filtro-tipo" onchange="filtrarAjustes()" style="padding:7px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> <option value="">Todos os Tipos</option> <option value="add">Somente Adições </option> <option value="sub">Somente Subtrações </option> </select> <span id="ajuste-contagem" style="font-size:12px;color:var(--text-muted);white-space:nowrap">${ajustes.length} ajustes</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead><tr><th style="width:130px">Data/Hora</th><th>Peça</th><th style="text-align:center;width:100px">Saldo Anterior</th><th style="text-align:center;width:90px">Saldo Novo</th><th style="text-align:center;width:90px">Diferença</th><th style="width:120px">Responsável</th><th>Motivo</th></tr></thead> <tbody id="tbody-ajustes"> ${rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">Nenhum ajuste registrado</td></tr>'}
+            </tbody> </table> </div> </div> `;
+  }
+
+  function filtrarAjustes() {
+    const busca = (document.getElementById('ajuste-busca').value || '').toLowerCase().trim();
+    const tFil  = document.getElementById('ajuste-filtro-tipo').value || '';
+    const rows  = document.querySelectorAll('#tbody-ajustes .ajuste-row');
+    let visivel = 0;
+    rows.forEach(tr => {
+      const show = (!busca || (tr.dataset.busca||'').includes(busca)) && (!tFil || tr.dataset.tipo === tFil);
+      tr.dataset.pagOut = show  '' : '1';
+      if (show) visivel++;
+    });
+    const contEl = document.getElementById('ajuste-contagem');
+    if (contEl) contEl.textContent = visivel + ' ajustes';
+    if (_pag['tbody-ajustes']) { _pag['tbody-ajustes'].page = 1; _applyPaginacao('tbody-ajustes'); }
+  }
+
+  // -- CONSERTOS EXTERNOS --------------------------------
+  function relConsertos() {
+    const consertos = DB.Consertos.listar();
+    const hoje = new Date().toISOString().slice(0, 10);
+    const mesAtual = hoje.slice(0, 7);
+
+    // KPIs
+    let total = 0, emAberto = 0, emConserto = 0, finalizado = 0, prazoVencido = 0;
+    let somaCusto = 0, somaTempoFora = 0, countComTempo = 0;
+    let noPrazo = 0, foraDoPrazo = 0;
+    const porFornecedor = {}, porAtivo = {};
+    const porMes = {};
+
+    consertos.forEach(function(s) {
+      total++;
+      if (!['Finalizado','Cancelado'].includes(s.status)) emAberto++;
+      if (['Enviado para conserto','Em conserto','Liberado para envio'].includes(s.status)) emConserto++;
+      if (s.status === 'Prazo de retorno vencido') prazoVencido++;
+      if (s.status === 'Finalizado') {
+        finalizado++;
+        const custo = parseFloat(s.valor_final_conserto) || parseFloat(s.valor_material) || 0;
+        somaCusto += custo;
+        if (s.data_real_envio && s.data_real_retorno) {
+          const dias = Math.round((new Date(s.data_real_retorno + 'T12:00:00') - new Date(s.data_real_envio + 'T12:00:00')) / 86400000);
+          if (dias >= 0) { somaTempoFora += dias; countComTempo++; }
+          // % no prazo
+          if (s.data_prevista_retorno) {
+            if (s.data_real_retorno <= s.data_prevista_retorno) noPrazo++; else foraDoPrazo++;
+          }
+        }
+      }
+      // Agrupamento por fornecedor
+      const forn = (s.fornecedor_razao_social || s.fornecedor_nome_fantasia || 'Sem fornecedor').trim();
+      if (!porFornecedor[forn]) porFornecedor[forn] = { total: 0, custo: 0, vencido: 0 };
+      porFornecedor[forn].total++;
+      if (s.status === 'Finalizado') porFornecedor[forn].custo += (parseFloat(s.valor_final_conserto) || 0);
+      if (s.status === 'Prazo de retorno vencido') porFornecedor[forn].vencido++;
+      // Por mês de abertura
+      const mes = (s.data_abertura || '').slice(0, 7);
+      if (mes) { porMes[mes] = (porMes[mes] || 0) + 1; }
+    });
+
+    const tempoMedio = countComTempo > 0  Math.round(somaTempoFora / countComTempo) : null;
+    const pctNoPrazo = (noPrazo + foraDoPrazo) > 0  Math.round(noPrazo / (noPrazo + foraDoPrazo) * 100) : null;
+
+    const fornRanking = Object.entries(porFornecedor)
+      .sort(function(a, b) { return b[1].total - a[1].total; });
+
+    const mesesOrdenados = Object.entries(porMes)
+      .sort(function(a, b) { return a[0].localeCompare(b[0]); })
+      .slice(-12);
+
+    const kpiBox = function(icon, label, val, color) {
+      return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px">'
+        + '<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:4px">' + icon + ' ' + label + '</div>'
+        + '<div style="font-size:22px;font-weight:800;color:' + color + ';line-height:1.1">' + val + '</div>'
+        + '</div>';
+    };
+
+    return '<div class="relatorio-header">'
+      + '<div><div class="relatorio-titulo"> Consertos Externos</div>'
+      + '<div class="relatorio-subtitle">Relatório de solicitações de conserto - gerado em ' + new Date().toLocaleDateString('pt-BR') + '</div></div>'
+      + '<div class="no-print"><button class="btn btn-outline btn-sm" onclick="window.print()"> Imprimir</button></div>'
+      + '</div>'
+
+      + '<div class="sumario-kpis">'
+      + kpiBox('', 'Total de solicitações', total, 'var(--text)')
+      + kpiBox('', 'Em aberto', emAberto, 'var(--primary)')
+      + kpiBox('', 'Em conserto', emConserto, 'var(--primary)')
+      + kpiBox('', 'Prazo vencido', prazoVencido, 'var(--danger)')
+      + kpiBox('', 'Finalizados', finalizado, 'var(--success)')
+      + (somaCusto > 0  kpiBox('', 'Custo total finaliz.', Utils.fmtMoeda(somaCusto), 'var(--success)') : '')
+      + (tempoMedio !== null  kpiBox('', 'Tempo mdio (dias)', tempoMedio, 'var(--primary)') : '')
+      + (pctNoPrazo !== null  kpiBox('', '% retornos no prazo', pctNoPrazo + '%', pctNoPrazo >= 70  'var(--success)' : 'var(--danger)') : '')
+      + '</div>'
+
+      + '<h3 style="font-size:14px;font-weight:700;margin:18px 0 10px">Custo por Fornecedor</h3>'
+      + '<div class="table-wrapper"><table><thead><tr>'
+      + '<th>Fornecedor</th><th style="text-align:center">Solicitações</th>'
+      + '<th style="text-align:center">Prazo vencido</th><th style="text-align:right">Custo total</th></tr></thead>'
+      + '<tbody>' + (fornRanking.length  fornRanking.map(function(r) {
+            return '<tr><td>' + Utils.safe(r[0]) + '</td>'
+              + '<td style="text-align:center">' + r[1].total + '</td>'
+              + '<td style="text-align:center;color:' + (r[1].vencido > 0  'var(--danger)' : 'inherit') + '">' + r[1].vencido + '</td>'
+              + '<td style="text-align:right">' + (r[1].custo > 0  Utils.fmtMoeda(r[1].custo) : '-') + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="4" style="text-align:center;color:var(--text-muted)">Nenhum dado</td></tr>')
+      + '</tbody></table></div>'
+
+      + '<h3 style="font-size:14px;font-weight:700;margin:18px 0 10px">Abertura por Mês</h3>'
+      + '<div class="table-wrapper"><table><thead><tr><th>Mês/Ano</th><th style="text-align:center">Solicitações abertas</th></tr></thead>'
+      + '<tbody>' + (mesesOrdenados.length  mesesOrdenados.map(function(m) {
+            const partes = m[0].split('-');
+            const nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+            const label = nomesMes[(parseInt(partes[1])||1) - 1] + '/' + partes[0];
+            return '<tr><td>' + label + '</td><td style="text-align:center">' + m[1] + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="2" style="text-align:center;color:var(--text-muted)">Nenhum dado</td></tr>')
+      + '</tbody></table></div>'
+
+      + '<h3 style="font-size:14px;font-weight:700;margin:18px 0 10px">Listagem completa</h3>'
+      + '<div class="table-wrapper"><table><thead><tr>'
+      + '<th>#</th><th>Material</th><th>Fornecedor</th><th>Aberto em</th>'
+      + '<th>Status</th><th>Valor final</th><th>Dias fora</th></tr></thead>'
+      + '<tbody id="tbody-consertos-rel">'
+      + consertos.map(function(s) {
+          const diasFora = (s.data_real_envio && s.data_real_retorno)  Math.round((new Date(s.data_real_retorno + 'T12:00:00') - new Date(s.data_real_envio + 'T12:00:00')) / 86400000)
+            : (s.data_real_envio  Math.round((Date.now() - new Date(s.data_real_envio + 'T12:00:00')) / 86400000) : null);
+          return '<tr>'
+            + '<td>' + Utils.safe(s.numeroSolicitacao || '-') + '</td>'
+            + '<td>' + Utils.safe(s.codigo_material_sap || s.descricao_material_sap || '-') + '</td>'
+            + '<td>' + Utils.safe(s.fornecedor_razao_social || s.fornecedor_nome_fantasia || '-') + '</td>'
+            + '<td>' + (s.data_abertura  new Date(s.data_abertura).toLocaleDateString('pt-BR') : '-') + '</td>'
+            + '<td>' + Utils.safe(s.status || '-') + '</td>'
+            + '<td>' + (s.valor_final_conserto  Utils.fmtMoeda(s.valor_final_conserto) : '-') + '</td>'
+            + '<td style="text-align:center">' + (diasFora !== null  diasFora + 'd' : '-') + '</td>'
+            + '</tr>';
+        }).join('')
+      + '</tbody></table></div>';
+  }
+
+  // -- RESUMO EXECUTIVO ----------------------------------
+  function relExecutivo() {
+    const pecas   = DB.Pecas.ativas();
+    const saldos  = DB.Movimentos.saldoTodos();
+    const movs    = DB.Movimentos.listar();
+    const reqs    = DB.Requisicoes.listar();
+    let ok=0, baixo=0, critico=0, valorTotal=0;
+    pecas.forEach(p => {
+      const s = saldos[p.id] || 0;
+      const st = Utils.statusEstoque(s, p.estoqueMinimo);
+      if (st.classe === 'ok') ok++;
+      else if (st.classe === 'low') baixo++;
+      else critico++;
+      valorTotal += s * (Number(p.precoUnitario) || 0);
+    });
+    const hoje = Utils.dataHoje();
+    const movHoje = movs.filter(m => m.data.startsWith(hoje)).length;
+    const movMes  = movs.filter(m => m.data.slice(0,7) === hoje.slice(0,7)).length;
+    const reqPend = reqs.filter(r => r.status === 'PENDENTE').length;
+    const topConsumidos = (() => {
+      const c = {};
+      movs.filter(m => m.tipo === 'SAIDA').forEach(m => c[m.pecaId] = (c[m.pecaId]||0)+Number(m.quantidade));
+      return Object.entries(c).map(([id,qtd]) => ({ peca: DB.Pecas.buscarId(id), qtd }))
+        .filter(x => x.peca).sort((a,b) => b.qtd-a.qtd).slice(0,5);
+    })();
+    return `
+      <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Resumo Executivo</div> <div class="relatorio-subtitle">Visão consolidada do almoxarifado - ${new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div> </div> </div> <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px"> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${pecas.length}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Itens Cadastrados</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E6F4EA;color:var(--success);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${ok}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Nível Normal</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${baixo}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Estoque Baixo</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FCE8E6;color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${critico}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Críticos / Zerados</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:13px;font-weight:800;color:var(--text);line-height:1.2">${Utils.fmtMoeda(valorTotal)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Valor em Estoque</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF0DC;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${movHoje}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Movim. Hoje</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#E4EAFB;color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${movMes}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Movim. Este Mês</div></div> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)"> <div style="width:40px;height:40px;border-radius:10px;background:#FFF8E1;color:var(--warning);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div> <div><div style="font-size:22px;font-weight:800;color:var(--text);line-height:1">${reqPend}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">Req. Pendentes</div></div> </div> </div> ${topConsumidos.length  `
+        <div style="display:flex;align-items:center;gap:8px;margin:4px 0 10px"> <h3 style="font-size:14px;font-weight:700;color:var(--text);margin:0"> Top 5 Itens Mais Consumidos</h3> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"> <table> <thead><tr><th style="text-align:center;width:44px">#</th><th>Peça</th><th style="text-align:center;width:120px">Total Saídas</th></tr></thead> <tbody>${topConsumidos.map((c,i) => `<tr> <td style="text-align:center"><span style="display:inline-block;width:26px;height:26px;border-radius:50%;background:${i < 3  'var(--primary)' : 'var(--bg)'};color:${i < 3  '#fff' : 'var(--text-muted)'};font-size:11px;font-weight:800;line-height:26px;text-align:center;border:1px solid var(--border)">${i+1}</span></td> <td style="font-weight:600;color:var(--primary-dark)">${Utils.safe(c.peca.nome)}</td> <td style="text-align:center;font-weight:700">${c.qtd}</td> </tr>`).join('')}</tbody> </table> </div> </div> ` : ''}
+    `;
+  }
+
+  // -- PAGINAÇÃO GENÉRICA --------------------------------
+  const _pag = {};
+  function paginar(tbodyId, ps) {
+    ps = ps || 10;
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    tbody.querySelectorAll('tr').forEach(function(r){ delete r.dataset.pagOut; });
+    _pag[tbodyId] = { page: 1, ps: ps };
+    _applyPaginacao(tbodyId);
+  }
+  function _applyPaginacao(tbodyId) {
+    const cfg = _pag[tbodyId];
+    if (!cfg) return;
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    const allRows = Array.from(tbody.querySelectorAll('tr'));
+    const active  = allRows.filter(function(r){ return r.dataset.pagOut !== '1'; });
+    const total   = active.length;
+    const pages   = Math.max(1, Math.ceil(total / cfg.ps));
+    if (cfg.page > pages) cfg.page = pages;
+    const start = (cfg.page - 1) * cfg.ps;
+    const end   = start + cfg.ps;
+    allRows.forEach(function(r) {
+      if (r.dataset.pagOut === '1') { r.style.display = 'none'; return; }
+      var idx = active.indexOf(r);
+      r.style.display = (idx >= start && idx < end)  '' : 'none';
+    });
+    _renderControlesPag(tbodyId, cfg.page, pages, total, cfg.ps);
+  }
+  function _renderControlesPag(tbodyId, page, pages, total, ps) {
+    var ctrlId = 'pag-' + tbodyId;
+    var el = document.getElementById(ctrlId);
+    if (!el) {
+      var tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+      var tableWrapper = tbody.closest('table')  tbody.closest('table').parentElement : null;
+      if (!tableWrapper) return;
+      el = document.createElement('div');
+      el.id = ctrlId;
+      tableWrapper.after(el);
+    }
+    var from = (page - 1) * ps + 1;
+    var to   = Math.min(page * ps, total);
+    var btns = '';
+    if (pages > 1) {
+      for (var p = 1; p <= pages; p++) {
+        if (p === 1 || p === pages || (p >= page - 1 && p <= page + 1)) {
+          var isAct = p === page;
+          btns += '<button onclick="_irPagina(\'' + tbodyId + '\',' + p + ')" style="padding:4px 9px;border-radius:5px;border:1.5px solid ' + (isAct  'var(--primary)' : 'var(--border)') + ';background:' + (isAct  'var(--primary)' : 'var(--card)') + ';color:' + (isAct  '#fff' : 'var(--text)') + ';cursor:pointer;font-size:12px;font-weight:' + (isAct  '700' : '400') + '">' + p + '</button>';
+        } else if (p === page - 2 || p === page + 2) {
+          btns += '<span style="padding:4px 3px;font-size:12px;color:var(--text-muted)">...</span>';
+        }
+      }
+    }
+    var psOpts = [10,20,50,100].map(function(v){ return '<option value="'+v+'"'+(v === ps  ' selected' : '')+'>'+v+'</option>'; }).join('');
+    el.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 16px;border-top:1px solid var(--border)">'
+      + '<span style="font-size:12px;color:var(--text-muted)">' + from + '-' + to + ' de ' + total + ' itens'
+      + '&ensp;<label style="font-size:12px;color:var(--text-muted)">Linhas: <select onchange="_mudarPs(\''+tbodyId+'\',+this.value)" style="padding:2px 6px;font-size:12px;border:1px solid var(--border);border-radius:5px;background:var(--card);color:var(--text);cursor:pointer">'+ psOpts +'</select></label>'
+      + '</span>'
+      + '<div style="display:flex;gap:4px;align-items:center">' + btns + '</div></div>';
+  }
+  function _irPagina(tbodyId, page) {
+    if (_pag[tbodyId]) { _pag[tbodyId].page = page; _applyPaginacao(tbodyId); }
+  }
+  function _mudarPs(tbodyId, ps) {
+    if (_pag[tbodyId]) { _pag[tbodyId].ps = ps; _pag[tbodyId].page = 1; _applyPaginacao(tbodyId); }
+  }
+
+  function _inicializar() { renderRelatorio('inventario'); }
+</script>
+</body>
+</html> 

@@ -1,0 +1,15 @@
+[
+  {
+    "pecaId": "mp1k0byw2542",
+    "operacao": "ADD",
+    "quantidade": 50,
+    "motivo": "Inventário físico",
+    "observacao": "ewtr",
+    "responsavelId": "u1",
+    "status": "APROVADO",
+    "aprovadoEm": "2026-05-12T17:22:08.146Z",
+    "aprovadorId": "u1",
+    "id": "mp2wekcyn2mm",
+    "criadoEm": "2026-05-12T17:22:08.146Z"
+  }
+]

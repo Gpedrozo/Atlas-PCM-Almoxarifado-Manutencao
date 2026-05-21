@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Ajuste de Saldo - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <style> .ajuste-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 24px; margin-bottom: 22px; }
+    .operacao-selector { display: flex; gap: 10px; margin-bottom: 4px; }
+    .op-btn { flex: 1; padding: 14px; border-radius: 8px; border: 2px solid var(--border); background: var(--bg); cursor: pointer; font-size: 15px; font-weight: 700; text-align: center; transition: all .15s; }
+    .op-btn.selected-add { border-color: var(--success); background: #e6f4ea; color: var(--success); }
+    .op-btn.selected-sub { border-color: var(--danger);  background: #fce8e6; color: var(--danger); }
+    .saldo-preview { background: var(--bg); border-radius: 10px; padding: 16px 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; margin-top: 12px; }
+    .saldo-prev-item .label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); font-weight: 600; }
+    .saldo-prev-item .valor { font-size: 24px; font-weight: 800; line-height: 1.1; margin-top: 4px; }
+    .tipo-add { color: var(--success); }
+    .tipo-sub { color: var(--danger); }
+    .tipo-ajuste { color: var(--warning); }
+  </style>
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
+    <div class="sub">PCM Almoxarifado</div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Principal</div>
+    <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
+    <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
+    <div class="nav-group-label">Cadastros</div>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
+    <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
+    <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
+    <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
+    <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
+    <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
+    <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
+  </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Ajuste de Saldo</div> <div class="topbar-subtitle" id="topbar-subtitle">Solicitação de ajuste de estoque</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- SEÇÃO PENDENTES (só admin) --> <div id="secao-pendentes" style="display:none"> <div class="card" style="border-left:4px solid var(--warning);margin-bottom:18px"> <div class="card-title" style="color:var(--warning)">Ajustes Aguardando Aprovação</div> <div id="lista-pendentes"></div> <div id="empty-pendentes" style="display:none;font-size:13px;color:var(--text-muted);padding:10px 0">Nenhum ajuste pendente.</div> </div> </div> <div class="alert alert-warning" style="margin-bottom:18px"> <strong>Atenção:</strong> Ajustes de saldo devem ser usados apenas para corrigir divergências físicas. Todo ajuste fica registrado com o responsável e <strong>requer aprovação do ADMIN</strong>.
+      </div> <!-- FORMULÁRIO DE AJUSTE --> <div class="ajuste-card"> <div class="card-title"> Novo Ajuste</div> <form id="form-ajuste" onsubmit="registrarAjuste(event)" autocomplete="off"> <div class="form-grid"> <!-- Peça --> <div class="form-group" style="grid-column:1/-1"> <label>Peça *</label> <select id="aj-peca" required onchange="atualizarPreview()"> <option value="">- Selecione a peça -</option> </select> </div> <!-- Operação --> <div class="form-group" style="grid-column:1/-1"> <label>Operação *</label> <div class="operacao-selector"> <button type="button" class="op-btn selected-add" id="btn-add" onclick="selecionarOperacao('ADD')"> + ACRESCENTAR<br><span style="font-size:11px;font-weight:400;opacity:.7">Adicionar unidades ao saldo</span> </button> <button type="button" class="op-btn" id="btn-sub" onclick="selecionarOperacao('SUB')"> - SUBTRAIR<br><span style="font-size:11px;font-weight:400;opacity:.7">Remover unidades do saldo</span> </button> </div> <input type="hidden" id="aj-operacao" value="ADD"> </div> <!-- Quantidade --> <div class="form-group"> <label>Quantidade *</label> <input type="number" id="aj-quantidade" min="1" step="1" placeholder="0" required oninput="atualizarPreview()"> </div> <!-- Motivo --> <div class="form-group"> <label>Motivo *</label> <select id="aj-motivo" required> <option value="">- Selecione -</option> <option value="Inventário físico">Inventário físico</option> <option value="Erro de lançamento">Erro de lançamento anterior</option> <option value="Avaria/Perda">Avaria / Perda</option> <option value="Devolução">Devolução de material</option> <option value="Doação">Doação / Transferência</option> <option value="Outro">Outro (ver observação)</option> </select> </div> <!-- Observação --> <div class="form-group full"> <label>Observação *</label> <textarea id="aj-obs" placeholder="Descreva o motivo detalhado do ajuste..." required></textarea> </div> </div> <!-- Preview saldo --> <div id="saldo-preview" class="saldo-preview" style="display:none"> <div class="saldo-prev-item"> <div class="label">Saldo Atual</div> <div class="valor" id="prev-atual">-</div> </div> <div class="saldo-prev-item"> <div class="label">Ajuste</div> <div class="valor" id="prev-ajuste">-</div> </div> <div class="saldo-prev-item"> <div class="label">Saldo Final</div> <div class="valor" id="prev-final">-</div> </div> </div> <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"> <button type="button" class="btn btn-outline" onclick="limparAjuste()">Limpar</button> <button type="submit" class="btn btn-warning" id="btn-confirmar-ajuste"> Solicitar Ajuste</button> </div> </form> </div> <!-- HISTÓRICO DE AJUSTES --> <div class="card"> <div class="card-title"> Histórico de Ajustes</div> <div class="table-wrapper"> <table> <thead> <tr> <th>Data</th> <th>Peça</th> <th>Operação</th> <th>Quantidade</th> <th>Status</th> <th>Motivo</th> <th>Responsável</th> <th>Observação</th> </tr> </thead> <tbody id="tbody-ajustes"></tbody> </table> </div> <div id="empty-ajustes" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhum ajuste realizado</p> </div> </div> </div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('ajustes');
+    Utils.aplicarPermissoes();
+    _inicializar();
+  });
+
+  const isAdmin = Auth.isAdmin();
+
+  // Mostrar seção de pendentes só para admin
+  if (isAdmin) {
+    document.getElementById('secao-pendentes').style.display = '';
+    document.getElementById('topbar-subtitle').textContent = 'Corrija divergências e gerencie aprovações';
+    document.getElementById('btn-confirmar-ajuste').textContent = ' Aplicar Ajuste';
+  }
+
+  let operacaoSelecionada = 'ADD';
+
+  function populaPecas() {
+    const sel = document.getElementById('aj-peca');
+    const pecas = DB.Pecas.ativas();
+    sel.innerHTML = '<option value="">- Selecione a peça -</option>';
+    pecas.forEach(p => {
+      const o = document.createElement('option');
+      o.value = p.id;
+      o.textContent = `[${p.codigo}] ${p.nome}`;
+      sel.appendChild(o);
+    });
+
+    // Pré-selecionar via URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pecaParam = urlParams.get('peca');
+    if (pecaParam) { sel.value = pecaParam; atualizarPreview(); }
+    Utils.initSearchSelect('aj-peca');
+  }
+
+  function selecionarOperacao(op) {
+    operacaoSelecionada = op;
+    document.getElementById('aj-operacao').value = op;
+    document.getElementById('btn-add').className = 'op-btn' + (op === 'ADD'  ' selected-add' : '');
+    document.getElementById('btn-sub').className = 'op-btn' + (op === 'SUB'  ' selected-sub' : '');
+    atualizarPreview();
+  }
+
+  function atualizarPreview() {
+    const id  = document.getElementById('aj-peca').value;
+    const qtd = Number(document.getElementById('aj-quantidade').value) || 0;
+    const prev = document.getElementById('saldo-preview');
+
+    if (!id) { prev.style.display = 'none'; return; }
+    prev.style.display = 'grid';
+
+    const p = DB.Pecas.buscarId(id);
+    const saldoAtual = DB.Movimentos.saldoPeca(id);
+    const delta = operacaoSelecionada === 'ADD'  qtd : -qtd;
+    const final = saldoAtual + delta;
+
+    document.getElementById('prev-atual').textContent = Utils.fmt(saldoAtual) + ' ' + p.unidade;
+    document.getElementById('prev-atual').className = 'valor';
+    const ajEl = document.getElementById('prev-ajuste');
+    ajEl.textContent = (operacaoSelecionada === 'ADD'  '+' : '-') + (qtd || 0) + ' ' + p.unidade;
+    ajEl.className = 'valor ' + (operacaoSelecionada === 'ADD'  'tipo-add' : 'tipo-sub');
+    const finEl = document.getElementById('prev-final');
+    finEl.textContent = Utils.fmt(final) + ' ' + p.unidade;
+    finEl.className = 'valor ' + (final > saldoAtual  'tipo-add' : final < saldoAtual  'tipo-sub' : '');
+  }
+
+  function registrarAjuste(e) {
+    e.preventDefault();
+    const id  = document.getElementById('aj-peca').value;
+    const op  = document.getElementById('aj-operacao').value;
+    const qtd = Number(document.getElementById('aj-quantidade').value);
+    const motivo = document.getElementById('aj-motivo').value;
+    const obs    = document.getElementById('aj-obs').value.trim();
+
+    if (!id) { Utils.toast('Selecione uma peça.', 'error'); return; }
+    if (qtd <= 0) { Utils.toast('Quantidade deve ser maior que zero.', 'error'); return; }
+
+    if (op === 'SUB') {
+      const saldoAtual = DB.Movimentos.saldoPeca(id);
+      if (qtd > saldoAtual) {
+        Utils.toast(`Não é possível subtrair ${qtd} - saldo atual é ${saldoAtual}.`, 'error');
+        return;
+      }
+    }
+
+    const sessao = Auth.getSessao();
+
+    if (isAdmin) {
+      // Admin: aplica imediatamente
+      const tipo = op === 'ADD'  'AJUSTE_ADD' : 'AJUSTE_SUB';
+      DB.Movimentos.registrar({ tipo, pecaId: id, quantidade: qtd, data: new Date().toISOString(), responsavel: sessao.id, ordemServico: '', observacao: `[${motivo}] ${obs}` });
+      DB.Ajustes.registrar({ pecaId: id, operacao: op, quantidade: qtd, motivo, observacao: obs, responsavelId: sessao.id, status: 'APROVADO', aprovadoEm: new Date().toISOString(), aprovadorId: sessao.id });
+      Utils.toast('Ajuste aplicado com sucesso!', 'success');
+    } else {
+      // PCM/Operador: cria solicitação PENDENTE
+      const ajReg = { pecaId: id, operacao: op, quantidade: qtd, motivo, observacao: obs, responsavelId: sessao.id, status: 'PENDENTE' };
+      DB.Ajustes.registrar(ajReg);
+      // Notificar admins in-sistema
+      const pecaNotif = DB.Pecas.buscarId(id);
+      const sinalNotif = op === 'ADD'  '+' : '-';
+      DB.Usuarios.listar().filter(function(u){ return u.nivel === 'ADMIN' && u.ativo !== false; }).forEach(function(admin) {
+        DB.Notificacoes.criar({
+          userId: admin.id,
+          tipo: 'PENDENTE_APROVACAO',
+          titulo: 'Novo ajuste de saldo aguardando aprovação ',
+          mensagem: sessao.nome + ' solicitou ajuste de ' + sinalNotif + qtd + ' ' + (pecaNotif  pecaNotif.unidade : '') + ' em ' + (pecaNotif  pecaNotif.nome : id) + '.',
+          referenciaId: '',
+          referenciaTipo: 'ajuste'
+        });
+      });
+      Utils.toast('Solicitação enviada! Aguardando aprovação do ADMIN.', 'info');
+    }
+
+    limparAjuste();
+    renderPendentes();
+    renderHistorico();
+  }
+
+  async function aprovarAjuste(ajusteId) {
+    const a = DB.Ajustes.buscarId(ajusteId);
+    if (!a) return;
+    const resp = await fetch('/api/ajustes/' + encodeURIComponent(ajusteId) + '/aprovar', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(function(){ return {}; });
+      Utils.toast(err.error || 'Erro ao aprovar ajuste.', 'error');
+      return;
+    }
+    Utils.toast('Ajuste aprovado e aplicado!', 'success');
+    DB.init().then(function() {
+      renderPendentes();
+      renderHistorico();
+    });
+  }
+
+  function rejeitarAjuste(ajusteId) {
+    if (!confirm('Rejeitar esta solicitação de ajuste')) return;
+    const a = DB.Ajustes.buscarId(ajusteId);
+    if (!a) return;
+    const sessao = Auth.getSessao();
+    DB.Ajustes.atualizar({ ...a, status: 'REJEITADO', rejeitadoEm: new Date().toISOString(), aprovadorId: sessao.id });
+    Utils.toast('Solicitação rejeitada.', 'warning');
+    renderPendentes();
+    renderHistorico();
+  }
+
+  function renderPendentes() {
+    if (!isAdmin) return;
+    const pendentes = DB.Ajustes.pendentes();
+    const lista     = document.getElementById('lista-pendentes');
+    const empty     = document.getElementById('empty-pendentes');
+
+    if (pendentes.length === 0) {
+      lista.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+    empty.style.display = 'none';
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+
+    lista.innerHTML = pendentes.map(a => {
+      const peca = pecasMap[a.pecaId];
+      const saldo = peca  DB.Movimentos.saldoPeca(a.pecaId) : 0;
+      const final = a.operacao === 'ADD'  saldo + a.quantidade : saldo - a.quantidade;
+      return `<div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)"> <div> <div style="font-weight:700">${peca  Utils.safe(peca.nome) : '-'} <span style="font-size:11px;font-family:monospace;background:var(--border);padding:1px 6px;border-radius:4px">${peca  Utils.safe(peca.codigo) : ''}</span></div> <div style="font-size:12px;color:var(--text-muted);margin-top:2px"> ${a.operacao === 'ADD'  'Acrscimo de' : 'Subtra-o de'}
+            <strong>${a.quantidade} ${peca  Utils.safe(peca.unidade) : ''}</strong> · Saldo: ${saldo} <strong>${final}</strong> · Motivo: ${Utils.safe(a.motivo)} · Por: ${Utils.safe(usuariosMap[a.responsavelId] || '-')} · ${Utils.formatarDataHora(a.criadoEm)}
+          </div> ${a.observacao  `<div style="font-size:11.5px;color:var(--text-muted);font-style:italic;margin-top:2px">${Utils.safe(a.observacao)}</div>` : ''}
+        </div> <div style="display:flex;gap:6px"> <button class="btn btn-success btn-sm" onclick="aprovarAjuste('${a.id}')">Aprovar</button> <button class="btn btn-danger btn-sm"  onclick="rejeitarAjuste('${a.id}')">Rejeitar</button> </div> </div>`;
+    }).join('');
+  }
+
+  function limparAjuste() {
+    document.getElementById('form-ajuste').reset();
+    document.getElementById('saldo-preview').style.display = 'none';
+    selecionarOperacao('ADD');
+  }
+
+  function renderHistorico() {
+    const usuariosMap = {};
+    DB.Usuarios.listar().forEach(u => usuariosMap[u.id] = u.nome);
+    const pecasMap = {};
+    DB.Pecas.listar().forEach(p => pecasMap[p.id] = p);
+
+    const ajustes = DB.Ajustes.listar();
+    const tbody = document.getElementById('tbody-ajustes');
+    const empty = document.getElementById('empty-ajustes');
+
+    if (ajustes.length === 0) {
+      tbody.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+    empty.style.display = 'none';
+
+    const statusBadge = s => {
+      if (s === 'APROVADO') return '<span class="badge badge-ok">Aprovado</span>';
+      if (s === 'REJEITADO') return '<span class="badge badge-critical">Rejeitado</span>';
+      return '<span class="badge badge-warning">Pendente</span>';
+    };
+
+    tbody.innerHTML = ajustes.map(a => {
+      const peca = pecasMap[a.pecaId];
+      return `<tr> <td style="white-space:nowrap;font-size:12px">${Utils.formatarDataHora(a.criadoEm)}</td> <td> <div style="font-weight:600">${peca  Utils.safe(peca.nome) : '-'}</div> <div style="font-size:11px;color:var(--text-muted)">${peca  Utils.safe(peca.codigo) : ''}</div> </td> <td><span class="badge ${a.operacao === 'ADD'  'badge-ok' : 'badge-critical'}">${a.operacao === 'ADD'  '+ Acrscimo' : '- Subtra-o'}</span></td> <td style="font-weight:700;font-size:15px;color:${a.operacao === 'ADD'  'var(--success)' : 'var(--danger)'}">${a.operacao === 'ADD'  '+' : '-'}${a.quantidade} ${peca  Utils.safe(peca.unidade) : ''}</td> <td>${statusBadge(a.status||'APROVADO')}</td> <td style="font-size:12px">${Utils.safe(a.motivo || '-')}</td> <td style="font-size:12px">${Utils.safe(usuariosMap[a.responsavelId] || '-')}</td> <td style="font-size:12px;color:var(--text-muted)">${a.observacao  Utils.safe(a.observacao) : '-'}</td> </tr>`;
+    }).join('');
+  }
+
+  function _inicializar() { populaPecas(); renderPendentes(); renderHistorico(); }
+</script>
+</body>
+</html> 

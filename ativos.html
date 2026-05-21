@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Ativos - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <style> .ativo-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; }
+    .ativo-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; transition:box-shadow .15s; }
+    .ativo-card:hover { box-shadow: 0 4px 16px rgba(30,58,95,.12); }
+    .ativo-card-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .ativo-tag { background:var(--primary); color:#fff; border-radius:6px; padding:5px 12px; font-size:13px; font-weight:700; font-family:monospace; }
+    .ativo-desc { flex:1; font-size:14px; font-weight:600; color:var(--text); }
+    .ativo-meta { display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:12px; color:var(--text-muted); margin-bottom:12px; }
+    .ativo-meta-item { display:flex; flex-direction:column; }
+    .ativo-meta-label { font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; font-weight:600; color:var(--text-muted); opacity:.7; margin-bottom:1px; }
+    .ativo-meta-val { font-size:12.5px; color:var(--text); font-weight:500; }
+    .ativo-actions { display:flex; gap:6px; justify-content:flex-end; padding-top:10px; border-top:1px solid var(--border); }
+    .ativo-consumo-badge { font-size:11px; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:3px 9px; color:var(--text-muted); }
+  </style>
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
+    <div class="sub">PCM Almoxarifado</div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Principal</div>
+    <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
+    <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
+    <div class="nav-group-label">Cadastros</div>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
+    <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
+    <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
+    <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
+    <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
+    <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
+    <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
+  </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title">Cadastro de Ativos</div> <div class="topbar-subtitle">Máquinas e equipamentos vinculados ao almoxarifado</div> </div> <div class="topbar-actions"> <button class="btn btn-primary" onclick="abrirModal()">+ Novo Ativo</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- Filtros --> <div class="card" style="padding:14px 20px;margin-bottom:16px"> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="busca-ativo" placeholder="Buscar por TAG, descrição, setor..." oninput="renderAtivos()"> </div> <select id="filtro-status" onchange="renderAtivos()" style="padding:7px 12px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text)"> <option value="ativos">Apenas Ativos</option> <option value="todos">Todos</option> <option value="inativos">Apenas Inativo</option> </select> </div> </div> <!-- Grid de ativos --> <div class="ativo-grid" id="grid-ativos"></div> <div id="empty-ativos" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhum ativo cadastrado</p> <button class="btn btn-primary" onclick="abrirModal()">+ Cadastrar Ativo</button> </div> </div> </div>
+</div> <!-- MODAL CADASTRO/EDIÇÃO -->
+<div class="modal-overlay" id="modal-ativo" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:560px"> <div class="modal-header"> <div class="modal-title" id="modal-ativo-titulo">Novo Ativo</div> <button class="modal-close" onclick="Utils.fecharModal('modal-ativo')"></button> </div> <form id="form-ativo" onsubmit="salvarAtivo(event)" autocomplete="off"> <input type="hidden" id="at-id"> <div class="form-grid"> <div class="form-group"> <label>TAG do Ativo *</label> <input type="text" id="at-tag" required placeholder="ex: CMP-001" style="font-family:monospace;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"> <div class="form-hint">Código único de identificação da máquina</div> </div> <div class="form-group"> <label>Setor / Localização *</label> <input type="text" id="at-setor" required placeholder="ex: Usinagem, Utilidades..."> </div> <div class="form-group full"> <label>Descrição do Ativo *</label> <input type="text" id="at-descricao" required placeholder="Nome completo da máquina/equipamento"> </div> <div class="form-group"> <label>Fabricante</label> <input type="text" id="at-fabricante" placeholder="ex: SKF, Siemens..."> </div> <div class="form-group"> <label>Modelo</label> <input type="text" id="at-modelo" placeholder="ex: GA11, D600..."> </div> <div class="form-group"> <label>Número de Série</label> <input type="text" id="at-serie" placeholder="Número de série (opcional)"> </div> <div class="form-group"> <label>Status</label> <select id="at-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> <div class="form-group full"> <label>Observações</label> <textarea id="at-obs" rows="2" placeholder="Informações adicionais..."></textarea> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-ativo')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar</button> </div> </form> </div>
+</div> <!-- MODAL DETALHES / CONSUMO -->
+<div class="modal-overlay" id="modal-consumo" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:680px"> <div class="modal-header"> <div class="modal-title" id="consumo-titulo">Materiais Consumidos</div> <button class="modal-close" onclick="Utils.fecharModal('modal-consumo')"></button> </div> <div id="consumo-body" style="max-height:65vh;overflow-y:auto"></div> <div class="modal-footer"> <button class="btn btn-secondary" onclick="Utils.fecharModal('modal-consumo')">Fechar</button> </div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireLogin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('ativos');
+    Utils.aplicarPermissoes();
+    _inicializar();
+  });
+
+  function renderAtivos() {
+    var busca  = (document.getElementById('busca-ativo').value || '').toLowerCase();
+    var status = document.getElementById('filtro-status').value;
+    var todos  = DB.Ativos.listar();
+    var lista  = todos.filter(function(a) {
+      if (status === 'ativos'   && a.ativo === false) return false;
+      if (status === 'inativos' && a.ativo !== false) return false;
+      if (!busca) return true;
+      return (a.tag||'').toLowerCase().includes(busca)
+          || (a.descricao||'').toLowerCase().includes(busca)
+          || (a.setor||'').toLowerCase().includes(busca)
+          || (a.fabricante||'').toLowerCase().includes(busca);
+    });
+
+    var grid  = document.getElementById('grid-ativos');
+    var empty = document.getElementById('empty-ativos');
+
+    if (lista.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+    empty.style.display = 'none';
+
+    // Calcular consumo por ativo
+    var movs   = DB.Movimentos.listar();
+    var pecasMap = {};
+    DB.Pecas.listar().forEach(function(p){ pecasMap[p.id] = p; });
+
+    var consumoAtivo = {};
+    var valorAtivo   = {};
+    movs.filter(function(m){ return m.tipo === 'SAIDA' && m.ativoId; }).forEach(function(m) {
+      consumoAtivo[m.ativoId] = (consumoAtivo[m.ativoId] || 0) + 1;
+      var p = pecasMap[m.pecaId];
+      if (p) {
+        valorAtivo[m.ativoId] = (valorAtivo[m.ativoId] || 0) + (Number(m.quantidade) * Number(p.precoUnitario||0));
+      }
+    });
+
+    var isAdmin = Auth.isAdmin();
+    grid.innerHTML = lista.map(function(a) {
+      var inativo = a.ativo === false;
+      var nmovs   = consumoAtivo[a.id] || 0;
+      var valor   = valorAtivo[a.id] || 0;
+      return '<div class="ativo-card"' + (inativo  ' style="opacity:.55"' : '') + '>'
+        + '<div class="ativo-card-header">'
+        + '<span class="ativo-tag">' + Utils.safe(a.tag) + '</span>'
+        + '<div class="ativo-desc">' + Utils.safe(a.descricao) + '</div>'
+        + (inativo  '<span class="badge badge-critical" style="font-size:10px">Inativo</span>' : '')
+        + '</div>'
+        + '<div class="ativo-meta">'
+        + '<div class="ativo-meta-item"><span class="ativo-meta-label">Setor</span><span class="ativo-meta-val">' + Utils.safe(a.setor||'-') + '</span></div>'
+        + '<div class="ativo-meta-item"><span class="ativo-meta-label">Fabricante</span><span class="ativo-meta-val">' + Utils.safe(a.fabricante||'-') + '</span></div>'
+        + '<div class="ativo-meta-item"><span class="ativo-meta-label">Modelo</span><span class="ativo-meta-val">' + Utils.safe(a.modelo||'-') + '</span></div>'
+        + '<div class="ativo-meta-item"><span class="ativo-meta-label">Nº Série</span><span class="ativo-meta-val">' + Utils.safe(a.serie||'-') + '</span></div>'
+        + '</div>'
+        + '<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">'
+        + '<span class="ativo-consumo-badge"> ' + nmovs + ' mov. de saída</span>'
+        + (valor > 0  '<span class="ativo-consumo-badge"> ' + Utils.fmtMoeda(valor) + ' consumido</span>' : '')
+        + '</div>'
+        + '<div class="ativo-actions">'
+        + '<button class="btn btn-secondary btn-sm" onclick="verConsumo(\'' + a.id + '\')"> Consumo</button>'
+        + (isAdmin  '<button class="btn btn-secondary btn-sm" onclick="editarAtivo(\'' + a.id + '\')"></button>' : '')
+        + (isAdmin && !inativo  '<button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="inativarAtivo(\'' + a.id + '\')" title="Inativar"></button>' : '')
+        + (isAdmin && inativo  '<button class="btn btn-secondary btn-sm" style="color:var(--success)" onclick="reativarAtivo(\'' + a.id + '\')" title="Reativar"></button>' : '')
+        + '</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  function abrirModal(id) {
+    document.getElementById('form-ativo').reset();
+    document.getElementById('at-id').value = '';
+    document.getElementById('modal-ativo-titulo').textContent = 'Novo Ativo';
+    if (id) {
+      var a = DB.Ativos.buscarId(id);
+      if (!a) return;
+      document.getElementById('at-id').value        = a.id;
+      document.getElementById('at-tag').value       = a.tag || '';
+      document.getElementById('at-setor').value     = a.setor || '';
+      document.getElementById('at-descricao').value = a.descricao || '';
+      document.getElementById('at-fabricante').value= a.fabricante || '';
+      document.getElementById('at-modelo').value    = a.modelo || '';
+      document.getElementById('at-serie').value     = a.serie || '';
+      document.getElementById('at-ativo').value     = String(a.ativo !== false);
+      document.getElementById('at-obs').value       = a.observacoes || '';
+      document.getElementById('modal-ativo-titulo').textContent = 'Editar Ativo';
+    }
+    Utils.abrirModal('modal-ativo');
+  }
+
+  function editarAtivo(id) { abrirModal(id); }
+
+  function salvarAtivo(e) {
+    e.preventDefault();
+    var id    = document.getElementById('at-id').value;
+    var tag   = document.getElementById('at-tag').value.trim().toUpperCase();
+    var setor = document.getElementById('at-setor').value.trim();
+    var desc  = document.getElementById('at-descricao').value.trim();
+
+    // Verificar tag duplicada
+    var existente = DB.Ativos.buscarTag(tag);
+    if (existente && existente.id !== id) {
+      Utils.toast('Já existe um ativo com esta TAG.', 'error');
+      return;
+    }
+
+    DB.Ativos.salvar({
+      id:          id || undefined,
+      tag:         tag,
+      setor:       setor,
+      descricao:   desc,
+      fabricante:  document.getElementById('at-fabricante').value.trim(),
+      modelo:      document.getElementById('at-modelo').value.trim(),
+      serie:       document.getElementById('at-serie').value.trim(),
+      ativo:       document.getElementById('at-ativo').value === 'true',
+      observacoes: document.getElementById('at-obs').value.trim(),
+    });
+    Utils.fecharModal('modal-ativo');
+    Utils.toast('Ativo salvo com sucesso!', 'success');
+    renderAtivos();
+  }
+
+  function inativarAtivo(id) {
+    if (!confirm('Inativar este ativoEle não aparecerá mais nas novas movimentações.')) return;
+    DB.Ativos.remover(id);
+    Utils.toast('Ativo inativado.', 'warning');
+    renderAtivos();
+  }
+
+  function reativarAtivo(id) {
+    var a = DB.Ativos.buscarId(id);
+    if (!a) return;
+    a.ativo = true;
+    DB.Ativos.salvar(a);
+    Utils.toast('Ativo reativado.', 'success');
+    renderAtivos();
+  }
+
+  function verConsumo(ativoId) {
+    var a = DB.Ativos.buscarId(ativoId);
+    if (!a) return;
+    var movs    = DB.Movimentos.porAtivo(ativoId).filter(function(m){ return m.tipo === 'SAIDA'; });
+    var pecasMap = {};
+    DB.Pecas.listar().forEach(function(p){ pecasMap[p.id] = p; });
+
+    // Agrupar por peça
+    var porPeca = {};
+    var valorTotal = 0;
+    movs.forEach(function(m) {
+      if (!porPeca[m.pecaId]) porPeca[m.pecaId] = { qtd: 0, valor: 0 };
+      porPeca[m.pecaId].qtd += Number(m.quantidade);
+      var p = pecasMap[m.pecaId];
+      if (p) porPeca[m.pecaId].valor += Number(m.quantidade) * Number(p.precoUnitario||0);
+    });
+    Object.values(porPeca).forEach(function(x){ valorTotal += x.valor; });
+
+    document.getElementById('consumo-titulo').textContent = 'Materiais Consumidos - ' + a.tag + ' | ' + a.descricao;
+
+    if (movs.length === 0) {
+      document.getElementById('consumo-body').innerHTML = '<div class="empty-state"><div class="icon"></div><p>Nenhum material consumido registrado para este ativo</p></div>';
+    } else {
+      var rows = Object.keys(porPeca).map(function(pid) {
+        var p = pecasMap[pid];
+        var c = porPeca[pid];
+        return '<tr>'
+          + '<td>' + (p  '<code style="font-size:11px">' + Utils.safe(p.codigo) + '</code>' : '-') + '</td>'
+          + '<td>' + (p  Utils.safe(p.nome) : pid) + '</td>'
+          + '<td style="text-align:center;font-weight:700">' + c.qtd + ' ' + (p  Utils.safe(p.unidade) : '') + '</td>'
+          + '<td style="text-align:right">' + (c.valor > 0  Utils.fmtMoeda(c.valor) : '-') + '</td>'
+          + '</tr>';
+      });
+
+      var ultimasMovs = movs.slice(0, 10).map(function(m) {
+        var p = pecasMap[m.pecaId];
+        return '<div style="display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;align-items:center">'
+          + '<span style="font-size:11px;color:var(--text-muted);white-space:nowrap">' + Utils.formatarDataHora(m.data) + '</span>'
+          + '<span>' + (p  Utils.safe(p.nome) : '-') + '</span>'
+          + '<span style="font-weight:700">-' + m.quantidade + ' ' + (p  Utils.safe(p.unidade) : '') + '</span>'
+          + '</div>';
+      }).join('');
+
+      document.getElementById('consumo-body').innerHTML =
+        '<div style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap">'
+        + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val">' + movs.length + '</div><div class="sumario-kpi-lbl">Movimentações</div></div>'
+        + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val">' + Object.keys(porPeca).length + '</div><div class="sumario-kpi-lbl">Tipos de Materiais</div></div>'
+        + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val" style="font-size:16px">' + Utils.fmtMoeda(valorTotal) + '</div><div class="sumario-kpi-lbl">Valor Total Consumido</div></div>'
+        + '</div>'
+        + '<div class="card-title" style="margin-bottom:10px">Resumo por Material</div>'
+        + '<div class="table-wrapper" style="margin-bottom:20px"><table><thead><tr><th>Código</th><th>Material</th><th style="text-align:center">Qtd. Total</th><th style="text-align:right">Valor</th></tr></thead><tbody>' + rows.join('') + '</tbody></table></div>'
+        + '<div class="card-title" style="margin-bottom:8px">Últimas 10 Movimentações</div>'
+        + ultimasMovs;
+    }
+    Utils.abrirModal('modal-consumo');
+  }
+
+  function _inicializar() { renderAtivos(); }
+</script>
+</body>
+</html> 

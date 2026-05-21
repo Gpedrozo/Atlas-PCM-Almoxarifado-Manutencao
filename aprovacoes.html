@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Solicitações - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.cssv=4"> <link rel="stylesheet" href="atlas-industrial.cssv=1"> <style> .aprov-tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+    .aprov-tab { padding: 10px 22px; border: none; background: none; font-size: 14px; font-weight: 600;
+                 cursor: pointer; color: var(--text-muted); border-bottom: 3px solid transparent;
+                 margin-bottom: -2px; transition: all .15s; }
+    .aprov-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .aprov-tab .badge-count { display: inline-flex; align-items: center; justify-content: center;
+                              min-width: 20px; height: 20px; background: var(--danger); color: #fff;
+                              border-radius: 10px; font-size: 11px; margin-left: 6px; padding: 0 5px; }
+
+    .aprov-row { display: grid; gap: 0; }
+    .aprov-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+                  padding: 16px 18px; margin-bottom: 10px; transition: box-shadow .15s; }
+    .aprov-item:hover { box-shadow: var(--shadow); }
+    .aprov-item-header { display: flex; align-items: flex-start; gap: 12px; }
+    .aprov-item-icon { font-size: 26px; flex-shrink: 0; }
+    .aprov-item-body { flex: 1; }
+    .aprov-item-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .aprov-item-meta  { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .aprov-item-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+    .motivo-block { display: none; margin-top: 10px; }
+    .motivo-block textarea { width: 100%; box-sizing: border-box; border-radius: 8px; border: 1.5px solid var(--border);
+                              background: var(--bg); color: var(--text); padding: 10px; font-size: 13px; resize: vertical;
+                              min-height: 70px; }
+    .motivo-block textarea:focus { outline: none; border-color: var(--primary); }
+
+    .assinatura-block { margin-top: 10px; padding: 8px 14px; border-radius: 8px; font-size: 12px; display: flex; gap: 8px; align-items: center; }
+    .assinatura-aprovado { background: #e6f4ea; color: #2d7a3a; border: 1px solid #a8d5b0; }
+    .assinatura-rejeitado { background: #fce8e6; color: #c62828; border: 1px solid #f5c6c6; }
+
+    .empty-aprov { text-align: center; padding: 40px; color: var(--text-muted); }
+    .empty-aprov .icon { font-size: 40px; margin-bottom: 8px; }
+  </style> <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+</head>
+<body>
+<div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
+    <div class="sub">PCM Almoxarifado</div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Principal</div>
+    <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
+    <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
+    <div class="nav-group-label">Cadastros</div>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
+    <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
+    <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
+    <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
+    <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
+    <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
+    <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
+  </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title">Central de Solicitações</div> <div class="topbar-subtitle">Solicitação SAP e ajustes de saldo</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <div class="aprov-tabs"> <button class="aprov-tab active" onclick="mudarAba('requisicoes')" id="tab-requisicoes"> Requisições de Compra <span class="badge-count" id="cnt-req">0</span> </button> <button class="aprov-tab" onclick="mudarAba('ajustes')" id="tab-ajustes"> Ajustes de Saldo <span class="badge-count" id="cnt-ajustes">0</span> </button> </div> <div id="painel-requisicoes"></div> <div id="painel-ajustes" style="display:none"></div> </div> </div>
+</div> <script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="utils.js"></script>
+<script> DB.init().then(function() {
+    if (!Auth.requireAdmin()) { return; }
+    Utils.applyTheme();
+    Utils.renderSidebarUser();
+    Utils.renderSidebarLogo();
+    Utils.marcarNavAtivo('aprovacoes');
+    _inicializar();
+  });
+
+  var abaAtiva = 'requisicoes';
+
+  function mudarAba(aba) {
+    abaAtiva = aba;
+    document.getElementById('tab-requisicoes').classList.toggle('active', aba === 'requisicoes');
+    document.getElementById('tab-ajustes').classList.toggle('active', aba === 'ajustes');
+    document.getElementById('painel-requisicoes').style.display = aba === 'requisicoes'  '' : 'none';
+    document.getElementById('painel-ajustes').style.display = aba === 'ajustes'  '' : 'none';
+  }
+
+  function render() {
+    var pendentesReq = DB.Requisicoes.listar().filter(function(r){ return r.status === 'PENDENTE' || r.status === 'SOLICITADO'; });
+    var pendentesAj  = DB.Ajustes.pendentes();
+
+    document.getElementById('cnt-req').textContent    = pendentesReq.length;
+    document.getElementById('cnt-ajustes').textContent = pendentesAj.length;
+
+    renderRequisicoes(pendentesReq);
+    renderAjustes(pendentesAj);
+  }
+
+  // --- REQUISIÇÕES -------------------------------------------
+  function renderRequisicoes(lista) {
+    var el = document.getElementById('painel-requisicoes');
+    if (lista.length === 0) {
+      el.innerHTML = '<div class="empty-aprov"><div class="icon"></div><p>Nenhuma requisição pendente de aprovação.</p></div>';
+      return;
+    }
+    var usuariosMap = {};
+    DB.Usuarios.listar().forEach(function(u){ usuariosMap[u.id] = u; });
+
+    el.innerHTML = lista.map(function(r) {
+      var user = usuariosMap[r.solicitanteId];
+      var nomeUser = user  user.nome : '-';
+      var emailUser = user  (user.email || '') : '';
+      var itensHtml = (r.itens || []).map(function(it){
+        var p = DB.Pecas.buscarId(it.pecaId);
+        return '<li>' + Utils.safe(p  p.nome : it.pecaId) + ' - ' + it.quantidade + ' ' + Utils.safe(it.unidade||'un') + (it.justificativa  ' <em>(' + Utils.safe(it.justificativa) + ')</em>' : '') + '</li>';
+      }).join('');
+      var urgBadge = r.urgencia === 'CRITICA'
+         '<span class="badge badge-critical">CRTICA</span>'
+        : r.urgencia === 'ALTA'
+           '<span class="badge badge-low">ALTA</span>'
+          : '<span class="badge badge-ok">NORMAL</span>';
+
+      return '<div class="aprov-item" id="aprov-req-' + r.id + '">'
+        + '<div class="aprov-item-header">'
+        + '<div class="aprov-item-icon"></div>'
+        + '<div class="aprov-item-body">'
+        + '<div class="aprov-item-title">Req. #' + Utils.safe(r.numero||r.id) + ' ' + urgBadge + '</div>'
+        + '<div class="aprov-item-meta">Solicitante: <strong>' + Utils.safe(nomeUser) + '</strong>'
+        + ' &middot; Data: ' + Utils.formatarData(r.criadoEm)
+        + (r.ativoParadoId  ' &middot; <span style="color:var(--danger);font-weight:700">Ativo parado</span>' : '') + '</div>'
+        + '<div class="aprov-item-meta" style="margin-top:6px"><ul style="margin:0;padding-left:18px">' + (itensHtml || '<li><em>Sem itens</em></li>') + '</ul></div>'
+        + (r.justificativa  '<div class="aprov-item-meta" style="margin-top:4px">Justificativa: ' + Utils.safe(r.justificativa) + '</div>' : '')
+        + '</div></div>'
+        + '<div class="aprov-item-actions">'
+        + '<button class="btn btn-success btn-sm" onclick="aprovarReq(\'' + r.id + '\')">Aprovar</button>'
+        + '<button class="btn btn-danger btn-sm" onclick="mostrarMotivo(\'' + r.id + '\',\'req\')">Rejeitar</button>'
+        + '</div>'
+        + '<div class="motivo-block" id="motivo-req-' + r.id + '">'
+        + '<textarea placeholder="Motivo da rejeição (obrigatório)..." id="motivo-txt-req-' + r.id + '"></textarea>'
+        + '<div style="display:flex;gap:8px;margin-top:6px">'
+        + '<button class="btn btn-danger btn-sm" onclick="rejeitarReq(\'' + r.id + '\',\'' + emailUser + '\')">Confirmar Rejeição</button>'
+        + '<button class="btn btn-sm" onclick="ocultarMotivo(\'' + r.id + '\',\'req\')">Cancelar</button>'
+        + '</div></div>'
+        + '</div>';
+    }).join('');
+  }
+
+  function aprovarReq(id) {
+    var sessao = Auth.getSessao();
+    var req = DB.Requisicoes.buscarId(id);
+    DB.Requisicoes.salvar({
+      ...req,
+      status: 'APROVADA',
+      aprovadoPor: sessao.id,
+      aprovadoPorNome: sessao.nome,
+      aprovadoEm: new Date().toISOString()
+    });
+    // Notificação in-sistema para o solicitante
+    if (req && req.solicitanteId) {
+      DB.Notificacoes.criar({
+        userId: req.solicitanteId,
+        tipo: 'APROVADO',
+        titulo: 'Requisição aprovada ',
+        mensagem: 'Sua requisição ' + (req.numero || req.id) + ' foi aprovada por ' + sessao.nome + '.',
+        referenciaId: id,
+        referenciaTipo: 'req'
+      });
+      // E-mail de aprovação
+      var solicitante = DB.Usuarios.buscarId(req.solicitanteId);
+      if (solicitante && solicitante.email) {
+        notificarAprovacao('Requisição de Compra', req.numero || req.id, solicitante.email, sessao.nome);
+      }
+    }
+    Utils.toast('Requisição aprovada com sucesso!', 'success');
+    render();
+  }
+
+  function rejeitarReq(id, emailSolicitante) {
+    var motivo = (document.getElementById('motivo-txt-req-' + id)||{}).value || '';
+    if (!motivo.trim()) { Utils.toast('Informe o motivo da rejeição.', 'error'); return; }
+    var sessao = Auth.getSessao();
+    var req = DB.Requisicoes.buscarId(id);
+    DB.Requisicoes.salvar({
+      ...req,
+      status: 'REJEITADO',
+      rejeitadoPor: sessao.id,
+      rejeitadoPorNome: sessao.nome,
+      rejeitadoEm: new Date().toISOString(),
+      motivoRejeicao: motivo
+    });
+    // Notificação in-sistema
+    if (req && req.solicitanteId) {
+      DB.Notificacoes.criar({
+        userId: req.solicitanteId,
+        tipo: 'REJEITADO',
+        titulo: 'Requisição rejeitada ',
+        mensagem: 'Sua requisição ' + (req.numero || req.id) + ' foi rejeitada por ' + sessao.nome + '. Motivo: ' + motivo,
+        referenciaId: id,
+        referenciaTipo: 'req'
+      });
+    }
+    if (emailSolicitante) notificarRejeicao('Requisição', id, emailSolicitante, motivo, sessao.nome);
+    Utils.toast('Requisição rejeitada.', 'warning');
+    render();
+  }
+
+  // --- AJUSTES -----------------------------------------------
+  function renderAjustes(lista) {
+    var el = document.getElementById('painel-ajustes');
+    if (lista.length === 0) {
+      el.innerHTML = '<div class="empty-aprov"><div class="icon"></div><p>Nenhum ajuste pendente de aprovação.</p></div>';
+      return;
+    }
+    var usuariosMap = {};
+    DB.Usuarios.listar().forEach(function(u){ usuariosMap[u.id] = u; });
+
+    el.innerHTML = lista.map(function(aj) {
+      var peca = DB.Pecas.buscarId(aj.pecaId);
+      var user = usuariosMap[aj.responsavel || aj.solicitanteId];
+      var nomeUser = user  user.nome : '-';
+      var emailUser = user  (user.email || '') : '';
+      var sinal = aj.operacao === 'ADD'  '+' : aj.operacao === 'SUB'  '-' : '=';
+      var sinalCor = aj.operacao === 'ADD'  'var(--success)' : aj.operacao === 'SUB'  'var(--danger)' : 'var(--warning)';
+
+      return '<div class="aprov-item" id="aprov-aj-' + aj.id + '">'
+        + '<div class="aprov-item-header">'
+        + '<div class="aprov-item-icon"></div>'
+        + '<div class="aprov-item-body">'
+        + '<div class="aprov-item-title">Ajuste: ' + Utils.safe(peca  peca.nome : aj.pecaId)
+        + ' <span style="color:' + sinalCor + ';font-weight:700">' + sinal + aj.quantidade + ' ' + Utils.safe(peca  peca.unidade : '') + '</span></div>'
+        + '<div class="aprov-item-meta">Solicitante: <strong>' + Utils.safe(nomeUser) + '</strong>'
+        + ' &middot; Data: ' + Utils.formatarData(aj.criadoEm)
+        + ' &middot; Saldo: ' + (aj.estoqueAnterior||'') + ' ' + (aj.estoqueNovo||'') + '</div>'
+        + (aj.motivo  '<div class="aprov-item-meta" style="margin-top:4px">Motivo: ' + Utils.safe(aj.motivo) + '</div>' : '')
+        + '</div></div>'
+        + '<div class="aprov-item-actions">'
+        + '<button class="btn btn-success btn-sm" onclick="aprovarAjuste(\'' + aj.id + '\')">Aprovar</button>'
+        + '<button class="btn btn-danger btn-sm" onclick="mostrarMotivo(\'' + aj.id + '\',\'aj\')">Rejeitar</button>'
+        + '</div>'
+        + '<div class="motivo-block" id="motivo-aj-' + aj.id + '">'
+        + '<textarea placeholder="Motivo da rejeição (obrigatório)..." id="motivo-txt-aj-' + aj.id + '"></textarea>'
+        + '<div style="display:flex;gap:8px;margin-top:6px">'
+        + '<button class="btn btn-danger btn-sm" onclick="rejeitarAjuste(\'' + aj.id + '\',\'' + emailUser + '\')">Confirmar Rejeição</button>'
+        + '<button class="btn btn-sm" onclick="ocultarMotivo(\'' + aj.id + '\',\'aj\')">Cancelar</button>'
+        + '</div></div>'
+        + '</div>';
+    }).join('');
+  }
+
+  async function aprovarAjuste(id) {
+    var sessao = Auth.getSessao();
+    var aj = DB.Ajustes.buscarId(id);
+    if (!aj) return;
+    var resp = await fetch('/api/ajustes/' + encodeURIComponent(id) + '/aprovar', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!resp.ok) {
+      var err = await resp.json().catch(function(){ return {}; });
+      Utils.toast(err.error || 'Erro ao aprovar ajuste.', 'error');
+      return;
+    }
+    // Notificação in-sistema para o solicitante
+    var solicitanteId = aj.responsavel || aj.solicitanteId || aj.responsavelId;
+    if (solicitanteId) {
+      var peca = DB.Pecas.buscarId(aj.pecaId);
+      var sinal = aj.operacao === 'ADD'  '+' : '-';
+      DB.Notificacoes.criar({
+        userId: solicitanteId,
+        tipo: 'APROVADO',
+        titulo: 'Ajuste de saldo aprovado ',
+        mensagem: 'Seu ajuste de ' + sinal + aj.quantidade + ' ' + (peca  peca.unidade : '') + ' em ' + (peca  peca.nome : aj.pecaId) + ' foi aprovado por ' + sessao.nome + '.',
+        referenciaId: id,
+        referenciaTipo: 'ajuste'
+      });
+      // E-mail de aprovação
+      var solicitante = DB.Usuarios.buscarId(solicitanteId);
+      if (solicitante && solicitante.email) {
+        notificarAprovacao('Ajuste de Saldo', id, solicitante.email, sessao.nome);
+      }
+    }
+    Utils.toast('Ajuste aprovado e aplicado ao estoque!', 'success');
+    DB.init().then(render);
+  }
+
+  function rejeitarAjuste(id, emailSolicitante) {
+    var motivo = (document.getElementById('motivo-txt-aj-' + id)||{}).value || '';
+    if (!motivo.trim()) { Utils.toast('Informe o motivo da rejeição.', 'error'); return; }
+    var sessao = Auth.getSessao();
+    var aj = DB.Ajustes.buscarId(id);
+    DB.Ajustes.atualizar({
+      ...aj,
+      status: 'REJEITADO',
+      rejeitadoPor: sessao.id,
+      rejeitadoPorNome: sessao.nome,
+      rejeitadoEm: new Date().toISOString(),
+      motivoRejeicao: motivo
+    });
+    // Notificação in-sistema
+    var solicitanteId = aj  (aj.responsavel || aj.solicitanteId || aj.responsavelId) : null;
+    if (solicitanteId) {
+      var peca = DB.Pecas.buscarId(aj.pecaId);
+      DB.Notificacoes.criar({
+        userId: solicitanteId,
+        tipo: 'REJEITADO',
+        titulo: 'Ajuste de saldo rejeitado ',
+        mensagem: 'Seu ajuste em ' + (peca  peca.nome : aj.pecaId) + ' foi rejeitado por ' + sessao.nome + '. Motivo: ' + motivo,
+        referenciaId: id,
+        referenciaTipo: 'ajuste'
+      });
+    }
+    if (emailSolicitante) notificarRejeicao('Ajuste de Saldo', id, emailSolicitante, motivo, sessao.nome);
+    Utils.toast('Ajuste rejeitado.', 'warning');
+    render();
+  }
+
+  // --- UI HELPERS --------------------------------------------
+  function mostrarMotivo(id, tipo) {
+    var el = document.getElementById('motivo-' + tipo + '-' + id);
+    if (el) { el.style.display = 'block'; el.querySelector('textarea').focus(); }
+  }
+
+  function ocultarMotivo(id, tipo) {
+    var el = document.getElementById('motivo-' + tipo + '-' + id);
+    if (el) el.style.display = 'none';
+  }
+
+  // --- HELPER: Inicializar EmailJS uma única vez por chave -----
+  var _emailjsInitedKey = '';
+  function _initEmailJS(publicKey) {
+    if (!publicKey) return false;
+    if (publicKey !== _emailjsInitedKey) {
+      try {
+        emailjs.init({ publicKey: publicKey });
+        _emailjsInitedKey = publicKey;
+      } catch(e) {
+        console.warn('EmailJS init error:', e);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // --- EMAIL APROVAÇÃO --------------------------------------
+  function notificarAprovacao(tipo, id, emailDest, aprovadorNome) {
+    var cfg = DB.Config.get();
+    if (!cfg.emailjsPublicKey || !cfg.emailjsServiceId) return;
+    var templateId = cfg.emailjsTemplateIdAprovacao || cfg.emailjsTemplateId;
+    if (!templateId) return;
+    if (!_initEmailJS(cfg.emailjsPublicKey)) return;
+    emailjs.send(cfg.emailjsServiceId, templateId, {
+      to_email:         emailDest,
+      req_numero:       id,
+      req_urgencia:     tipo,
+      req_data:         new Date().toLocaleDateString('pt-BR'),
+      req_solicitante:  emailDest,
+      req_itens:        tipo + ' #' + id + ' foi APROVADO.',
+      req_justificativa: '',
+      ativo_parado:     '',
+      link_aprovacao:   '',
+      link_rejeicao:    '',
+      aprovador:        aprovadorNome,
+      motivo_rejeicao:  '',
+      status_notif:     'APROVADO'
+    }).then(function() {
+      Utils.toast('E-mail de aprovação enviado.', 'success');
+    }).catch(function(err) {
+      console.warn('EmailJS aprovação:', err);
+      Utils.toast('Erro ao enviar e-mail de aprovação.', 'warning');
+    });
+  }
+
+  // --- EMAIL REJEIÇÃO ----------------------------------------
+  function notificarRejeicao(tipo, id, emailDest, motivo, aprovadorNome) {
+    var cfg = DB.Config.get();
+    if (!cfg.emailjsPublicKey || !cfg.emailjsServiceId) return;
+    var templateId = cfg.emailjsTemplateIdAprovacao || cfg.emailjsTemplateId;
+    if (!templateId) return;
+    if (!_initEmailJS(cfg.emailjsPublicKey)) return;
+    emailjs.send(cfg.emailjsServiceId, templateId, {
+      to_email: emailDest,
+      req_numero: id,
+      req_urgencia: tipo,
+      req_data: new Date().toLocaleDateString('pt-BR'),
+      req_solicitante: emailDest,
+      req_itens: tipo + ' #' + id + ' foi REJEITADO.',
+      req_justificativa: motivo,
+      ativo_parado: '',
+      link_aprovacao: '',
+      link_rejeicao: '',
+      aprovador: aprovadorNome,
+      motivo_rejeicao: motivo,
+      status_notif: 'REJEITADO'
+    }).then(function() {
+      Utils.toast('E-mail de rejeição enviado.', 'success');
+    }).catch(function(err) {
+      console.warn('EmailJS rejeição:', err);
+      Utils.toast('Erro ao enviar e-mail de rejeição.', 'warning');
+    });
+  }
+
+  function _inicializar() { render(); }
+</script>
+</body>
+</html> 
