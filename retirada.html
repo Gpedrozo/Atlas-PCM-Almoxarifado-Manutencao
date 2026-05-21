@@ -153,7 +153,7 @@ let _ativoGlobalOpts = [];
 function toast(msg, tipo) {
   var el = document.getElementById('rt-toast');
   el.textContent = msg;
-  el.style.background = tipo === 'error'  '#dc2626' : tipo === 'ok'  '#16a34a' : '#1e293b';
+  el.style.background = tipo === 'error' ? '#dc2626' : tipo === 'ok' ? '#16a34a' : '#1e293b';
   el.classList.add('show');
   setTimeout(function() { el.classList.remove('show'); }, 2800);
 }
@@ -465,7 +465,7 @@ function atualizarCarrinho() {
     return '<div class="rt-lista-item">' +
       '<div class="info">' +
         '<div class="nome">' + escHtml(c.peca.nome) + '</div>' +
-        '<div class="qtd">' + c.qtd + ' ' + (c.peca.unidade || 'UN') + (c.os  ' - ' + escHtml(c.os) : '') + '</div>' +
+        '<div class="qtd">' + c.qtd + ' ' + (c.peca.unidade || 'UN') + (c.os ? ' - ' + escHtml(c.os) : '') + '</div>' +
       '</div>' +
       '<span class="rem" onclick="removerDoCarrinho(' + i + ')"></span>' +
     '</div>';

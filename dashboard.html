@@ -415,8 +415,8 @@
 
     // Tendências (simuladas ou de dados históricos)
     document.getElementById('kpi-trend-itens').textContent = 'Estável';
-    document.getElementById('kpi-trend-entrada').innerHTML = entradaMes > 5  '<span style="color:var(--success)">Acima</span>' : 'Abaixo';
-    document.getElementById('kpi-trend-saida').innerHTML = saidaMes > 5  '<span style="color:var(--success)">Normal</span>' : 'Baixo';
+    document.getElementById('kpi-trend-entrada').innerHTML = entradaMes > 5 ? '<span style="color:var(--success)">Acima</span>' : 'Abaixo';
+    document.getElementById('kpi-trend-saida').innerHTML = saidaMes > 5 ? '<span style="color:var(--success)">Normal</span>' : 'Baixo';
     document.getElementById('kpi-trend-critico').textContent = critico > 0  'A-O NECESSRIA' : 'OK';
 
     // ------------------------------------------------------

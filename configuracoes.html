@@ -142,7 +142,7 @@
   function abaUsuarios() {
     const usuarios = DB.Usuarios.listar();
     const rows = usuarios.map(u => `
-      <div class="user-row"> <div> <div class="nome">${Utils.safe(u.nome)}</div> <div class="email">${Utils.safe(u.email)}</div> </div> <div> <span class="badge badge-${u.nivel === 'ADMIN'  'ok' : 'low'}">${u.nivel}</span> </div> <span class="badge ${u.ativo  'badge-ok' : 'badge-critical'}">${u.ativo  'Ativo' : 'Inativo'}</span> <div style="display:flex;gap:6px"> <button class="btn btn-secondary btn-sm" onclick="editarUsuario('${u.id}')"></button> ${u.id !== Auth.getSessao().id  `<button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUsuario('${u.id}')"></button>` : '<button class="btn btn-secondary btn-sm" disabled title="Usuário atual"></button>'}
+      <div class="user-row"> <div> <div class="nome">${Utils.safe(u.nome)}</div> <div class="email">${Utils.safe(u.email)}</div> </div> <div> <span class="badge badge-${u.nivel === 'ADMIN' ? 'ok' : 'low'}">${u.nivel}</span> </div> <span class="badge ${u.ativo ? 'badge-ok' : 'badge-critical'}">${u.ativo ? 'Ativo' : 'Inativo'}</span> <div style="display:flex;gap:6px"> <button class="btn btn-secondary btn-sm" onclick="editarUsuario('${u.id}')"></button> ${u.id !== Auth.getSessao().id ? `<button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUsuario('${u.id}')"></button>` : '<button class="btn btn-secondary btn-sm" disabled title="Usuário atual"></button>'}
         </div> </div> `).join('');
     return `
       <div class="config-panel-header" style="display:flex;align-items:center;justify-content:space-between"> <span> Gerenciamento de Usuários</span> <button class="btn btn-primary btn-sm" onclick="novoUsuario()">+ Novo Usuário</button> </div> <div id="lista-usuarios">${rows || '<div class="empty-state"><div class="icon"></div><p>Nenhum usuário cadastrado</p></div>'}</div> `;
@@ -222,7 +222,7 @@
   function abaSistema() {
     const temaAtual = localStorage.getItem('atlas_theme') || 'light';
     return `
-      <div class="config-panel-header"> Preferências do Sistema</div> <div style="margin-bottom:28px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Tema Visual</label> <div style="display:flex;gap:16px"> <div class="theme-card ${temaAtual === 'light'  'selected' : ''}" onclick="mudarTema('light')" id="tc-light"> <div class="preview theme-light-preview"></div> <span style="font-size:13px;font-weight:600">Claro</span> </div> <div class="theme-card ${temaAtual === 'dark'  'selected' : ''}" onclick="mudarTema('dark')" id="tc-dark"> <div class="preview theme-dark-preview"></div> <span style="font-size:13px;font-weight:600">Escuro</span> </div> </div> </div> <div class="divider"></div> <div style="margin-top:24px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Dados do Sistema</label> <div style="display:flex;gap:12px;flex-wrap:wrap"> <button class="btn btn-secondary" onclick="exportarDados()"> Exportar Dados (JSON)</button> <button class="btn btn-secondary" onclick="importarDados()"> Importar Dados (JSON)</button> <button class="btn btn-secondary" style="color:var(--danger)" onclick="limparDados()"> Limpar Todos os Dados</button> </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:10px"> Exportar antes de limpar dados. Todos os registros serão removidos permanentemente.</div> </div> <div style="margin-top:28px;padding:20px;background:var(--bg);border:2px solid var(--danger);border-radius:12px"> <div style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:8px"> Preparar para Uso Real</div> <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:14px"> Remove todos os dados de demonstração - peças, movimentações, ajustes, requisições e ativos.<br> <strong style="color:var(--text)">Usuários, senhas e configurações da empresa são preservados.</strong> </div> <button class="btn" style="background:var(--danger);color:#fff;font-weight:700" onclick="limparParaUsoReal()"> Limpar Dados Demo e Iniciar Uso Real
+      <div class="config-panel-header"> Preferências do Sistema</div> <div style="margin-bottom:28px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Tema Visual</label> <div style="display:flex;gap:16px"> <div class="theme-card ${temaAtual === 'light' ? 'selected' : ''}" onclick="mudarTema('light')" id="tc-light"> <div class="preview theme-light-preview"></div> <span style="font-size:13px;font-weight:600">Claro</span> </div> <div class="theme-card ${temaAtual === 'dark' ? 'selected' : ''}" onclick="mudarTema('dark')" id="tc-dark"> <div class="preview theme-dark-preview"></div> <span style="font-size:13px;font-weight:600">Escuro</span> </div> </div> </div> <div class="divider"></div> <div style="margin-top:24px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Dados do Sistema</label> <div style="display:flex;gap:12px;flex-wrap:wrap"> <button class="btn btn-secondary" onclick="exportarDados()"> Exportar Dados (JSON)</button> <button class="btn btn-secondary" onclick="importarDados()"> Importar Dados (JSON)</button> <button class="btn btn-secondary" style="color:var(--danger)" onclick="limparDados()"> Limpar Todos os Dados</button> </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:10px"> Exportar antes de limpar dados. Todos os registros serão removidos permanentemente.</div> </div> <div style="margin-top:28px;padding:20px;background:var(--bg);border:2px solid var(--danger);border-radius:12px"> <div style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:8px"> Preparar para Uso Real</div> <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:14px"> Remove todos os dados de demonstração - peças, movimentações, ajustes, requisições e ativos.<br> <strong style="color:var(--text)">Usuários, senhas e configurações da empresa são preservados.</strong> </div> <button class="btn" style="background:var(--danger);color:#fff;font-weight:700" onclick="limparParaUsoReal()"> Limpar Dados Demo e Iniciar Uso Real
         </button> </div> <input type="file" id="import-json-input" accept=".json" style="display:none" onchange="processarImportacao(this)"> `;
   }
 
@@ -276,7 +276,7 @@
   function abaRetirada() {
     const lista = DB.UsuariosRetirada.listar();
     const rows = lista.map(u => `
-      <div class="user-row" style="grid-template-columns:1fr 1fr 1fr auto auto"> <div> <div class="nome">${Utils.safe(u.nome)}</div> </div> <div style="font-family:monospace;font-size:13px;color:var(--text-muted)">${Utils.safe(u.codigo||'-')}</div> <span class="badge ${u.ativo !== false  'badge-ok' : 'badge-critical'}">${u.ativo !== false  'Ativo' : 'Inativo'}</span> <button class="btn btn-secondary btn-sm" onclick="editarUR('${u.id}')"></button> <button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUR('${u.id}')"></button> </div> `).join('');
+      <div class="user-row" style="grid-template-columns:1fr 1fr 1fr auto auto"> <div> <div class="nome">${Utils.safe(u.nome)}</div> </div> <div style="font-family:monospace;font-size:13px;color:var(--text-muted)">${Utils.safe(u.codigo||'-')}</div> <span class="badge ${u.ativo !== false ? 'badge-ok' : 'badge-critical'}">${u.ativo !== false ? 'Ativo' : 'Inativo'}</span> <button class="btn btn-secondary btn-sm" onclick="editarUR('${u.id}')"></button> <button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUR('${u.id}')"></button> </div> `).join('');
     return `
       <div class="config-panel-header" style="display:flex;align-items:center;justify-content:space-between"> <span> Usuários de Retirada (QR Code)</span> <button class="btn btn-primary btn-sm" onclick="novoUR()">+ Novo Usuário</button> </div> <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px;background:var(--bg);padding:12px 16px;border-radius:8px;border:1px solid var(--border)"> Estes usuários são quem pode <strong>retirar materiais via QR Code</strong> (tela <code>retirada.html</code>), sem precisar de login no sistema completo.
         Cada usuário se identifica pelo <strong>nome</strong> ou <strong>código</strong> cadastrado aqui.
@@ -535,7 +535,7 @@
       reader.onload = function(e) {
         const texto = e.target.result;
         const primLinha = texto.split('\n')[0];
-        const sep = (primLinha.split(';').length > primLinha.split(',').length)  ';' : ',';
+        const sep = (primLinha.split(';').length > primLinha.split(',').length) ? ';' : ',';
         const linhasTxt = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         // Detectar se tem cabeçalho
         let inicio = 0;
@@ -594,15 +594,15 @@
       if (!codigo || !/^[A-Za-z][A-Za-z0-9\-]{2,}$/.test(codigo)) continue;
 
       const pecaExistente = DB.Pecas.listar().find(p => p.codigo === codigo);
-      const status = pecaExistente  'atualizar' : 'novo';
+      const status = pecaExistente ? 'atualizar' : 'novo';
       if (status === 'novo') novos++; else atualizar++;
 
       _cargaLinhas.push({ codigo, categoria, descricao, localizacao, preco, qtdEstoque, estoqueMin, prazo, ultCompra, qtdReposicao, ativo, status });
 
-      const cor   = status === 'novo'  'var(--success)' : 'var(--warning)';
-      const label = status === 'novo'  '+ Novo' : 'Atualizar';
+      const cor   = status === 'novo' ? 'var(--success)' : 'var(--warning)';
+      const label = status === 'novo' ? '+ Novo' : 'Atualizar';
       const nomeExib = descricao || categoria || codigo;
-      tbody.innerHTML += `<tr> <td><code>${Utils.safe(codigo)}</code></td> <td title="${Utils.safe(descricao)}">${Utils.safe(nomeExib.substring(0,50))}${nomeExib.length > 50  '...' : ''}</td> <td>${Utils.safe(localizacao)}</td> <td>R$ ${preco.toFixed(2).replace('.',',')}</td> <td style="text-align:center">${qtdEstoque}</td> <td style="text-align:center">${estoqueMin}</td> <td style="text-align:center">${prazo > 0  prazo + 'd' : '-'}</td> <td><span style="font-size:11.5px;font-weight:700;color:${cor}">${label}</span></td> </tr>`;
+      tbody.innerHTML += `<tr> <td><code>${Utils.safe(codigo)}</code></td> <td title="${Utils.safe(descricao)}">${Utils.safe(nomeExib.substring(0,50))}${nomeExib.length > 50 ? '...' : ''}</td> <td>${Utils.safe(localizacao)}</td> <td>R$ ${preco.toFixed(2).replace('.',',')}</td> <td style="text-align:center">${qtdEstoque}</td> <td style="text-align:center">${estoqueMin}</td> <td style="text-align:center">${prazo > 0 ? prazo + 'd' : '-'}</td> <td><span style="font-size:11.5px;font-weight:700;color:${cor}">${label}</span></td> </tr>`;
     }
 
     document.getElementById('carga-resumo').innerHTML =

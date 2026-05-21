@@ -74,7 +74,7 @@
     tbody.innerHTML = usuarios.map(u => {
       const inicial = (u.nome || '').charAt(0).toUpperCase();
       const ehEu = u.id === sessaoAtual.id;
-      return `<tr> <td> <div style="display:flex;align-items:center;gap:10px"> <div class="avatar ${u.nivel === 'ADMIN'  'admin' : ''}">${inicial}</div> <div> <div style="font-weight:600">${Utils.safe(u.nome)}${ehEu  ' <span class="badge badge-pending" style="font-size:10px">Voc</span>' : ''}</div> </div> </div> </td> <td style="font-size:13px">${Utils.safe(u.email)}</td> <td><span class="badge nivel-${u.nivel}">${u.nivel}</span></td> <td>${u.ativo !== false  '<span class="badge badge-ok">Ativo</span>' : '<span class="badge badge-critical">Inativo</span>'}</td> <td style="font-size:12px;color:var(--text-muted)">${Utils.formatarData(u.criadoEm)}</td> <td style="text-align:center;white-space:nowrap"> <button class="btn-icon" title="Editar" onclick="editarUsuario('${u.id}')"></button> <button class="btn-icon" title="Redefinir senha" onclick="abrirResetSenha('${u.id}')"></button> ${!ehEu  `<button class="btn-icon" title="${u.ativo !== false  'Desativar' : 'Ativar'}" onclick="toggleAtivo('${u.id}')">${u.ativo !== false  'Desativar' : 'Ativar'}</button>` : ''}
+      return `<tr> <td> <div style="display:flex;align-items:center;gap:10px"> <div class="avatar ${u.nivel === 'ADMIN' ? 'admin' : ''}">${inicial}</div> <div> <div style="font-weight:600">${Utils.safe(u.nome)}${ehEu ? ' <span class="badge badge-pending" style="font-size:10px">Voc</span>' : ''}</div> </div> </div> </td> <td style="font-size:13px">${Utils.safe(u.email)}</td> <td><span class="badge nivel-${u.nivel}">${u.nivel}</span></td> <td>${u.ativo !== false ? '<span class="badge badge-ok">Ativo</span>' : '<span class="badge badge-critical">Inativo</span>'}</td> <td style="font-size:12px;color:var(--text-muted)">${Utils.formatarData(u.criadoEm)}</td> <td style="text-align:center;white-space:nowrap"> <button class="btn-icon" title="Editar" onclick="editarUsuario('${u.id}')"></button> <button class="btn-icon" title="Redefinir senha" onclick="abrirResetSenha('${u.id}')"></button> ${!ehEu ? `<button class="btn-icon" title="${u.ativo !== false ? 'Desativar' : 'Ativar'}" onclick="toggleAtivo('${u.id}')">${u.ativo !== false ? 'Desativar' : 'Ativar'}</button>` : ''}
         </td> </tr>`;
     }).join('');
   }
@@ -133,7 +133,7 @@
 
     DB.Usuarios.salvar(usuario);
     Utils.fecharModal('modal-usuario');
-    Utils.toast(id  'Usurio atualizado!' : 'Usurio criado com sucesso!', 'success');
+    Utils.toast(id ? 'Usurio atualizado!' : 'Usurio criado com sucesso!', 'success');
     renderTabela();
   }
 
@@ -142,7 +142,7 @@
     if (!u) return;
     u.ativo = u.ativo === false;
     DB.Usuarios.salvar(u);
-    Utils.toast(u.ativo  'Usurio reativado.' : 'Usurio desativado.', u.ativo  'success' : 'warning');
+    Utils.toast(u.ativo ? 'Usurio reativado.' : 'Usurio desativado.', u.ativo ? 'success' : 'warning');
     renderTabela();
   }
 

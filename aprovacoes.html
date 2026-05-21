@@ -115,7 +115,7 @@
       var emailUser = user  (user.email || '') : '';
       var itensHtml = (r.itens || []).map(function(it){
         var p = DB.Pecas.buscarId(it.pecaId);
-        return '<li>' + Utils.safe(p  p.nome : it.pecaId) + ' - ' + it.quantidade + ' ' + Utils.safe(it.unidade||'un') + (it.justificativa  ' <em>(' + Utils.safe(it.justificativa) + ')</em>' : '') + '</li>';
+        return '<li>' + Utils.safe(p ? p.nome : it.pecaId) + ' - ' + it.quantidade + ' ' + Utils.safe(it.unidade||'un') + (it.justificativa ? ' <em>(' + Utils.safe(it.justificativa) + ')</em>' : '') + '</li>';
       }).join('');
       var urgBadge = r.urgencia === 'CRITICA'
          '<span class="badge badge-critical">CRTICA</span>'
@@ -130,9 +130,9 @@
         + '<div class="aprov-item-title">Req. #' + Utils.safe(r.numero||r.id) + ' ' + urgBadge + '</div>'
         + '<div class="aprov-item-meta">Solicitante: <strong>' + Utils.safe(nomeUser) + '</strong>'
         + ' &middot; Data: ' + Utils.formatarData(r.criadoEm)
-        + (r.ativoParadoId  ' &middot; <span style="color:var(--danger);font-weight:700">Ativo parado</span>' : '') + '</div>'
+        + (r.ativoParadoId ? ' &middot; <span style="color:var(--danger);font-weight:700">Ativo parado</span>' : '') + '</div>'
         + '<div class="aprov-item-meta" style="margin-top:6px"><ul style="margin:0;padding-left:18px">' + (itensHtml || '<li><em>Sem itens</em></li>') + '</ul></div>'
-        + (r.justificativa  '<div class="aprov-item-meta" style="margin-top:4px">Justificativa: ' + Utils.safe(r.justificativa) + '</div>' : '')
+        + (r.justificativa ? '<div class="aprov-item-meta" style="margin-top:4px">Justificativa: ' + Utils.safe(r.justificativa) + '</div>' : '')
         + '</div></div>'
         + '<div class="aprov-item-actions">'
         + '<button class="btn btn-success btn-sm" onclick="aprovarReq(\'' + r.id + '\')">Aprovar</button>'
@@ -234,7 +234,7 @@
         + '<div class="aprov-item-meta">Solicitante: <strong>' + Utils.safe(nomeUser) + '</strong>'
         + ' &middot; Data: ' + Utils.formatarData(aj.criadoEm)
         + ' &middot; Saldo: ' + (aj.estoqueAnterior||'') + ' ' + (aj.estoqueNovo||'') + '</div>'
-        + (aj.motivo  '<div class="aprov-item-meta" style="margin-top:4px">Motivo: ' + Utils.safe(aj.motivo) + '</div>' : '')
+        + (aj.motivo ? '<div class="aprov-item-meta" style="margin-top:4px">Motivo: ' + Utils.safe(aj.motivo) + '</div>' : '')
         + '</div></div>'
         + '<div class="aprov-item-actions">'
         + '<button class="btn btn-success btn-sm" onclick="aprovarAjuste(\'' + aj.id + '\')">Aprovar</button>'

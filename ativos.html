@@ -111,7 +111,7 @@
         + '<div class="ativo-card-header">'
         + '<span class="ativo-tag">' + Utils.safe(a.tag) + '</span>'
         + '<div class="ativo-desc">' + Utils.safe(a.descricao) + '</div>'
-        + (inativo  '<span class="badge badge-critical" style="font-size:10px">Inativo</span>' : '')
+        + (inativo ? '<span class="badge badge-critical" style="font-size:10px">Inativo</span>' : '')
         + '</div>'
         + '<div class="ativo-meta">'
         + '<div class="ativo-meta-item"><span class="ativo-meta-label">Setor</span><span class="ativo-meta-val">' + Utils.safe(a.setor||'-') + '</span></div>'
@@ -121,7 +121,7 @@
         + '</div>'
         + '<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">'
         + '<span class="ativo-consumo-badge"> ' + nmovs + ' mov. de saída</span>'
-        + (valor > 0  '<span class="ativo-consumo-badge"> ' + Utils.fmtMoeda(valor) + ' consumido</span>' : '')
+        + (valor > 0 ? '<span class="ativo-consumo-badge"> ' + Utils.fmtMoeda(valor) + ' consumido</span>' : '')
         + '</div>'
         + '<div class="ativo-actions">'
         + '<button class="btn btn-secondary btn-sm" onclick="verConsumo(\'' + a.id + '\')"> Consumo</button>'
@@ -229,7 +229,7 @@
         var p = pecasMap[pid];
         var c = porPeca[pid];
         return '<tr>'
-          + '<td>' + (p  '<code style="font-size:11px">' + Utils.safe(p.codigo) + '</code>' : '-') + '</td>'
+          + '<td>' + (p ? '<code style="font-size:11px">' + Utils.safe(p.codigo) + '</code>' : '-') + '</td>'
           + '<td>' + (p  Utils.safe(p.nome) : pid) + '</td>'
           + '<td style="text-align:center;font-weight:700">' + c.qtd + ' ' + (p  Utils.safe(p.unidade) : '') + '</td>'
           + '<td style="text-align:right">' + (c.valor > 0  Utils.fmtMoeda(c.valor) : '-') + '</td>'

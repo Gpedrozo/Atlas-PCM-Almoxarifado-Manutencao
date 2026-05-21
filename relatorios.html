@@ -250,7 +250,7 @@
     const contEl = document.getElementById('inv-contagem');
     if (contEl) contEl.textContent = visivel + ' itens';
     const emptyEl = document.getElementById('inv-empty');
-    if (emptyEl) emptyEl.style.display = visivel === 0  '' : 'none';
+    if (emptyEl) emptyEl.style.display = visivel === 0 ? '' : 'none';
     if (_pag['tbody-inventario']) { _pag['tbody-inventario'].page = 1; _applyPaginacao('tbody-inventario'); }
   }
 
@@ -483,7 +483,7 @@
     const contEl = document.getElementById('cat-contagem');
     if (contEl) contEl.textContent = visivel + ' itens';
     const emptyEl = document.getElementById('cat-empty');
-    if (emptyEl) emptyEl.style.display = visivel === 0  '' : 'none';
+    if (emptyEl) emptyEl.style.display = visivel === 0 ? '' : 'none';
     if (_pag['tbody-catalogo']) { _pag['tbody-catalogo'].page = 1; _applyPaginacao('tbody-catalogo'); }
   }
 
