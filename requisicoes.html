@@ -673,9 +673,9 @@
     var moeda = (document.getElementById('req-moeda').value || 'BRL').toUpperCase();
     var valorDigitado = parseDinheiro(document.getElementById('req-valor').value);
     var totalMoedaItens = itensCompra.reduce(function(acc, it) { return acc + ((it.quantidade || 0) * (it.precoUnitario || 0)); }, 0);
-    var baseMoeda = totalMoedaItens > 0  totalMoedaItens : valorDigitado;
-    var cot = (moeda === 'BRL')  1 : (cotacaoAtual || 1);
-    var totalBRL = moeda === 'BRL'  baseMoeda : (baseMoeda * cot);
+    var baseMoeda = totalMoedaItens > 0 ? totalMoedaItens : valorDigitado;
+    var cot = (moeda === 'BRL') ? 1 : (cotacaoAtual || 1);
+    var totalBRL = moeda === 'BRL' ? baseMoeda : (baseMoeda * cot);
 
     var descricaoResumo = document.getElementById('req-descricao-material').value.trim();
     if (!descricaoResumo && itensCompra.length) {
@@ -823,7 +823,7 @@
     var orcHtml = '';
     if (orcamentosReq.length) {
       var linksOrc = orcamentosReq.map(function(orc) {
-        var tamanhoTxt = orc.tamanho  ' <small style="color:var(--text-muted)">(' + (orc.tamanho / 1024).toFixed(1) + ' KB)</small>' : '';
+        var tamanhoTxt = orc.tamanho ? ' <small style="color:var(--text-muted)">(' + (orc.tamanho / 1024).toFixed(1) + ' KB)</small>' : '';
         return '<div><a href="/api/orcamentos/' + Utils.safe(orc.filename) + '" target="_blank" style="color:var(--primary);font-weight:600">'
           + Utils.safe(orc.nomeOriginal || orc.filename) + '</a>' + tamanhoTxt + '</div>';
       }).join('');
@@ -1047,7 +1047,7 @@
       Promise.all(promises)
         .then(function() { Utils.toast('E-mail enviado aos aprovadores com sucesso!', 'success'); })
         .catch(function(err) {
-          var d = (err && err.text)  ' - ' + err.text : ((err && err.status)  ' - status ' + err.status : (typeof err === 'string'  ' - ' + err : ''));
+          var d = (err && err.text) ? ' - ' + err.text : ((err && err.status) ? ' - status ' + err.status : (typeof err === 'string' ? ' - ' + err : ''));
           Utils.toast('Erro ao enviar e-mail' + d + '. Verifique as configurações.', 'error');
         });
     } else {

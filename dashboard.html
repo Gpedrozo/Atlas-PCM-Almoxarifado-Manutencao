@@ -451,7 +451,7 @@
   // -- Renderizar grupo de alertas ------------------------
   function renderAlertGroup(elId, items, tipo, titulo) {
     var el = document.getElementById(elId);
-    var cssClass = tipo === 'critical'  'danger' : tipo === 'warning'  'warning' : 'info';
+    var cssClass = tipo === 'critical' ? 'danger' : tipo === 'warning' ? 'warning' : 'info';
     
     if (items.length === 0) {
       if (tipo === 'critical') {
@@ -500,8 +500,8 @@
 
     el.innerHTML = ultMovs.map(function(m) {
       var peca = pecasMap[m.pecaId];
-      var cls  = m.tipo === 'ENTRADA'  'mov-entrada' : m.tipo === 'SAIDA'  'mov-saida' : 'mov-ajuste';
-      var sinal = m.tipo === 'SAIDA'  '-' : '+';
+      var cls  = m.tipo === 'ENTRADA' ? 'mov-entrada' : m.tipo === 'SAIDA' ? 'mov-saida' : 'mov-ajuste';
+      var sinal = m.tipo === 'SAIDA' ? '-' : '+';
       return '<div class="activity-item">'
         + '<div class="activity-time">' + Utils.formatarDataHora(m.data) + '</div>'
         + '<div class="activity-content">'
@@ -529,7 +529,7 @@
     DB.Usuarios.listar().forEach(function(u){ usuariosMap[u.id] = u.nome; });
 
     el.innerHTML = reqs.map(function(r) {
-      var statusCls = r.status === 'PENDENTE'  'warning' : r.status === 'APROVADA'  'success' : 'danger';
+      var statusCls = r.status === 'PENDENTE' ? 'warning' : r.status === 'APROVADA' ? 'success' : 'danger';
       return '<div class="activity-item">'
         + '<div class="activity-time">' + Utils.formatarData(r.criadoEm) + '</div>'
         + '<div class="activity-content">'

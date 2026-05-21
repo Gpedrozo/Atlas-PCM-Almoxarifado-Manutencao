@@ -265,8 +265,8 @@ function carregarItem(p) {
   document.getElementById('item-saldo').textContent  = saldo;
   document.getElementById('item-unidade').textContent = p.unidade || '';
   // badge status
-  var st = saldo <= 0  'Zerado' : (p.estoqueMinimo && saldo < p.estoqueMinimo  'Baixo' : 'Normal');
-  var stCls = saldo <= 0  'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo  'low' : 'ok');
+  var st = saldo <= 0 ? 'Zerado' : (p.estoqueMinimo && saldo < p.estoqueMinimo ? 'Baixo' : 'Normal');
+  var stCls = saldo <= 0 ? 'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo ? 'low' : 'ok');
   document.getElementById('item-status-badge').innerHTML = '<span class="rt-badge rt-badge-' + stCls + '">' + st + '</span>';
   document.getElementById('inp-qtd').value = 1;
   if (_osGlobal) {
@@ -539,7 +539,7 @@ function buscarPecaManual() {
   if (!matches.length) { res.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:10px 0">Nenhuma peÃ§a encontrada</div>'; return; }
   res.innerHTML = '<div class="rt-busca-res">' + matches.map(function(p) {
     var saldo = _saldos[p.id] || 0;
-    var st = saldo <= 0  'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo  'low' : 'ok');
+    var st = saldo <= 0 ? 'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo ? 'low' : 'ok');
     return '<div class="rt-busca-item" onclick="selecionarPecaBusca(\'' + p.id + '\')">' +
       '<div style="flex:1;min-width:0">' +
         '<div class="nome">' + escHtml(p.nome) + '</div>' +

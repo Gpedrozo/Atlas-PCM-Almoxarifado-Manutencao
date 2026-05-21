@@ -106,7 +106,7 @@
 
     const p = DB.Pecas.buscarId(id);
     const saldoAtual = DB.Movimentos.saldoPeca(id);
-    const delta = operacaoSelecionada === 'ADD'  qtd : -qtd;
+    const delta = operacaoSelecionada === 'ADD' ? qtd : -qtd;
     const final = saldoAtual + delta;
 
     document.getElementById('prev-atual').textContent = Utils.fmt(saldoAtual) + ' ' + p.unidade;

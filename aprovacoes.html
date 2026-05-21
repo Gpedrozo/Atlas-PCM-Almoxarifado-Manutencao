@@ -222,8 +222,8 @@
       var user = usuariosMap[aj.responsavel || aj.solicitanteId];
       var nomeUser = user  user.nome : '-';
       var emailUser = user  (user.email || '') : '';
-      var sinal = aj.operacao === 'ADD'  '+' : aj.operacao === 'SUB'  '-' : '=';
-      var sinalCor = aj.operacao === 'ADD'  'var(--success)' : aj.operacao === 'SUB'  'var(--danger)' : 'var(--warning)';
+      var sinal = aj.operacao === 'ADD' ? '+' : aj.operacao === 'SUB' ? '-' : '=';
+      var sinalCor = aj.operacao === 'ADD' ? 'var(--success)' : aj.operacao === 'SUB' ? 'var(--danger)' : 'var(--warning)';
 
       return '<div class="aprov-item" id="aprov-aj-' + aj.id + '">'
         + '<div class="aprov-item-header">'
@@ -268,7 +268,7 @@
     var solicitanteId = aj.responsavel || aj.solicitanteId || aj.responsavelId;
     if (solicitanteId) {
       var peca = DB.Pecas.buscarId(aj.pecaId);
-      var sinal = aj.operacao === 'ADD'  '+' : '-';
+      var sinal = aj.operacao === 'ADD' ? '+' : '-';
       DB.Notificacoes.criar({
         userId: solicitanteId,
         tipo: 'APROVADO',
