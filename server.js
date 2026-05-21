@@ -335,8 +335,8 @@ function getInitJson(currentUser) {
     obj.pecas = (_cache.pecas || []).map(function(p) {
       var copy = Object.assign({}, p);
       // Nunca enviar base64 bruto no init — apenas indicadores e filenames (pequenos)
-      copy.imagem          = p.imagem ? ? true : false;
-      copy.imagemExplodida = p.imagemExplodida ? ? true : false;
+      copy.imagem          = p.imagem ? true : false;
+      copy.imagemExplodida = p.imagemExplodida ? true : false;
       copy.imagens         = p.imagens || [];
       return copy;
     });
@@ -525,7 +525,7 @@ function sessionCookie(value, maxAgeSeconds) {
 
 function createSession(res, user, lembrar) {
   const sid = crypto.randomBytes(32).toString('base64url');
-  const ttl = lembrar ? ? SESSION_REMEMBER_TTL_MS : SESSION_TTL_MS;
+  const ttl = lembrar ? SESSION_REMEMBER_TTL_MS : SESSION_TTL_MS;
   _sessions.set(sid, { userId: user.id, expiresAt: Date.now() + ttl });
   res.setHeader('Set-Cookie', sessionCookie(sid, Math.floor(ttl / 1000)));
   return sid;
@@ -708,7 +708,7 @@ if (USE_HTTPS) {
   }
 }
 
-const server = (USE_HTTPS  https.createServer(sslOptions, asyncHandler) : http.createServer(asyncHandler));
+const server = (USE_HTTPS ? https.createServer(sslOptions, asyncHandler) : http.createServer(asyncHandler));
 
 // ===== REQUEST HANDLER =====
 async function asyncHandler(req, res) {
@@ -809,8 +809,8 @@ async function asyncHandler(req, res) {
         return jsonRes(res, 200, {
           pecas: (_cache.pecas || []).map(function(p) {
             const copy = Object.assign({}, p);
-            copy.imagem = p.imagem ? ? true : false;
-            copy.imagemExplodida = p.imagemExplodida ? ? true : false;
+            copy.imagem = p.imagem ? true : false;
+            copy.imagemExplodida = p.imagemExplodida ? true : false;
             return copy;
           }),
           ativos: _cache.ativos || [],
@@ -1040,7 +1040,7 @@ async function asyncHandler(req, res) {
           }
           if (!_cache.consertos_historico) _cache.consertos_historico = [];
           // MELHORIAS: Histórico mais descritivo com auto-advance
-          const detalheAuditoria = 'NF anexada. Automaticamente liberada para envio.' + (body.emailContabilidade  ' Email: ' + String(body.emailContabilidade).toLowerCase() : '') + (body.observacoesContabilidade  ' Obs: ' + String(body.observacoesContabilidade).slice(0, 300) : '');
+          const detalheAuditoria = 'NF anexada. Automaticamente liberada para envio.' + (body.emailContabilidade ? ' Email: ' + String(body.emailContabilidade).toLowerCase() : '') + (body.observacoesContabilidade ? ' Obs: ' + String(body.observacoesContabilidade).slice(0, 300) : '');
           _cache.consertos_historico.push({
             id: _id(),
             solicitacaoId,
@@ -1048,7 +1048,7 @@ async function asyncHandler(req, res) {
             detalhes: detalheAuditoria,
             dataHora: _now(),
             ip: tokenItem.ip_ultimo_acesso || (((req.headers['x-forwarded-for'] || '') || req.socket.remoteAddress || '').split(',')[0].trim()),
-            emailUsuario: body.emailContabilidade  String(body.emailContabilidade).toLowerCase() : undefined
+            emailUsuario: body.emailContabilidade ? String(body.emailContabilidade).toLowerCase() : undefined
           });
           saveData('consertos_historico', _cache.consertos_historico);
           const solicitanteId = _cache.consertos_solicitacoes[solIdx].solicitanteId;
@@ -1183,7 +1183,7 @@ async function asyncHandler(req, res) {
         const mimeMap = { '.pdf': 'application/pdf', '.xml': 'application/xml', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png' };
         const mime = mimeMap[ext] || 'application/octet-stream';
         // PDF: inline (visualização no browser). Outros: forçar download para evitar execução
-        const disposition = ext === '.pdf'  'inline' : 'attachment; filename="' + path.basename(filePath) + '"';
+        const disposition = ext === '.pdf' ? 'inline' : 'attachment; filename="' + path.basename(filePath) + '"';
         res.setHeader('Cache-Control', 'private, no-store');
         res.setHeader('Content-Disposition', disposition);
         res.writeHead(200, { 'Content-Type': mime, 'Content-Length': stat.size });
@@ -1212,7 +1212,7 @@ async function asyncHandler(req, res) {
           return jsonRes(res, 400, { error: 'Tipo de arquivo não permitido. Somente PDF e XML são aceitos.' });
         }
         const m = String(base64).match(/^data:[^;]+;base64,(.+)$/s);
-        const b64d = m  m[1] : String(base64);
+        const b64d = m ? m[1] : String(base64);
         const buffer = Buffer.from(b64d, 'base64');
         // ── Limite de ? tamanho: 10 MB por arquivo ────────────────────
         const MAX_BYTES = 10 * 1024 * 1024;
@@ -1248,12 +1248,12 @@ async function asyncHandler(req, res) {
         const anexo = {
           id: _id(),
           solicitacaoId,
-          tipoAnexo: ext === '.xml'  'XML' : 'PDF',
+          tipoAnexo: ext === '.xml' ? 'XML' : 'PDF',
           nomeOriginal,
           nomeArmazenado: filename,
           caminho: caminhoSeguro,
           extensao: ext.slice(1),
-          mimeType: ext === '.xml'  'application/xml' : 'application/pdf',
+          mimeType: ext === '.xml' ? 'application/xml' : 'application/pdf',
           tamanho: buffer.length,
           hashArquivo,
           origemUpload: 'contabilidade',
@@ -1281,7 +1281,7 @@ async function asyncHandler(req, res) {
         if (!body.id) body.id = _id();
         if (!body.dataHora) body.dataHora = _now();
         // Dados que o servidor pode observar
-        body.ip = req.socket && req.socket.remoteAddress  req.socket.remoteAddress : null;
+        body.ip = req.socket && req.socket.remoteAddress ? req.socket.remoteAddress : null;
         body.userAgent = req.headers['user-agent'] || null;
         body.xForwardedFor = req.headers['x-forwarded-for'] || null;
         const list = (_cache.consertos_historico || []).concat([body]);
@@ -1303,7 +1303,7 @@ async function asyncHandler(req, res) {
           id: _id(),
           solicitacaoId: delBody.solicitacaoId || null,
           acao: 'Anexo excluído',
-          detalhes: 'Arquivo: ' + id + (delBody.justificativa  ' - Motivo: ' + String(delBody.justificativa).slice(0, 200) : ' - Sem justificativa'),
+          detalhes: 'Arquivo: ' + id + (delBody.justificativa ? ' - Motivo: ' + String(delBody.justificativa).slice(0, 200) : ' - Sem justificativa'),
           usuarioId: delBody.usuarioId || null,
           dataHora: _now(),
           ip: ((req.headers['x-forwarded-for'] || '') || req.socket.remoteAddress || '').split(',')[0].trim()
@@ -1328,7 +1328,7 @@ async function asyncHandler(req, res) {
         const peca = (_cache.pecas || []).find(function(x) { return x.id === id; });
         if (!peca) return jsonRes(res, 404, { error: 'Peça não encontrada' });
         const tipo = new URL(req.url, 'http://localhost').searchParams.get('tipo') || 'principal';
-        const b64  = tipo === 'explodida'  (peca.imagemExplodida || '') : (peca.imagem || '');
+        const b64  = tipo === 'explodida' ? (peca.imagemExplodida || '') : (peca.imagem || '');
         if (b64) return jsonRes(res, 200, { imagem: b64 });
         // Novo ? modelo: retorna primeiro filename para backward compat
         const imagens = peca.imagens || [];
@@ -1365,8 +1365,8 @@ async function asyncHandler(req, res) {
         if (!base64) return jsonRes(res, 400, { error: 'base64 obrigatório' });
         // Extrai tipo e dados
         const m    = String(base64).match(/^data:image\/(\w+);base64,(.+)$/s);
-        const ext  = m  (m[1] === 'jpeg' || m[1] === 'jpg'  '.jpeg' : '.' + m[1]) : '.jpeg';
-        const b64d = m  m[2] : String(base64);
+        const ext  = m ? (m[1] === 'jpeg' || m[1] === 'jpg' ? '.jpeg' : '.' + m[1]) : '.jpeg';
+        const b64d = m ? m[2] : String(base64);
         const extensoesImagem = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
         if (!extensoesImagem.includes(ext)) return jsonRes(res, 400, { error: 'Tipo de imagem não permitido' });
         const buffer = Buffer.from(b64d, 'base64');
@@ -1441,7 +1441,7 @@ async function asyncHandler(req, res) {
         
         // Extrai dados base64
         const m = String(base64).match(/^data:[^;]+;base64,(.+)$/s);
-        const b64d = m  m[1] : String(base64);
+        const b64d = m ? m[1] : String(base64);
         const prefix = (reqId || 'orc') + '_' + Date.now().toString(36);
         const filename = prefix + ext;
         const filePath = path.join(ORCAMENTOS_DIR, filename);
@@ -1501,7 +1501,7 @@ async function asyncHandler(req, res) {
         const ajuste = DataStore.findById('ajustes', id);
         if (!ajuste) return jsonRes(res, 404, { error: 'Ajuste nao encontrado.' });
         if (ajuste.status !== 'PENDENTE') return jsonRes(res, 409, { error: 'Ajuste nao esta pendente.' });
-        const tipo = ajuste.operacao === 'SUB'  'AJUSTE_SUB' : 'AJUSTE_ADD';
+        const tipo = ajuste.operacao === 'SUB' ? 'AJUSTE_SUB' : 'AJUSTE_ADD';
         const mov = {
           tipo,
           pecaId: ajuste.pecaId,
@@ -1585,7 +1585,7 @@ async function asyncHandler(req, res) {
           return jsonRes(res, 403, { error: 'CSRF token inválido ou expirado. Recarregue a página e tente novamente.' });
         }
         const removido = DataStore.remove(col, id);
-        return jsonRes(res, removido ? ? 200 : 404, removido ? { ok: true } : { error: 'Registro não encontrado' });
+        return jsonRes(res, removido ? 200 : 404, removido ? { ok: true } : { error: 'Registro não encontrado' });
       }
 
       return jsonRes(res, 405, { error: 'Método não permitido' });
@@ -1596,7 +1596,7 @@ async function asyncHandler(req, res) {
       res.writeHead(405); res.end(); return;
     }
 
-    const reqPath  = (pathname === '/')  '/index.html' : pathname;
+    const reqPath  = (pathname === '/') ? '/index.html' : pathname;
     const safePath = path.resolve(ROOT, '.' + reqPath.replace(/\\/g, '/'));
 
     // Segurança: impedir path traversal
@@ -1618,8 +1618,8 @@ async function asyncHandler(req, res) {
     if (cached) {
       // Cache-Control: HTML sempre revalidado, JS/CSS/imagens com TTL
       const cc = ext === '.html'
-         'no-cache'
-        : ((ext === '.js' || ext === '.css')  'public, max-age=300' : 'public, max-age=86400');
+         ? 'no-cache'
+        : ((ext === '.js' || ext === '.css') ? 'public, max-age=300' : 'public, max-age=86400');
       // Se cliente tem ETag igual, retorna 304 sem body (sem download)
       if (req.headers['if-none-match'] === cached.etag) {
         res.writeHead(304, { 'ETag': cached.etag, 'Cache-Control': cc });
@@ -1665,10 +1665,10 @@ server.listen(PORT, '0.0.0.0', function() {
     });
   } catch {}
 
-  const protocol = USE_HTTPS  'https' : 'http';
+  const protocol = USE_HTTPS ? 'https' : 'http';
   const urlLocal = protocol + '://localhost:' + PORT;
   const urlLAN = protocol + '://' + localIP + ':' + PORT;
-  const httpsLabel = USE_HTTPS  ' 🔒 HTTPS' : ' HTTP';
+  const httpsLabel = USE_HTTPS ? ' 🔒 HTTPS' : ' HTTP';
 
   console.log('');
   console.log('  ╔══════════════════════════════════════════════════╗');
