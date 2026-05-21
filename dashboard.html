@@ -417,7 +417,7 @@
     document.getElementById('kpi-trend-itens').textContent = 'Estável';
     document.getElementById('kpi-trend-entrada').innerHTML = entradaMes > 5 ? '<span style="color:var(--success)">Acima</span>' : 'Abaixo';
     document.getElementById('kpi-trend-saida').innerHTML = saidaMes > 5 ? '<span style="color:var(--success)">Normal</span>' : 'Baixo';
-    document.getElementById('kpi-trend-critico').textContent = critico > 0  'A-O NECESSRIA' : 'OK';
+    document.getElementById('kpi-trend-critico').textContent = critico > 0 ? 'A-O NECESSRIA' : 'OK';
 
     // ------------------------------------------------------
     // SEÇÃO 2: STATUS OPERACIONAL
@@ -467,7 +467,7 @@
     var html = '<div class="alert-strip-header">' + titulo + ' (' + items.length + ')</div>';
     html += items.slice(0, 3).map(function(a) {
       return '<div class="alert-item-strip ' + cssClass + '">'
-        + '<div class="alert-item-icon">' + (tipo === 'critical'  '!' : '') + '</div>'
+        + '<div class="alert-item-icon">' + (tipo === 'critical' ? '!' : '') + '</div>'
         + '<div class="alert-item-info">'
         + '<div class="alert-item-nome">' + Utils.safe(a.peca.nome) + '</div>'
         + '<div class="alert-item-detalhe">Saldo: <strong>' + a.saldo + '</strong> ' + Utils.safe(a.peca.unidade) + ' (mín: ' + a.peca.estoqueMinimo + ')</div>'
@@ -477,7 +477,7 @@
     }).join('');
     
     if (items.length > 3) {
-      html += '<div class="alert-item-more" onclick="abrirDrill(\'' + (tipo === 'critical'  'critical' : 'low') + '\')">+ ' + (items.length-3) + ' mais...</div>';
+      html += '<div class="alert-item-more" onclick="abrirDrill(\'' + (tipo === 'critical' ? 'critical' : 'low') + '\')">+ ' + (items.length-3) + ' mais...</div>';
     }
     el.innerHTML = html;
   }

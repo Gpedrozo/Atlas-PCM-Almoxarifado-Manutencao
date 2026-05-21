@@ -313,7 +313,7 @@ function buscarAtivo() {
   res.innerHTML = _ativoOpts.map(function(a, i) {
     return '<div class="opt" data-i="' + i + '" onclick="selecionarAtivo(' + i + ')">' +
       '<strong>' + escHtml(a.tag) + '</strong> â€” ' + escHtml(a.descricao) +
-      (a.setor  ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
+      (a.setor ? ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
       '</div>';
   }).join('');
 }
@@ -358,7 +358,7 @@ function buscarAtivoGlobal() {
   res.innerHTML = _ativoGlobalOpts.map(function(a, i) {
     return '<div class="opt" data-i="' + i + '" onclick="selecionarAtivoGlobal(' + i + ')">' +
       '<strong>' + escHtml(a.tag) + '</strong> â€” ' + escHtml(a.descricao) +
-      (a.setor  ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
+      (a.setor ? ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
       '</div>';
   }).join('');
 }
