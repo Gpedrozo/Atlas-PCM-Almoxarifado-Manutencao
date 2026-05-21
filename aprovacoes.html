@@ -84,8 +84,8 @@
     abaAtiva = aba;
     document.getElementById('tab-requisicoes').classList.toggle('active', aba === 'requisicoes');
     document.getElementById('tab-ajustes').classList.toggle('active', aba === 'ajustes');
-    document.getElementById('painel-requisicoes').style.display = aba === 'requisicoes'  '' : 'none';
-    document.getElementById('painel-ajustes').style.display = aba === 'ajustes'  '' : 'none';
+    document.getElementById('painel-requisicoes').style.display = aba === 'requisicoes' ? '' : 'none';
+    document.getElementById('painel-ajustes').style.display = aba === 'ajustes' ? '' : 'none';
   }
 
   function render() {

@@ -90,7 +90,7 @@
     const cfg = DB.Config.get();
     return `
       <div class="config-panel-header"> Identidade da Empresa</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start"> <div> <div class="form-group" style="margin-bottom:18px"> <label>Nome da Empresa</label> <input type="text" id="cfg-empresa-nome" value="${Utils.safe(cfg.empresa||'Atlas Ind. Eletrodomésticos')}" placeholder="Nome da empresa"> </div> <div class="form-group" style="margin-bottom:18px"> <label>Subtítulo / Departamento</label> <input type="text" id="cfg-empresa-sub" value="${Utils.safe(cfg.sub||'PCM Almoxarifado')}" placeholder="Ex: PCM Almoxarifado"> </div> <button class="btn btn-primary" onclick="salvarEmpresa()"> Salvar Configurações</button> </div> <div> <label style="font-size:12.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:8px">Logomarca</label> <div class="logo-preview-box" id="logo-preview-box" onclick="document.getElementById('logo-input').click()"> ${cfg.logo  `<img src="${cfg.logo}" id="logo-preview-img" alt="Logo">` : '<span id="logo-preview-placeholder">Clique para selecionar imagem</span>'}
-          </div> <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="processarLogo(this)"> <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"> <button class="btn btn-secondary btn-sm" onclick="document.getElementById('logo-input').click()"> Alterar Logo</button> ${cfg.logo  '<button class="btn btn-secondary btn-sm" onclick="removerLogo()" style="color:var(--danger)">Remover</button>' : ''}
+          </div> <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="processarLogo(this)"> <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"> <button class="btn btn-secondary btn-sm" onclick="document.getElementById('logo-input').click()"> Alterar Logo</button> ${cfg.logo ? '<button class="btn btn-secondary btn-sm" onclick="removerLogo()" style="color:var(--danger)">Remover</button>' : ''}
           </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:8px">Formatos aceitos: PNG, JPG, SVG, WebP. A imagem será redimensionada automaticamente.</div> </div> </div> `;
   }
 
@@ -574,7 +574,7 @@
       const cells = rows[i];
       if (!cells || cells.length < 3) continue;
 
-      const str = v => String(v === null || v === undefined  '' : v).trim().replace(/^"|"$/g, '');
+      const str = v => String(v === null || v === undefined ? '' : v).trim().replace(/^"|"$/g, '');
 
       // Mapeamento real da planilha (col A = índice/branco, dados a partir de B):
       const codigo      = str(cells[1]).toUpperCase();   // Col B - Código

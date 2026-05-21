@@ -224,7 +224,7 @@
       else if (st.classe === 'low') baixoCnt++;
       else criticoCnt++;
       const pct = p.estoqueMinimo > 0  Math.min(100, (s / p.estoqueMinimo) * 100) : 100;
-      const barColor = st.classe === 'ok'  'var(--success)' : st.classe === 'low'  'var(--warning)' : 'var(--danger)';
+      const barColor = st.classe === 'ok' ? 'var(--success)' : st.classe === 'low' ? 'var(--warning)' : 'var(--danger)';
       return `<tr class="inv-row"
           data-busca="${(p.codigo||'').toLowerCase()} ${(p.nome||'').toLowerCase()} ${(p.categoria||'').toLowerCase()}"
           data-status="${st.classe}"
@@ -314,7 +314,7 @@
       const cls = m.tipo === 'ENTRADA'  'mov-tipo-entrada' : m.tipo === 'SAIDA'  'mov-tipo-saida' : 'mov-tipo-ajuste';
       return `<tr> <td>${Utils.formatarDataHora(m.data)}</td> <td>${p  Utils.safe(p.nome) : '-'}</td> <td><span class="${cls}">${Utils.labelTipo(m.tipo)}</span></td> <td style="text-align:center;font-weight:600">${m.quantidade}</td> <td>${Utils.safe(m.ordemServico||'-')}</td> <td>${Utils.safe(usuariosMap[m.responsavel]||'-')}</td> </tr>`;
     });
-    const pecaOptions = todasPecas.map(p => `<option value="${p.id}" ${p.id === filtPeca  'selected' : ''}>[${Utils.safe(p.codigo)}] ${Utils.safe(p.nome)}</option>`
+    const pecaOptions = todasPecas.map(p => `<option value="${p.id}" ${p.id === filtPeca ? 'selected' : ''}>[${Utils.safe(p.codigo)}] ${Utils.safe(p.nome)}</option>`
     ).join('');
     return `
       <div class="relatorio-header"> <div> <div class="relatorio-titulo"> Movimentações por Período</div> <div class="relatorio-subtitle">Filtro de datas - exibe entradas, saídas e ajustes</div> </div> </div> <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px" class="no-print"> <div style="display:flex;align-items:center;gap:8px"> <label style="font-size:12px;color:var(--text-muted);white-space:nowrap">De:</label> <input type="date" id="filt-de" value="${de}" oninput="atualizarPeriodo()" style="padding:7px 10px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> </div> <div style="display:flex;align-items:center;gap:8px"> <label style="font-size:12px;color:var(--text-muted);white-space:nowrap">Até:</label> <input type="date" id="filt-ate" value="${ate}" oninput="atualizarPeriodo()" style="padding:7px 10px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)"> </div> <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px"> <label style="font-size:12px;color:var(--text-muted);white-space:nowrap">Peça:</label> <select id="filt-peca" onchange="atualizarPeriodo()" style="flex:1;padding:7px 10px;font-size:13px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);min-width:180px;max-width:320px"> <option value="">Todas</option>${pecaOptions}
@@ -390,7 +390,7 @@
       .slice(0, 20);
     const rows = entradas.map(m => `<tr> <td>${Utils.formatarData(m.data)}</td> <td style="text-align:center">${m.quantidade}</td> <td style="text-align:right">${Number(m.precoUnitario) > 0  Utils.fmtMoeda(Number(m.precoUnitario)) : '-'}</td> <td style="text-align:right;font-weight:700">${Number(m.precoUnitario) > 0  Utils.fmtMoeda(Number(m.precoUnitario) * Number(m.quantidade)) : '-'}</td> <td>${Utils.safe(usuariosMap[m.responsavel]||'-')}</td> <td>${Utils.safe(m.ordemServico||'-')}</td> </tr>`);
     document.getElementById('drill-titulo').textContent = ' ' + nome + ' - últimas entradas';
-    document.getElementById('drill-body').innerHTML = rows.length === 0  '<div class="empty-state"><p>Nenhuma entrada registrada para este item.</p></div>'
+    document.getElementById('drill-body').innerHTML = rows.length === 0 ? '<div class="empty-state"><p>Nenhuma entrada registrada para este item.</p></div>'
       : `<div class="table-wrapper"><table> <thead><tr><th>Data</th><th style="text-align:center">Qtd</th><th style="text-align:right">Preço Unit.</th><th style="text-align:right">Total</th><th>Responsável</th><th>OS</th></tr></thead> <tbody>${rows.join('')}</tbody> </table></div>`;
     Utils.abrirModal('modal-drill');
   }
@@ -454,7 +454,7 @@
             }
             <div> <div style="font-weight:600;font-size:13px;color:var(--primary-dark)">${Utils.safe(p.nome)}</div> ${p.descricao && p.descricao !== p.nome  `<div style="font-size:11px;color:var(--text-muted);margin-top:1px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${Utils.safe(p.descricao)}</div>` : ''}
             </div> </div> </td> <td> <span style="display:inline-block;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;letter-spacing:.3px"> ${Utils.safe(p.categoria||'-')}
-          </span> </td> <td style="font-size:12px;text-align:center">${Utils.safe(p.unidade||'UN')}</td> <td> <div style="display:flex;align-items:center;gap:6px"> <span style="font-weight:700;font-size:13px;min-width:28px">${saldo}</span> <div style="flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;min-width:40px"> <div style="height:100%;border-radius:3px;background:${st.classe === 'ok'  'var(--success)' : st.classe === 'low'  'var(--warning)' : 'var(--danger)'};width:${pct}%"></div> </div> <span style="font-size:10px;color:var(--text-muted)">${p.estoqueMinimo}</span> </div> </td> <td style="font-size:12px;text-align:right">${Number(p.precoUnitario) > 0  Utils.fmtMoeda(Number(p.precoUnitario)) : '<span style="color:var(--text-muted)">-</span>'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localização||p.localizacao||'-')}</td> <td style="text-align:center"> <span class="badge badge-${ativo  'ok' : 'critical'}">${ativo  'Ativo' : 'Inativo'}</span> </td> </tr>`;
+          </span> </td> <td style="font-size:12px;text-align:center">${Utils.safe(p.unidade||'UN')}</td> <td> <div style="display:flex;align-items:center;gap:6px"> <span style="font-weight:700;font-size:13px;min-width:28px">${saldo}</span> <div style="flex:1;height:5px;border-radius:3px;background:var(--border);overflow:hidden;min-width:40px"> <div style="height:100%;border-radius:3px;background:${st.classe === 'ok' ? 'var(--success)' : st.classe === 'low' ? 'var(--warning)' : 'var(--danger)'};width:${pct}%"></div> </div> <span style="font-size:10px;color:var(--text-muted)">${p.estoqueMinimo}</span> </div> </td> <td style="font-size:12px;text-align:right">${Number(p.precoUnitario) > 0 ? Utils.fmtMoeda(Number(p.precoUnitario)) : '<span style="color:var(--text-muted)">-</span>'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localização||p.localizacao||'-')}</td> <td style="text-align:center"> <span class="badge badge-${ativo ? 'ok' : 'critical'}">${ativo ? 'Ativo' : 'Inativo'}</span> </td> </tr>`;
     });
 
     return `
@@ -549,7 +549,7 @@
       return `<tr> <td style="font-size:12px">${Utils.formatarData(m.data)}</td> <td>${p  Utils.safe(p.nome) : '-'}</td> <td style="text-align:center">${m.quantidade} ${p  Utils.safe(p.unidade) : ''}</td> <td style="text-align:right">${preco > 0  Utils.fmtMoeda(preco) : '-'}</td> <td style="text-align:right;font-weight:700">${total > 0  Utils.fmtMoeda(total) : '-'}</td> <td style="font-size:12px">${Utils.safe(usuariosMap[m.responsavel]||'-')}</td> <td style="font-size:12px">${Utils.safe(m.ordemServico||'-')}</td> </tr>`;
     });
     document.getElementById('drill-titulo').textContent = ' ' + nomeFornecedor;
-    document.getElementById('drill-body').innerHTML = rows.length === 0  '<div class="empty-state"><p>Nenhuma entrada encontrada.</p></div>'
+    document.getElementById('drill-body').innerHTML = rows.length === 0 ? '<div class="empty-state"><p>Nenhuma entrada encontrada.</p></div>'
       : `<div class="table-wrapper"><table> <thead><tr><th>Data</th><th>Peça</th><th style="text-align:center">Qtd</th><th style="text-align:right">Preço Unit.</th><th style="text-align:right">Total</th><th>Responsável</th><th>OS</th></tr></thead> <tbody>${rows.join('')}</tbody> </table></div>`;
     Utils.abrirModal('modal-drill');
   }
@@ -576,7 +576,7 @@
       });
       return `<div style="margin-bottom:20px"> <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"> <code style="font-size:12px;background:var(--primary);color:#fff;padding:3px 10px;border-radius:6px;font-weight:700">${Utils.safe(a.tag)}</code> <span style="font-size:13px;font-weight:600;color:var(--primary-dark)">${Utils.safe(a.descricao)}</span> <span style="font-size:11px;color:var(--text-muted);margin-left:auto">${itens.length} tipo(s) de item</span> </div> <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)"> <div class="table-wrapper"><table><thead><tr><th style="width:90px">Código</th><th>Material</th><th style="text-align:center;width:120px">Qtd. Consumida</th></tr></thead><tbody>${rows.join('')}</tbody></table></div> </div> </div>`;
     });
-    const semAtivo = movSaida.length === 0  '' : (() => {
+    const semAtivo = movSaida.length === 0 ? '' : (() => {
       const movSemAtivo = DB.Movimentos.listar().filter(m => m.tipo === 'SAIDA' && !m.ativoId);
       if (!movSemAtivo.length) return '';
       const map = {};
@@ -899,7 +899,7 @@
         }
       }
     }
-    var psOpts = [10,20,50,100].map(function(v){ return '<option value="'+v+'"'+(v === ps  ' selected' : '')+'>'+v+'</option>'; }).join('');
+    var psOpts = [10,20,50,100].map(function(v){ return '<option value="'+v+'"'+(v === ps ? ' selected' : '')+'>'+v+'</option>'; }).join('');
     el.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 16px;border-top:1px solid var(--border)">'
       + '<span style="font-size:12px;color:var(--text-muted)">' + from + '-' + to + ' de ' + total + ' itens'
       + '&ensp;<label style="font-size:12px;color:var(--text-muted)">Linhas: <select onchange="_mudarPs(\''+tbodyId+'\',+this.value)" style="padding:2px 6px;font-size:12px;border:1px solid var(--border);border-radius:5px;background:var(--card);color:var(--text);cursor:pointer">'+ psOpts +'</select></label>'

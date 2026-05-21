@@ -1131,7 +1131,7 @@
 
     var itensHtml = itens.length > 0  itens.map(function(it, idx) {
       var p = pecasMap[it.pecaId];
-      return '<tr style="background:' + (idx % 2 === 0  '#fff' : '#f5f8fc') + '">'
+      return '<tr style="background:' + (idx % 2 === 0 ? '#fff' : '#f5f8fc') + '">'
         + '<td style="text-align:center;width:4%;padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (idx + 1) + '</td>'
         + '<td style="font-family:monospace;width:12%;padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (p  Utils.safe(p.codigo) : '-') + '</td>'
         + '<td style="padding:5pt 4pt;border-bottom:.5pt solid #ddd">' + (p  '<strong>' + Utils.safe(p.nome) + '</strong>' : '-') + '</td>'

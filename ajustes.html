@@ -91,8 +91,8 @@
   function selecionarOperacao(op) {
     operacaoSelecionada = op;
     document.getElementById('aj-operacao').value = op;
-    document.getElementById('btn-add').className = 'op-btn' + (op === 'ADD'  ' selected-add' : '');
-    document.getElementById('btn-sub').className = 'op-btn' + (op === 'SUB'  ' selected-sub' : '');
+    document.getElementById('btn-add').className = 'op-btn' + (op === 'ADD' ? ' selected-add' : '');
+    document.getElementById('btn-sub').className = 'op-btn' + (op === 'SUB' ? ' selected-sub' : '');
     atualizarPreview();
   }
 
@@ -112,11 +112,11 @@
     document.getElementById('prev-atual').textContent = Utils.fmt(saldoAtual) + ' ' + p.unidade;
     document.getElementById('prev-atual').className = 'valor';
     const ajEl = document.getElementById('prev-ajuste');
-    ajEl.textContent = (operacaoSelecionada === 'ADD'  '+' : '-') + (qtd || 0) + ' ' + p.unidade;
-    ajEl.className = 'valor ' + (operacaoSelecionada === 'ADD'  'tipo-add' : 'tipo-sub');
+    ajEl.textContent = (operacaoSelecionada === 'ADD' ? '+' : '-') + (qtd || 0) + ' ' + p.unidade;
+    ajEl.className = 'valor ' + (operacaoSelecionada === 'ADD' ? 'tipo-add' : 'tipo-sub');
     const finEl = document.getElementById('prev-final');
     finEl.textContent = Utils.fmt(final) + ' ' + p.unidade;
-    finEl.className = 'valor ' + (final > saldoAtual  'tipo-add' : final < saldoAtual  'tipo-sub' : '');
+    finEl.className = 'valor ' + (final > saldoAtual ? 'tipo-add' : final < saldoAtual ? 'tipo-sub' : '');
   }
 
   function registrarAjuste(e) {
@@ -142,7 +142,7 @@
 
     if (isAdmin) {
       // Admin: aplica imediatamente
-      const tipo = op === 'ADD'  'AJUSTE_ADD' : 'AJUSTE_SUB';
+      const tipo = op === 'ADD' ? 'AJUSTE_ADD' : 'AJUSTE_SUB';
       DB.Movimentos.registrar({ tipo, pecaId: id, quantidade: qtd, data: new Date().toISOString(), responsavel: sessao.id, ordemServico: '', observacao: `[${motivo}] ${obs}` });
       DB.Ajustes.registrar({ pecaId: id, operacao: op, quantidade: qtd, motivo, observacao: obs, responsavelId: sessao.id, status: 'APROVADO', aprovadoEm: new Date().toISOString(), aprovadorId: sessao.id });
       Utils.toast('Ajuste aplicado com sucesso!', 'success');
@@ -152,7 +152,7 @@
       DB.Ajustes.registrar(ajReg);
       // Notificar admins in-sistema
       const pecaNotif = DB.Pecas.buscarId(id);
-      const sinalNotif = op === 'ADD'  '+' : '-';
+      const sinalNotif = op === 'ADD' ? '+' : '-';
       DB.Usuarios.listar().filter(function(u){ return u.nivel === 'ADMIN' && u.ativo !== false; }).forEach(function(admin) {
         DB.Notificacoes.criar({
           userId: admin.id,
@@ -223,8 +223,8 @@
       const peca = pecasMap[a.pecaId];
       const saldo = peca  DB.Movimentos.saldoPeca(a.pecaId) : 0;
       const final = a.operacao === 'ADD'  saldo + a.quantidade : saldo - a.quantidade;
-      return `<div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)"> <div> <div style="font-weight:700">${peca  Utils.safe(peca.nome) : '-'} <span style="font-size:11px;font-family:monospace;background:var(--border);padding:1px 6px;border-radius:4px">${peca  Utils.safe(peca.codigo) : ''}</span></div> <div style="font-size:12px;color:var(--text-muted);margin-top:2px"> ${a.operacao === 'ADD'  'Acrscimo de' : 'Subtra-o de'}
-            <strong>${a.quantidade} ${peca  Utils.safe(peca.unidade) : ''}</strong> · Saldo: ${saldo} <strong>${final}</strong> · Motivo: ${Utils.safe(a.motivo)} · Por: ${Utils.safe(usuariosMap[a.responsavelId] || '-')} · ${Utils.formatarDataHora(a.criadoEm)}
+      return `<div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)"> <div> <div style="font-weight:700">${peca ? Utils.safe(peca.nome) : '-'} <span style="font-size:11px;font-family:monospace;background:var(--border);padding:1px 6px;border-radius:4px">${peca ? Utils.safe(peca.codigo) : ''}</span></div> <div style="font-size:12px;color:var(--text-muted);margin-top:2px"> ${a.operacao === 'ADD' ? 'Acrscimo de' : 'Subtra-o de'}
+            <strong>${a.quantidade} ${peca ? Utils.safe(peca.unidade) : ''}</strong> · Saldo: ${saldo} <strong>${final}</strong> · Motivo: ${Utils.safe(a.motivo)} · Por: ${Utils.safe(usuariosMap[a.responsavelId] || '-')} · ${Utils.formatarDataHora(a.criadoEm)}
           </div> ${a.observacao  `<div style="font-size:11.5px;color:var(--text-muted);font-style:italic;margin-top:2px">${Utils.safe(a.observacao)}</div>` : ''}
         </div> <div style="display:flex;gap:6px"> <button class="btn btn-success btn-sm" onclick="aprovarAjuste('${a.id}')">Aprovar</button> <button class="btn btn-danger btn-sm"  onclick="rejeitarAjuste('${a.id}')">Rejeitar</button> </div> </div>`;
     }).join('');
@@ -261,7 +261,7 @@
 
     tbody.innerHTML = ajustes.map(a => {
       const peca = pecasMap[a.pecaId];
-      return `<tr> <td style="white-space:nowrap;font-size:12px">${Utils.formatarDataHora(a.criadoEm)}</td> <td> <div style="font-weight:600">${peca  Utils.safe(peca.nome) : '-'}</div> <div style="font-size:11px;color:var(--text-muted)">${peca  Utils.safe(peca.codigo) : ''}</div> </td> <td><span class="badge ${a.operacao === 'ADD'  'badge-ok' : 'badge-critical'}">${a.operacao === 'ADD'  '+ Acrscimo' : '- Subtra-o'}</span></td> <td style="font-weight:700;font-size:15px;color:${a.operacao === 'ADD'  'var(--success)' : 'var(--danger)'}">${a.operacao === 'ADD'  '+' : '-'}${a.quantidade} ${peca  Utils.safe(peca.unidade) : ''}</td> <td>${statusBadge(a.status||'APROVADO')}</td> <td style="font-size:12px">${Utils.safe(a.motivo || '-')}</td> <td style="font-size:12px">${Utils.safe(usuariosMap[a.responsavelId] || '-')}</td> <td style="font-size:12px;color:var(--text-muted)">${a.observacao  Utils.safe(a.observacao) : '-'}</td> </tr>`;
+      return `<tr> <td style="white-space:nowrap;font-size:12px">${Utils.formatarDataHora(a.criadoEm)}</td> <td> <div style="font-weight:600">${peca ? Utils.safe(peca.nome) : '-'}</div> <div style="font-size:11px;color:var(--text-muted)">${peca ? Utils.safe(peca.codigo) : ''}</div> </td> <td><span class="badge ${a.operacao === 'ADD' ? 'badge-ok' : 'badge-critical'}">${a.operacao === 'ADD' ? '+ Acrscimo' : '- Subtra-o'}</span></td> <td style="font-weight:700;font-size:15px;color:${a.operacao === 'ADD' ? 'var(--success)' : 'var(--danger)'}">${a.operacao === 'ADD' ? '+' : '-'}${a.quantidade} ${peca ? Utils.safe(peca.unidade) : ''}</td> <td>${statusBadge(a.status||'APROVADO')}</td> <td style="font-size:12px">${Utils.safe(a.motivo || '-')}</td> <td style="font-size:12px">${Utils.safe(usuariosMap[a.responsavelId] || '-')}</td> <td style="font-size:12px;color:var(--text-muted)">${a.observacao ? Utils.safe(a.observacao) : '-'}</td> </tr>`;
     }).join('');
   }
 

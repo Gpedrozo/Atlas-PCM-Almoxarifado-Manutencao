@@ -107,7 +107,7 @@
       var inativo = a.ativo === false;
       var nmovs   = consumoAtivo[a.id] || 0;
       var valor   = valorAtivo[a.id] || 0;
-      return '<div class="ativo-card"' + (inativo  ' style="opacity:.55"' : '') + '>'
+      return '<div class="ativo-card"' + (inativo ? ' style="opacity:.55"' : '') + '>'
         + '<div class="ativo-card-header">'
         + '<span class="ativo-tag">' + Utils.safe(a.tag) + '</span>'
         + '<div class="ativo-desc">' + Utils.safe(a.descricao) + '</div>'

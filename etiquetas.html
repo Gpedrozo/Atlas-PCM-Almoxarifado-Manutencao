@@ -139,7 +139,7 @@
     const sel = document.getElementById('filtro-cat');
     const catAtual = sel.value;
     sel.innerHTML = '<option value="">Todas as categorias</option>' +
-      cats.map(c => `<option value="${Utils.safe(c)}" ${c === catAtual  'selected' : ''}>${Utils.safe(c)}</option>`).join('');
+      cats.map(c => `<option value="${Utils.safe(c)}" ${c === catAtual ? 'selected' : ''}>${Utils.safe(c)}</option>`).join('');
 
     pecasFiltradas = pecas.filter(p => {
       if (catFiltro && p.categoria !== catFiltro) return false;
@@ -158,7 +158,7 @@
     }
 
     grid.innerHTML = pecasFiltradas.map(p => `
-      <div class="etiqueta-item-screen ${selecionados.has(p.id)  'selected' : ''}" onclick="toggleSel('${p.id}', this)"> <div class="check">${selecionados.has(p.id)  'Selecionado' : ''}</div> <div class="info"> <div class="nome">${Utils.safe(p.nome)}</div> <div class="codigo">${Utils.safe(p.codigo)}</div> <div class="loc"> ${Utils.safe(p.localização||p.localizacao||'-')}</div> </div> </div> `).join('');
+      <div class="etiqueta-item-screen ${selecionados.has(p.id) ? 'selected' : ''}" onclick="toggleSel('${p.id}', this)"> <div class="check">${selecionados.has(p.id) ? 'Selecionado' : ''}</div> <div class="info"> <div class="nome">${Utils.safe(p.nome)}</div> <div class="codigo">${Utils.safe(p.codigo)}</div> <div class="loc"> ${Utils.safe(p.localização||p.localizacao||'-')}</div> </div> </div> `).join('');
 
     document.getElementById('info-contagem').textContent = `${pecasFiltradas.length} itens`;
     atualizarBotao();
@@ -251,7 +251,7 @@
       var infoCol = document.createElement('div');
       infoCol.className = 'label-info-col';
       var loc = p.localização || p.localizacao || '';
-      infoCol.innerHTML = (cfg.logo  '<img src="' + cfg.logo + '" class="label-logo" alt="Logo">'
+      infoCol.innerHTML = (cfg.logo ? '<img src="' + cfg.logo + '" class="label-logo" alt="Logo">'
         : '<div style="font-size:7pt;font-weight:700;color:#1e3a5f;margin-bottom:2mm">' + Utils.safe(cfg.empresa || 'Atlas PCM') + '</div>')
         + '<div class="label-nome">' + Utils.safe(p.nome) + '</div>'
         + '<div class="label-codigo">' + Utils.safe(p.codigo) + '</div>'
