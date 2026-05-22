@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>Retirada de Material â€” Atlas PCM</title> <style> :root {
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>Retirada de Material — Atlas PCM</title> <style> :root {
       --primary: #1B3A8A;
       --primary-dark: #101827;
       --brand-blue: #1B3A8A;
@@ -129,27 +129,27 @@
     @media (min-width: 500px) {
       .rt-body { padding: 24px 20px; }
     }
-  </style> <link rel="stylesheet" href="atlas-industrial.css?v=1"> </head> <body> <div class="rt-header"> <div class="rt-logo" id="rt-logo-img-wrap"></div> <div class="rt-header-text"> <div class="title">ATLAS PCM</div> <div class="sub" id="rt-sub">Retirada de Material</div> </div> </div> <div class="rt-body" id="rt-body"> <!-- TELA 1: IdentificaÃ§Ã£o do usuÃ¡rio --> <div class="rt-screen active" id="tela-login"> <div class="rt-card"> <div class="rt-card-title"> IdentificaÃ§Ã£o</div> <label class="rt-label">Seu nome ou cÃ³digo de usuÃ¡rio</label> <input class="rt-input rt-input-lg" type="text" id="inp-usuario" placeholder="Ex: JOAO ou 1234"
+  </style> <link rel="stylesheet" href="style.css?v=5"> </head> <body> <div class="rt-header"> <div class="rt-logo" id="rt-logo-img-wrap"></div> <div class="rt-header-text"> <div class="title">ATLAS PCM</div> <div class="sub" id="rt-sub">Retirada de Material</div> </div> </div> <div class="rt-body" id="rt-body"> <!-- TELA 1: Identificação do usuário --> <div class="rt-screen active" id="tela-login"> <div class="rt-card"> <div class="rt-card-title"> Identificação</div> <label class="rt-label">Seu nome ou código de usuário</label> <input class="rt-input rt-input-lg" type="text" id="inp-usuario" placeholder="Ex: JOAO ou 1234"
         autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
-        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')confirmarUsuario()"> <div style="margin-top:12px"> <button class="rt-btn rt-btn-primary" onclick="confirmarUsuario()">âœ… Continuar</button> </div> </div> <div style="font-size:12px;color:var(--text-muted);text-align:center"> Acesso exclusivo para retirada de materiais.<br> Para acesso ao sistema completo, use a <a href="index.html" style="color:var(--primary)">tela de login</a>.
-    </div> </div> <!-- TELA 1.5: Informar OS / Ativo (opcional) --> <div class="rt-screen" id="tela-os"> <div class="rt-card"> <div class="rt-card-title"> Ordem de ServiÃ§o / Ativo</div> <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px"> Opcional: Informe a OS ou ativo para associar Ã  retirada (ex: OS-0042 ou CMP-001).
-      </div> <label class="rt-label">OS / Ativo</label> <div class="rt-select-wrap" style="margin-bottom:14px"> <input class="rt-input" type="text" id="inp-os-global" placeholder="Ex: OS-0042 ou Compressor 001 â€” DescriÃ§Ã£o"
-          autocomplete="off" oninput="buscarAtivoGlobal()" onkeydown="navegarAtivoGlobal(event)" onblur="setTimeout(()=>fecharAtivosGlobal(),200)"> <div class="rt-select-res" id="ativo-global-res" style="display:none"></div> </div> <div style="display:flex;gap:10px"> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="pularOS()">Pular</button> <button class="rt-btn rt-btn-primary" onclick="confirmarOS()">âœ… Continuar</button> </div> </div> </div> <!-- TELA 2: Item (via QR ou busca manual) + adicionar ao carrinho --> <div class="rt-screen" id="tela-item"> <!-- Info do usuÃ¡rio logado --> <div style="display:flex;align-items:center;justify-content:space-between"> <span style="font-size:13px;color:var(--text-muted)">Operador: <strong id="rt-nome-usuario" style="color:var(--primary)">â€”</strong></span> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="voltarLogin()" style="width:auto">â¬… Sair</button> </div> <!-- Item carregado via QR --> <div id="bloco-item-qr" style="display:none"> <div class="rt-item-card" id="item-card"> <div class="rt-item-nome" id="item-nome">â€”</div> <div class="rt-item-codigo" id="item-codigo">â€”</div> <div class="rt-item-loc" id="item-loc"></div> <div class="rt-item-saldo"> <span style="opacity:.75;font-size:13px">Saldo atual:</span> <span class="rt-saldo-val" id="item-saldo">â€”</span> <span style="opacity:.75;font-size:13px" id="item-unidade"></span> <span id="item-status-badge" style="margin-left:auto"></span> </div> </div> <div class="rt-card"> <div class="rt-card-title"> Quantidade a retirar</div> <div class="rt-stepper" style="margin-bottom:14px"> <button onclick="stepQtd(-1)">âˆ’</button> <input type="number" id="inp-qtd" value="1" min="1" max="9999"> <button onclick="stepQtd(1)">+</button> </div> <label class="rt-label">Ordem de ServiÃ§o / MÃ¡quina (TAG ou descriÃ§Ã£o)</label> <div class="rt-select-wrap" style="margin-bottom:14px"> <input class="rt-input" type="text" id="inp-os" placeholder="Ex: OS-0042 ou CMP-001 â€” Compressor"
-            autocomplete="off" oninput="buscarAtivo()" onkeydown="navegarAtivo(event)" onblur="setTimeout(()=>fecharAtivos(),200)"> <div class="rt-select-res" id="ativo-res" style="display:none"></div> </div> <button class="rt-btn rt-btn-success" onclick="adicionarAoCarrinho()">âž• Adicionar ao carrinho</button> </div> </div> <!-- Busca manual --> <div class="rt-card"> <div class="rt-card-title"> Buscar outro item</div> <div style="display:flex;gap:8px;align-items:stretch;margin-bottom:10px"> <input class="rt-input" type="text" id="inp-busca-peca" placeholder="Digite o cÃ³digo ou nome da peÃ§a..."
-          autocomplete="off" oninput="buscarPecaManual()" style="flex:1"> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="escanearQR()" style="white-space:nowrap"> QR</button> </div> <div id="busca-res" style="margin-top:10px"></div> </div> <!-- Carrinho --> <div class="rt-card" id="bloco-carrinho" style="display:none"> <div class="rt-card-title" style="justify-content:space-between"> <span> Carrinho (<span id="carrinho-qtd">0</span> item(ns))</span> </div> <div class="rt-lista-itens" id="carrinho-lista"></div> <div style="margin-top:14px"> <button class="rt-btn rt-btn-primary" onclick="confirmarRetirada()">âœ… Confirmar Retirada</button> </div> </div> </div> <!-- TELA 3: Sucesso --> <div class="rt-screen" id="tela-sucesso"> <div class="rt-card" style="text-align:center;padding:32px 20px"> <div class="rt-success-icon">âœ…</div> <div class="rt-success-title">Retirada Registrada!</div> <div class="rt-success-sub" id="sucesso-msg">SaÃ­da registrada com sucesso no sistema.</div> <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px"> <button class="rt-btn rt-btn-primary" onclick="novaRetirada()"> Nova Retirada</button> </div> </div> </div> </div> <div id="rt-toast"></div> <script> /* â”€â”€ ComunicaÃ§Ã£o com a API (sem db.js â€” sem login) â”€â”€ */
+        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')confirmarUsuario()"> <div style="margin-top:12px"> <button class="rt-btn rt-btn-primary" onclick="confirmarUsuario()">✅ Continuar</button> </div> </div> <div style="font-size:12px;color:var(--text-muted);text-align:center"> Acesso exclusivo para retirada de materiais.<br> Para acesso ao sistema completo, use a <a href="index.html" style="color:var(--primary)">tela de login</a>.
+    </div> </div> <!-- TELA 1.5: Informar OS / Ativo (opcional) --> <div class="rt-screen" id="tela-os"> <div class="rt-card"> <div class="rt-card-title"> Ordem de Serviço / Ativo</div> <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px"> Opcional: Informe a OS ou ativo para associar à retirada (ex: OS-0042 ou CMP-001).
+      </div> <label class="rt-label">OS / Ativo</label> <div class="rt-select-wrap" style="margin-bottom:14px"> <input class="rt-input" type="text" id="inp-os-global" placeholder="Ex: OS-0042 ou Compressor 001 — Descrição"
+          autocomplete="off" oninput="buscarAtivoGlobal()" onkeydown="navegarAtivoGlobal(event)" onblur="setTimeout(()=>fecharAtivosGlobal(),200)"> <div class="rt-select-res" id="ativo-global-res" style="display:none"></div> </div> <div style="display:flex;gap:10px"> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="pularOS()">Pular</button> <button class="rt-btn rt-btn-primary" onclick="confirmarOS()">✅ Continuar</button> </div> </div> </div> <!-- TELA 2: Item (via QR ou busca manual) + adicionar ao carrinho --> <div class="rt-screen" id="tela-item"> <!-- Info do usuário logado --> <div style="display:flex;align-items:center;justify-content:space-between"> <span style="font-size:13px;color:var(--text-muted)">Operador: <strong id="rt-nome-usuario" style="color:var(--primary)">—</strong></span> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="voltarLogin()" style="width:auto">⬅ Sair</button> </div> <!-- Item carregado via QR --> <div id="bloco-item-qr" style="display:none"> <div class="rt-item-card" id="item-card"> <div class="rt-item-nome" id="item-nome">—</div> <div class="rt-item-codigo" id="item-codigo">—</div> <div class="rt-item-loc" id="item-loc"></div> <div class="rt-item-saldo"> <span style="opacity:.75;font-size:13px">Saldo atual:</span> <span class="rt-saldo-val" id="item-saldo">—</span> <span style="opacity:.75;font-size:13px" id="item-unidade"></span> <span id="item-status-badge" style="margin-left:auto"></span> </div> </div> <div class="rt-card"> <div class="rt-card-title"> Quantidade a retirar</div> <div class="rt-stepper" style="margin-bottom:14px"> <button onclick="stepQtd(-1)">−</button> <input type="number" id="inp-qtd" value="1" min="1" max="9999"> <button onclick="stepQtd(1)">+</button> </div> <label class="rt-label">Ordem de Serviço / Máquina (TAG ou descrição)</label> <div class="rt-select-wrap" style="margin-bottom:14px"> <input class="rt-input" type="text" id="inp-os" placeholder="Ex: OS-0042 ou CMP-001 — Compressor"
+            autocomplete="off" oninput="buscarAtivo()" onkeydown="navegarAtivo(event)" onblur="setTimeout(()=>fecharAtivos(),200)"> <div class="rt-select-res" id="ativo-res" style="display:none"></div> </div> <button class="rt-btn rt-btn-success" onclick="adicionarAoCarrinho()">➕ Adicionar ao carrinho</button> </div> </div> <!-- Busca manual --> <div class="rt-card"> <div class="rt-card-title"> Buscar outro item</div> <div style="display:flex;gap:8px;align-items:stretch;margin-bottom:10px"> <input class="rt-input" type="text" id="inp-busca-peca" placeholder="Digite o código ou nome da peça..."
+          autocomplete="off" oninput="buscarPecaManual()" style="flex:1"> <button class="rt-btn rt-btn-secondary rt-btn-sm" onclick="escanearQR()" style="white-space:nowrap"> QR</button> </div> <div id="busca-res" style="margin-top:10px"></div> </div> <!-- Carrinho --> <div class="rt-card" id="bloco-carrinho" style="display:none"> <div class="rt-card-title" style="justify-content:space-between"> <span> Carrinho (<span id="carrinho-qtd">0</span> item(ns))</span> </div> <div class="rt-lista-itens" id="carrinho-lista"></div> <div style="margin-top:14px"> <button class="rt-btn rt-btn-primary" onclick="confirmarRetirada()">✅ Confirmar Retirada</button> </div> </div> </div> <!-- TELA 3: Sucesso --> <div class="rt-screen" id="tela-sucesso"> <div class="rt-card" style="text-align:center;padding:32px 20px"> <div class="rt-success-icon">✅</div> <div class="rt-success-title">Retirada Registrada!</div> <div class="rt-success-sub" id="sucesso-msg">Saída registrada com sucesso no sistema.</div> <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px"> <button class="rt-btn rt-btn-primary" onclick="novaRetirada()"> Nova Retirada</button> </div> </div> </div> </div> <div id="rt-toast"></div> <script> /* ── Comunicação com a API (sem db.js — sem login) ── */
 const API = '/api';
 let _store = { pecas: [], movimentos: [], ativos: [], config: {}, usuarios_retirada: [] };
-let _usuarioAtual = null; // { id, nome } do usuÃ¡rio de retirada
-let _itemAtual    = null; // peÃ§a carregada via QR
+let _usuarioAtual = null; // { id, nome } do usuário de retirada
+let _itemAtual    = null; // peça carregada via QR
 let _carrinho     = [];   // [{ peca, qtd, os, ativoId }]
 let _saldos       = {};   // { [pecaId]: saldo }
-let _ativoHi      = -1;   // Ã­ndice selecionado na lista de ativos
+let _ativoHi      = -1;   // índice selecionado na lista de ativos
 let _ativoOpts    = [];   // ativos filtrados pelo campo OS
 let _osGlobal     = null; // { tag, descricao, id } ou string
 let _ativoGlobalHi = -1;
 let _ativoGlobalOpts = [];
 
-/* â”€â”€ Toast â”€â”€ */
+/* ── Toast ── */
 function toast(msg, tipo) {
   var el = document.getElementById('rt-toast');
   el.textContent = msg;
@@ -158,14 +158,14 @@ function toast(msg, tipo) {
   setTimeout(function() { el.classList.remove('show'); }, 2800);
 }
 
-/* â”€â”€ Tela â”€â”€ */
+/* ── Tela ── */
 function mostrarTela(id) {
   document.querySelectorAll('.rt-screen').forEach(function(s) { s.classList.remove('active'); });
   var t = document.getElementById(id);
   if (t) { t.classList.add('active'); window.scrollTo(0, 0); }
 }
 
-/* â”€â”€ Init â”€â”€ */
+/* ── Init ── */
 async function init() {
   try {
     const r = await fetch(API + '/retirada-init', { credentials: 'same-origin' });
@@ -190,17 +190,17 @@ async function init() {
       wrap.innerHTML = '<img src="' + _store.config.logo + '" style="width:38px;height:38px;border-radius:10px;object-fit:contain;">';
     }
     if (_store.config.empresa) {
-      document.getElementById('rt-sub').textContent = _store.config.empresa + ' â€” Retirada';
+      document.getElementById('rt-sub').textContent = _store.config.empresa + ' — Retirada';
     }
 
-    // Verifica parÃ¢metro id= (QR code)
+    // Verifica parâmetro id= (QR code)
     var params = new URLSearchParams(window.location.search);
     var pecaId  = params.get('id');
     if (pecaId) {
       var p = _store.pecas.find(function(x) { return x.id === pecaId; });
       if (p) {
         _itemAtual = p;
-        // Vamos carregar o item apÃ³s o login
+        // Vamos carregar o item após o login
       }
     }
   } catch(e) {
@@ -208,12 +208,12 @@ async function init() {
   }
 }
 
-/* â”€â”€ Login â”€â”€ */
+/* ── Login ── */
 function confirmarUsuario() {
   var val = (document.getElementById('inp-usuario').value || '').trim();
-  if (!val) { toast('Informe seu nome ou cÃ³digo', 'error'); return; }
+  if (!val) { toast('Informe seu nome ou código', 'error'); return; }
 
-  // Verifica contra lista de usuÃ¡rios de retirada
+  // Verifica contra lista de usuários de retirada
   var lista = _store.usuarios_retirada || [];
   if (lista.length > 0) {
     var encontrado = lista.find(function(u) {
@@ -223,12 +223,12 @@ function confirmarUsuario() {
       );
     });
     if (!encontrado) {
-      toast('UsuÃ¡rio nÃ£o autorizado. Contate o almoxarifado.', 'error');
+      toast('Usuário não autorizado. Contate o almoxarifado.', 'error');
       return;
     }
     _usuarioAtual = { id: encontrado.id, nome: encontrado.nome };
   } else {
-    toast('Nenhum usuÃ¡rio de retirada autorizado foi configurado.', 'error');
+    toast('Nenhum usuário de retirada autorizado foi configurado.', 'error');
     return;
   }
 
@@ -253,7 +253,7 @@ function voltarLogin() {
   mostrarTela('tela-login');
 }
 
-/* â”€â”€ Carregar item no painel â”€â”€ */
+/* ── Carregar item no painel ── */
 function carregarItem(p) {
   _itemAtual = p;
   var saldo = _saldos[p.id] || 0;
@@ -273,7 +273,7 @@ function carregarItem(p) {
     if (typeof _osGlobal === 'string') {
       document.getElementById('inp-os').value = _osGlobal;
     } else {
-      document.getElementById('inp-os').value = _osGlobal.tag + ' â€” ' + _osGlobal.descricao;
+      document.getElementById('inp-os').value = _osGlobal.tag + ' — ' + _osGlobal.descricao;
       document.getElementById('inp-os').dataset.ativoId = _osGlobal.id;
     }
   } else {
@@ -287,7 +287,7 @@ function carregarItem(p) {
   window.scrollTo(0, 0);
 }
 
-/* â”€â”€ Stepper de quantidade â”€â”€ */
+/* ── Stepper de quantidade ── */
 function stepQtd(delta) {
   var el = document.getElementById('inp-qtd');
   var v = parseInt(el.value) || 1;
@@ -295,7 +295,7 @@ function stepQtd(delta) {
   el.value = v;
 }
 
-/* â”€â”€ Busca de ativo / OS â”€â”€ */
+/* ── Busca de ativo / OS ── */
 function buscarAtivo() {
   var val = (document.getElementById('inp-os').value || '').toLowerCase().trim();
   var res = document.getElementById('ativo-res');
@@ -312,7 +312,7 @@ function buscarAtivo() {
   res.style.display = '';
   res.innerHTML = _ativoOpts.map(function(a, i) {
     return '<div class="opt" data-i="' + i + '" onclick="selecionarAtivo(' + i + ')">' +
-      '<strong>' + escHtml(a.tag) + '</strong> â€” ' + escHtml(a.descricao) +
+      '<strong>' + escHtml(a.tag) + '</strong> — ' + escHtml(a.descricao) +
       (a.setor ? ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
       '</div>';
   }).join('');
@@ -331,7 +331,7 @@ function navegarAtivo(e) {
 function selecionarAtivo(i) {
   var a = _ativoOpts[i];
   if (!a) return;
-  document.getElementById('inp-os').value = a.tag + ' â€” ' + a.descricao;
+  document.getElementById('inp-os').value = a.tag + ' — ' + a.descricao;
   document.getElementById('inp-os').dataset.ativoId = a.id;
   fecharAtivos();
 }
@@ -340,7 +340,7 @@ function fecharAtivos() {
   document.getElementById('ativo-res').style.display = 'none';
 }
 
-/* â”€â”€ Busca de ativo GLOBAL â”€â”€ */
+/* ── Busca de ativo GLOBAL ── */
 function buscarAtivoGlobal() {
   var val = (document.getElementById('inp-os-global').value || '').toLowerCase().trim();
   var res = document.getElementById('ativo-global-res');
@@ -357,7 +357,7 @@ function buscarAtivoGlobal() {
   res.style.display = '';
   res.innerHTML = _ativoGlobalOpts.map(function(a, i) {
     return '<div class="opt" data-i="' + i + '" onclick="selecionarAtivoGlobal(' + i + ')">' +
-      '<strong>' + escHtml(a.tag) + '</strong> â€” ' + escHtml(a.descricao) +
+      '<strong>' + escHtml(a.tag) + '</strong> — ' + escHtml(a.descricao) +
       (a.setor ? ' <span style="font-size:11px;color:#94a3b8">(' + escHtml(a.setor) + ')</span>' : '') +
       '</div>';
   }).join('');
@@ -376,7 +376,7 @@ function navegarAtivoGlobal(e) {
 function selecionarAtivoGlobal(i) {
   var a = _ativoGlobalOpts[i];
   if (!a) return;
-  document.getElementById('inp-os-global').value = a.tag + ' â€” ' + a.descricao;
+  document.getElementById('inp-os-global').value = a.tag + ' — ' + a.descricao;
   _osGlobal = { tag: a.tag, descricao: a.descricao, id: a.id };
   fecharAtivosGlobal();
 }
@@ -396,8 +396,8 @@ function pularOS() {
 function confirmarOS() {
   var val = document.getElementById('inp-os-global').value.trim();
   if (val) {
-    if (_osGlobal && _osGlobal.tag + ' â€” ' + _osGlobal.descricao === val) {
-      // JÃ¡ selecionado
+    if (_osGlobal && _osGlobal.tag + ' — ' + _osGlobal.descricao === val) {
+      // Já selecionado
     } else {
       _osGlobal = val; // string simples
     }
@@ -409,32 +409,32 @@ function confirmarOS() {
   if (_itemAtual) carregarItem(_itemAtual);
 }
 
-/* â”€â”€ Adicionar ao carrinho â”€â”€ */
+/* ── Adicionar ao carrinho ── */
 function adicionarAoCarrinho() {
   if (!_itemAtual) { toast('Nenhum item selecionado', 'error'); return; }
   var qtd = parseInt(document.getElementById('inp-qtd').value) || 0;
-  if (qtd <= 0) { toast('Quantidade invÃ¡lida', 'error'); return; }
+  if (qtd <= 0) { toast('Quantidade inválida', 'error'); return; }
   var osVal = document.getElementById('inp-os').value.trim();
   var ativoId = document.getElementById('inp-os').dataset.ativoId || '';
   if (!osVal && _osGlobal) {
     if (typeof _osGlobal === 'string') {
       osVal = _osGlobal;
     } else {
-      osVal = _osGlobal.tag + ' â€” ' + _osGlobal.descricao;
+      osVal = _osGlobal.tag + ' — ' + _osGlobal.descricao;
       ativoId = _osGlobal.id;
     }
   }
   // Verificar saldo
   var saldo = _saldos[_itemAtual.id] || 0;
   if (qtd > saldo) {
-    toast('Quantidade maior que o saldo disponÃ­vel (' + saldo + ')', 'error');
+    toast('Quantidade maior que o saldo disponível (' + saldo + ')', 'error');
     return;
   }
-  // Se jÃ¡ no carrinho, somar
+  // Se já no carrinho, somar
   var existe = _carrinho.find(function(c) { return c.peca.id === _itemAtual.id; });
   if (existe) {
     var novaQtd = existe.qtd + qtd;
-    if (novaQtd > saldo) { toast('Total excede o saldo disponÃ­vel (' + saldo + ')', 'error'); return; }
+    if (novaQtd > saldo) { toast('Total excede o saldo disponível (' + saldo + ')', 'error'); return; }
     existe.qtd = novaQtd;
     if (osVal) { existe.os = osVal; existe.ativoId = ativoId; }
   } else {
@@ -472,10 +472,10 @@ function atualizarCarrinho() {
   }).join('');
 }
 
-/* â”€â”€ Confirmar retirada â”€â”€ */
+/* ── Confirmar retirada ── */
 async function confirmarRetirada() {
   if (!_carrinho.length) { toast('Carrinho vazio', 'error'); return; }
-  var usuario = _usuarioAtual || { id: 'anonimo', nome: 'AnÃ´nimo' };
+  var usuario = _usuarioAtual || { id: 'anonimo', nome: 'Anônimo' };
   var erros = 0;
   for (var c of _carrinho) {
     try {
@@ -513,7 +513,7 @@ async function confirmarRetirada() {
   mostrarTela('tela-sucesso');
 }
 
-/* â”€â”€ Nova retirada â”€â”€ */
+/* ── Nova retirada ── */
 function novaRetirada() {
   _itemAtual = null;
   _carrinho = [];
@@ -525,7 +525,7 @@ function novaRetirada() {
   mostrarTela('tela-item');
 }
 
-/* â”€â”€ Busca manual de peÃ§a â”€â”€ */
+/* ── Busca manual de peça ── */
 function buscarPecaManual() {
   var val = (document.getElementById('inp-busca-peca').value || '').toLowerCase().trim();
   var res = document.getElementById('busca-res');
@@ -536,7 +536,7 @@ function buscarPecaManual() {
       (p.nome   || '').toLowerCase().includes(val)
     );
   }).slice(0, 10);
-  if (!matches.length) { res.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:10px 0">Nenhuma peÃ§a encontrada</div>'; return; }
+  if (!matches.length) { res.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:10px 0">Nenhuma peça encontrada</div>'; return; }
   res.innerHTML = '<div class="rt-busca-res">' + matches.map(function(p) {
     var saldo = _saldos[p.id] || 0;
     var st = saldo <= 0 ? 'critical' : (p.estoqueMinimo && saldo < p.estoqueMinimo ? 'low' : 'ok');
@@ -556,27 +556,27 @@ function selecionarPecaBusca(id) {
   carregarItem(p);
 }
 
-/* â”€â”€ Escanear QR â”€â”€ */
+/* ── Escanear QR ── */
 function escanearQR() {
   var url = prompt('Cole a URL do QR code escaneado (ex: http://localhost:8080/retirada.htmlid=peca123):');
   if (!url) return;
   try {
     var parsed = new URL(url);
     var pecaId = parsed.searchParams.get('id');
-    if (!pecaId) { toast('URL invÃ¡lida â€” nÃ£o contÃ©m id=', 'error'); return; }
+    if (!pecaId) { toast('URL inválida — não contém id=', 'error'); return; }
     var p = (_store.pecas || []).find(function(x) { return x.id === pecaId; });
-    if (!p) { toast('PeÃ§a nÃ£o encontrada', 'error'); return; }
+    if (!p) { toast('Peça não encontrada', 'error'); return; }
     carregarItem(p);
   } catch(e) {
-    toast('URL invÃ¡lida', 'error');
+    toast('URL inválida', 'error');
   }
 }
 
-/* â”€â”€ Utils â”€â”€ */
+/* ── Utils ── */
 function escHtml(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* â”€â”€ Start â”€â”€ */
+/* ── Start ── */
 init();
 </script> </body> </html> 

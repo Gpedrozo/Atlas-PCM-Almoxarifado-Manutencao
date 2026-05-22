@@ -1,6 +1,6 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Ativos - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <style> .ativo-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; }
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Ativos - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <style> .ativo-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; }
     .ativo-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; transition:box-shadow .15s; }
     .ativo-card:hover { box-shadow: 0 4px 16px rgba(30,58,95,.12); }
     .ativo-card-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
@@ -18,36 +18,36 @@
 <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">GestÃ£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÃ§Ãµes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÃ§as</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">AnÃ¡lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÃ³rios</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>AdministraÃ§Ã£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÃ§Ãµes</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÃ§Ãµes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> UsuÃ¡rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">â€¦</div>
-    <div class="user-role" id="sidebar-user-role">â€¦</div>
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTEÃšDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title">Cadastro de Ativos</div> <div class="topbar-subtitle">MÃ¡quinas e equipamentos vinculados ao almoxarifado</div> </div> <div class="topbar-actions"> <button class="btn btn-primary" onclick="abrirModal()">+ Novo Ativo</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- Filtros --> <div class="card" style="padding:14px 20px;margin-bottom:16px"> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="busca-ativo" placeholder="Buscar por TAG, descriÃ§Ã£o, setor..." oninput="renderAtivos()"> </div> <select id="filtro-status" onchange="renderAtivos()" style="padding:7px 12px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text)"> <option value="ativos">Apenas Ativos</option> <option value="todos">Todos</option> <option value="inativos">Apenas Inativo</option> </select> </div> </div> <!-- Grid de ativos --> <div class="ativo-grid" id="grid-ativos"></div> <div id="empty-ativos" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhum ativo cadastrado</p> <button class="btn btn-primary" onclick="abrirModal()">+ Cadastrar Ativo</button> </div> </div> </div>
-</div> <!-- MODAL CADASTRO/EDIÃ‡ÃƒO -->
-<div class="modal-overlay" id="modal-ativo" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:560px"> <div class="modal-header"> <div class="modal-title" id="modal-ativo-titulo">Novo Ativo</div> <button class="modal-close" onclick="Utils.fecharModal('modal-ativo')"></button> </div> <form id="form-ativo" onsubmit="salvarAtivo(event)" autocomplete="off"> <input type="hidden" id="at-id"> <div class="form-grid"> <div class="form-group"> <label>TAG do Ativo *</label> <input type="text" id="at-tag" required placeholder="ex: CMP-001" style="font-family:monospace;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"> <div class="form-hint">CÃ³digo Ãºnico de identificaÃ§Ã£o da mÃ¡quina</div> </div> <div class="form-group"> <label>Setor / LocalizaÃ§Ã£o *</label> <input type="text" id="at-setor" required placeholder="ex: Usinagem, Utilidades..."> </div> <div class="form-group full"> <label>DescriÃ§Ã£o do Ativo *</label> <input type="text" id="at-descricao" required placeholder="Nome completo da mÃ¡quina/equipamento"> </div> <div class="form-group"> <label>Fabricante</label> <input type="text" id="at-fabricante" placeholder="ex: SKF, Siemens..."> </div> <div class="form-group"> <label>Modelo</label> <input type="text" id="at-modelo" placeholder="ex: GA11, D600..."> </div> <div class="form-group"> <label>NÃºmero de SÃ©rie</label> <input type="text" id="at-serie" placeholder="NÃºmero de sÃ©rie (opcional)"> </div> <div class="form-group"> <label>Status</label> <select id="at-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> <div class="form-group full"> <label>ObservaÃ§Ãµes</label> <textarea id="at-obs" rows="2" placeholder="InformaÃ§Ãµes adicionais..."></textarea> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-ativo')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar</button> </div> </form> </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title">Cadastro de Ativos</div> <div class="topbar-subtitle">Máquinas e equipamentos vinculados ao almoxarifado</div> </div> <div class="topbar-actions"> <button class="btn btn-primary" onclick="abrirModal()">+ Novo Ativo</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- Filtros --> <div class="card" style="padding:14px 20px;margin-bottom:16px"> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"> <div class="search-bar" style="flex:1;min-width:200px"> <input type="text" id="busca-ativo" placeholder="Buscar por TAG, descrição, setor..." oninput="renderAtivos()"> </div> <select id="filtro-status" onchange="renderAtivos()" style="padding:7px 12px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text)"> <option value="ativos">Apenas Ativos</option> <option value="todos">Todos</option> <option value="inativos">Apenas Inativo</option> </select> </div> </div> <!-- Grid de ativos --> <div class="ativo-grid" id="grid-ativos"></div> <div id="empty-ativos" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhum ativo cadastrado</p> <button class="btn btn-primary" onclick="abrirModal()">+ Cadastrar Ativo</button> </div> </div> </div>
+</div> <!-- MODAL CADASTRO/EDIÇÃO -->
+<div class="modal-overlay" id="modal-ativo" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:560px"> <div class="modal-header"> <div class="modal-title" id="modal-ativo-titulo">Novo Ativo</div> <button class="modal-close" onclick="Utils.fecharModal('modal-ativo')"></button> </div> <form id="form-ativo" onsubmit="salvarAtivo(event)" autocomplete="off"> <input type="hidden" id="at-id"> <div class="form-grid"> <div class="form-group"> <label>TAG do Ativo *</label> <input type="text" id="at-tag" required placeholder="ex: CMP-001" style="font-family:monospace;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"> <div class="form-hint">Código único de identificação da máquina</div> </div> <div class="form-group"> <label>Setor / Localização *</label> <input type="text" id="at-setor" required placeholder="ex: Usinagem, Utilidades..."> </div> <div class="form-group full"> <label>Descrição do Ativo *</label> <input type="text" id="at-descricao" required placeholder="Nome completo da máquina/equipamento"> </div> <div class="form-group"> <label>Fabricante</label> <input type="text" id="at-fabricante" placeholder="ex: SKF, Siemens..."> </div> <div class="form-group"> <label>Modelo</label> <input type="text" id="at-modelo" placeholder="ex: GA11, D600..."> </div> <div class="form-group"> <label>Número de Série</label> <input type="text" id="at-serie" placeholder="Número de série (opcional)"> </div> <div class="form-group"> <label>Status</label> <select id="at-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> <div class="form-group full"> <label>Observações</label> <textarea id="at-obs" rows="2" placeholder="Informações adicionais..."></textarea> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-ativo')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar</button> </div> </form> </div>
 </div> <!-- MODAL DETALHES / CONSUMO -->
 <div class="modal-overlay" id="modal-consumo" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:680px"> <div class="modal-header"> <div class="modal-title" id="consumo-titulo">Materiais Consumidos</div> <button class="modal-close" onclick="Utils.fecharModal('modal-consumo')"></button> </div> <div id="consumo-body" style="max-height:65vh;overflow-y:auto"></div> <div class="modal-footer"> <button class="btn btn-secondary" onclick="Utils.fecharModal('modal-consumo')">Fechar</button> </div> </div>
 </div> <script src="db.js"></script>
@@ -117,10 +117,10 @@
         + '<div class="ativo-meta-item"><span class="ativo-meta-label">Setor</span><span class="ativo-meta-val">' + Utils.safe(a.setor||'-') + '</span></div>'
         + '<div class="ativo-meta-item"><span class="ativo-meta-label">Fabricante</span><span class="ativo-meta-val">' + Utils.safe(a.fabricante||'-') + '</span></div>'
         + '<div class="ativo-meta-item"><span class="ativo-meta-label">Modelo</span><span class="ativo-meta-val">' + Utils.safe(a.modelo||'-') + '</span></div>'
-        + '<div class="ativo-meta-item"><span class="ativo-meta-label">NÂº SÃ©rie</span><span class="ativo-meta-val">' + Utils.safe(a.serie||'-') + '</span></div>'
+        + '<div class="ativo-meta-item"><span class="ativo-meta-label">Nº Série</span><span class="ativo-meta-val">' + Utils.safe(a.serie||'-') + '</span></div>'
         + '</div>'
         + '<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">'
-        + '<span class="ativo-consumo-badge"> ' + nmovs + ' mov. de saÃ­da</span>'
+        + '<span class="ativo-consumo-badge"> ' + nmovs + ' mov. de saída</span>'
         + (valor > 0 ? '<span class="ativo-consumo-badge"> ' + Utils.fmtMoeda(valor) + ' consumido</span>' : '')
         + '</div>'
         + '<div class="ativo-actions">'
@@ -166,7 +166,7 @@
     // Verificar tag duplicada
     var existente = DB.Ativos.buscarTag(tag);
     if (existente && existente.id !== id) {
-      Utils.toast('JÃ¡ existe um ativo com esta TAG.', 'error');
+      Utils.toast('Já existe um ativo com esta TAG.', 'error');
       return;
     }
 
@@ -187,7 +187,7 @@
   }
 
   function inativarAtivo(id) {
-    if (!confirm('Inativar este ativoEle nÃ£o aparecerÃ¡ mais nas novas movimentaÃ§Ãµes.')) return;
+    if (!confirm('Inativar este ativoEle não aparecerá mais nas novas movimentações.')) return;
     DB.Ativos.remover(id);
     Utils.toast('Ativo inativado.', 'warning');
     renderAtivos();
@@ -209,7 +209,7 @@
     var pecasMap = {};
     DB.Pecas.listar().forEach(function(p){ pecasMap[p.id] = p; });
 
-    // Agrupar por peÃ§a
+    // Agrupar por peça
     var porPeca = {};
     var valorTotal = 0;
     movs.forEach(function(m) {
@@ -247,13 +247,13 @@
 
       document.getElementById('consumo-body').innerHTML =
         '<div style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap">'
-        + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val">' + movs.length + '</div><div class="sumario-kpi-lbl">MovimentaÃ§Ãµes</div></div>'
+        + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val">' + movs.length + '</div><div class="sumario-kpi-lbl">Movimentações</div></div>'
         + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val">' + Object.keys(porPeca).length + '</div><div class="sumario-kpi-lbl">Tipos de Materiais</div></div>'
         + '<div class="sumario-kpi" style="flex:1;min-width:120px"><div class="sumario-kpi-val" style="font-size:16px">' + Utils.fmtMoeda(valorTotal) + '</div><div class="sumario-kpi-lbl">Valor Total Consumido</div></div>'
         + '</div>'
         + '<div class="card-title" style="margin-bottom:10px">Resumo por Material</div>'
-        + '<div class="table-wrapper" style="margin-bottom:20px"><table><thead><tr><th>CÃ³digo</th><th>Material</th><th style="text-align:center">Qtd. Total</th><th style="text-align:right">Valor</th></tr></thead><tbody>' + rows.join('') + '</tbody></table></div>'
-        + '<div class="card-title" style="margin-bottom:8px">Ãšltimas 10 MovimentaÃ§Ãµes</div>'
+        + '<div class="table-wrapper" style="margin-bottom:20px"><table><thead><tr><th>Código</th><th>Material</th><th style="text-align:center">Qtd. Total</th><th style="text-align:right">Valor</th></tr></thead><tbody>' + rows.join('') + '</tbody></table></div>'
+        + '<div class="card-title" style="margin-bottom:8px">Últimas 10 Movimentações</div>'
         + ultimasMovs;
     }
     Utils.abrirModal('modal-consumo');

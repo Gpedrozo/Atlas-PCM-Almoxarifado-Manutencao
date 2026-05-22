@@ -1,4 +1,4 @@
-Ôªø<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Etiquetas - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script> <style> .etiqueta-topbar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Etiquetas - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script> <style> .etiqueta-topbar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
     .etiqueta-info { font-size:12.5px; color:var(--text-muted); }
     .etiqueta-grid-screen { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; }
     .etiqueta-item-screen { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all .15s; }
@@ -11,7 +11,7 @@
     .etiqueta-item-screen .loc { font-size:11px; color:var(--text-muted); }
     .filtro-cat { padding:7px 12px; font-size:13px; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); }
 
-    /* ===== ETIQUETA: estilos base (compartilhados tela/impress√£o) ===== */
+    /* ===== ETIQUETA: estilos base (compartilhados tela/impress„o) ===== */
     #area-impressao { display: none; }
 
     .label-item {
@@ -54,7 +54,7 @@
     .label-loc { font-size: 6pt; color: #666; margin-top: 0.5mm; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .label-empresa { font-size: 5.5pt; color: #888; margin-top: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* ===== IMPRESS√ÉO ===== */
+    /* ===== IMPRESS√O ===== */
     @media print {
       @page {
         size: A4;
@@ -91,10 +91,10 @@
         box-shadow: none !important;
       }
 
-      /* Grade de impress√£o:
-         A4 = 210mm. @page margin 5mm cada lado => 200mm √∫teis.
-         3 colunas √ó 60mm = 180mm + 2 gaps √ó 3mm = 186mm  cabe em 200mm.
-         Sem padding extra (a margem da @page j√° cuida das bordas). */
+      /* Grade de impress„o:
+         A4 = 210mm. @page margin 5mm cada lado => 200mm ˙teis.
+         3 colunas ◊ 60mm = 180mm + 2 gaps ◊ 3mm = 186mm  cabe em 200mm.
+         Sem padding extra (a margem da @page j· cuida das bordas). */
       #area-impressao {
         display: grid !important;
         grid-template-columns: repeat(3, 60mm);
@@ -116,7 +116,7 @@
         break-inside: avoid;
       }
     }
-  </style> </head> <body> <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar no-print" id="sidebar"> <div class="sidebar-logo"> <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none"> <div id="sidebar-logo-text" class="system-name">Gest√£o de Estoque</div> <div class="sub">PCM Almoxarifado</div> </div> <nav> <div class="nav-group-label">Principal</div> <a href="dashboard.html" data-page="dashboard">Dashboard</a> <a href="estoque.html" data-page="estoque">Estoque</a> <a href="movimentacoes.html" data-page="movimentacoes">Movimenta√ß√µes</a> <div class="nav-group-label">Cadastros</div> <a href="pecas.html" data-page="pecas">Pe√ßas</a> <a href="ativos.html" data-page="ativos">Ativos</a> <a href="requisicoes.html" data-page="requisicoes">Req. de Compra</a> <a href="consertos.html" data-page="consertos">Consertos Externos</a> <div class="nav-group-label">An√°lise</div> <a href="relatorios.html" data-page="relatorios">Relat√≥rios</a> <a href="etiquetas.html" data-page="etiquetas">Etiquetas</a> <div class="nav-group-label" data-admin>Administra√ß√£o</div> <a href="aprovacoes.html" data-page="aprovacoes" data-admin><span class="icon"></span> Solicita√ß√µes</a> <a href="ajustes.html" data-page="ajustes" data-admin>Ajuste de Saldo</a> <a href="configuracoes.html" data-page="configuracoes" data-admin>Configura√ß√µes</a> </nav> <div class="sidebar-footer"> <div class="user-info" id="sidebar-user-name">-</div> <div class="user-role" id="sidebar-user-role">-</div> <button class="btn-logout" onclick="Auth.logout()">Sair do Sistema</button> </div> </aside> <!-- CONTE√öDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar no-print"> <div> <div class="topbar-title">Etiquetas</div> <div class="topbar-subtitle">Gera√ß√£o e impress√£o de etiquetas com QR code</div> </div> <div class="topbar-actions"> <button class="btn btn-primary btn-sm" id="btn-imprimir" onclick="imprimirSelecionados()" disabled> Imprimir Selecionados (<span id="qtd-sel">0</span>)</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- BARRA DE CONTROLES --> <div class="etiqueta-topbar no-print"> <div class="search-bar" style="flex:1;min-width:220px"> <input type="text" id="etq-busca" placeholder="Buscar por c√≥digo ou nome..." oninput="renderTela()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select class="filtro-cat" id="filtro-cat" onchange="renderTela()"> <option value="">Todas as categorias</option> </select> <button class="btn btn-secondary btn-sm" onclick="selecionarTodos()"> Selecionar Todos</button> <button class="btn btn-secondary btn-sm" onclick="desselecionar()">Limpar Sele√ß√£o</button> <span class="etiqueta-info" id="info-contagem">0 itens</span> </div> <!-- √ÅREA DE TELA --> <div id="area-tela"> <div class="etiqueta-grid-screen" id="grid-etiquetas"></div> </div> <!-- √ÅREA DE IMPRESS√ÉO (oculta, vis√≠vel s√≥ no print) --> <div id="area-impressao"></div> </div> </div> </div> <script src="db.js"></script> <script src="auth.js"></script> <script src="utils.js"></script> <script> DB.init().then(function() {
+  </style> </head> <body> <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar no-print" id="sidebar"> <div class="sidebar-logo"> <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none"> <div id="sidebar-logo-text" class="system-name">Gest„o de Estoque</div> <div class="sub">PCM Almoxarifado</div> </div> <nav> <div class="nav-group-label">Principal</div> <a href="dashboard.html" data-page="dashboard">Dashboard</a> <a href="estoque.html" data-page="estoque">Estoque</a> <a href="movimentacoes.html" data-page="movimentacoes">MovimentaÁıes</a> <div class="nav-group-label">Cadastros</div> <a href="pecas.html" data-page="pecas">PeÁas</a> <a href="ativos.html" data-page="ativos">Ativos</a> <a href="requisicoes.html" data-page="requisicoes">Req. de Compra</a> <a href="consertos.html" data-page="consertos">Consertos Externos</a> <div class="nav-group-label">An·lise</div> <a href="relatorios.html" data-page="relatorios">RelatÛrios</a> <a href="etiquetas.html" data-page="etiquetas">Etiquetas</a> <div class="nav-group-label" data-admin>AdministraÁ„o</div> <a href="aprovacoes.html" data-page="aprovacoes" data-admin><span class="icon"></span> SolicitaÁıes</a> <a href="ajustes.html" data-page="ajustes" data-admin>Ajuste de Saldo</a> <a href="configuracoes.html" data-page="configuracoes" data-admin>ConfiguraÁıes</a> </nav> <div class="sidebar-footer"> <div class="user-info" id="sidebar-user-name">-</div> <div class="user-role" id="sidebar-user-role">-</div> <button class="btn-logout" onclick="Auth.logout()">Sair do Sistema</button> </div> </aside> <!-- CONTE⁄DO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar no-print"> <div> <div class="topbar-title">Etiquetas</div> <div class="topbar-subtitle">GeraÁ„o e impress„o de etiquetas com QR code</div> </div> <div class="topbar-actions"> <button class="btn btn-primary btn-sm" id="btn-imprimir" onclick="imprimirSelecionados()" disabled> Imprimir Selecionados (<span id="qtd-sel">0</span>)</button> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- BARRA DE CONTROLES --> <div class="etiqueta-topbar no-print"> <div class="search-bar" style="flex:1;min-width:220px"> <input type="text" id="etq-busca" placeholder="Buscar por cÛdigo ou nome..." oninput="renderTela()" style="border:none;background:transparent;outline:none;font-size:13px;color:var(--text);flex:1;padding:0"> </div> <select class="filtro-cat" id="filtro-cat" onchange="renderTela()"> <option value="">Todas as categorias</option> </select> <button class="btn btn-secondary btn-sm" onclick="selecionarTodos()"> Selecionar Todos</button> <button class="btn btn-secondary btn-sm" onclick="desselecionar()">Limpar SeleÁ„o</button> <span class="etiqueta-info" id="info-contagem">0 itens</span> </div> <!-- ¡REA DE TELA --> <div id="area-tela"> <div class="etiqueta-grid-screen" id="grid-etiquetas"></div> </div> <!-- ¡REA DE IMPRESS√O (oculta, visÌvel sÛ no print) --> <div id="area-impressao"></div> </div> </div> </div> <script src="db.js"></script> <script src="auth.js"></script> <script src="utils.js"></script> <script> DB.init().then(function() {
     if (!Auth.requireLogin()) { return; }
     Utils.applyTheme();
     Utils.renderSidebarUser();
@@ -152,13 +152,13 @@
 
     const grid = document.getElementById('grid-etiquetas');
     if (pecasFiltradas.length === 0) {
-      grid.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Nenhuma pe√ßa cadastrada</p></div>';
+      grid.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Nenhuma peÁa cadastrada</p></div>';
       document.getElementById('info-contagem').textContent = '0 itens';
       return;
     }
 
     grid.innerHTML = pecasFiltradas.map(p => `
-      <div class="etiqueta-item-screen ${selecionados.has(p.id) ? 'selected' : ''}" onclick="toggleSel('${p.id}', this)"> <div class="check">${selecionados.has(p.id) ? 'Selecionado' : ''}</div> <div class="info"> <div class="nome">${Utils.safe(p.nome)}</div> <div class="codigo">${Utils.safe(p.codigo)}</div> <div class="loc"> ${Utils.safe(p.localiza√ß√£o||p.localizacao||'-')}</div> </div> </div> `).join('');
+      <div class="etiqueta-item-screen ${selecionados.has(p.id) ? 'selected' : ''}" onclick="toggleSel('${p.id}', this)"> <div class="check">${selecionados.has(p.id) ? 'Selecionado' : ''}</div> <div class="info"> <div class="nome">${Utils.safe(p.nome)}</div> <div class="codigo">${Utils.safe(p.codigo)}</div> <div class="loc"> ${Utils.safe(p.localizaÁ„o||p.localizacao||'-')}</div> </div> </div> `).join('');
 
     document.getElementById('info-contagem').textContent = `${pecasFiltradas.length} itens`;
     atualizarBotao();
@@ -190,7 +190,7 @@
     if (selecionados.size === 0) return;
 
     if (typeof QRCode === 'undefined') {
-      Utils.toast('Biblioteca QR Code n√£o carregada. Verifique a conex√£o com a internet.', 'error');
+      Utils.toast('Biblioteca QR Code n„o carregada. Verifique a conex„o com a internet.', 'error');
       return;
     }
 
@@ -227,14 +227,14 @@
       } catch(e) {}
     }
 
-    // qrcodejs@1.0.0 falha silenciosamente com caracteres acentuados (√≠, √£, √ß...)
-    // deixando o canvas em branco sem lan√ßar exce√ß√£o.
-    // Solu√ß√£o: normalizar para ASCII puro antes de codificar.
+    // qrcodejs@1.0.0 falha silenciosamente com caracteres acentuados (Ì, „, Á...)
+    // deixando o canvas em branco sem lanÁar exceÁ„o.
+    // SoluÁ„o: normalizar para ASCII puro antes de codificar.
     function normQR(str) {
       return String(str)
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')   // remove diacr√≠ticos (acentos)
-        .replace(/[^\x00-\x7F]/g, '');    // qualquer outro n√£o-ASCII ''
+        .replace(/[\u0300-\u036f]/g, '')   // remove diacrÌticos (acentos)
+        .replace(/[^\x00-\x7F]/g, '');    // qualquer outro n„o-ASCII ''
     }
 
     function criarEtiqueta(p) {
@@ -250,13 +250,13 @@
 
       var infoCol = document.createElement('div');
       infoCol.className = 'label-info-col';
-      var loc = p.localiza√ß√£o || p.localizacao || '';
+      var loc = p.localizaÁ„o || p.localizacao || '';
       infoCol.innerHTML = (cfg.logo ? '<img src="' + cfg.logo + '" class="label-logo" alt="Logo">'
         : '<div style="font-size:7pt;font-weight:700;color:#1e3a5f;margin-bottom:2mm">' + Utils.safe(cfg.empresa || 'Atlas PCM') + '</div>')
         + '<div class="label-nome">' + Utils.safe(p.nome) + '</div>'
         + '<div class="label-codigo">' + Utils.safe(p.codigo) + '</div>'
         + (loc  '<div class="label-loc">' + Utils.safe(loc) + '</div>' : '')
-        + '<div class="label-empresa">' + Utils.safe(cfg.empresa || 'Atlas Ind. Eletrodom√©sticos') + '</div>';
+        + '<div class="label-empresa">' + Utils.safe(cfg.empresa || 'Atlas Ind. EletrodomÈsticos') + '</div>';
       div.appendChild(infoCol);
       area.appendChild(div);
 
@@ -292,15 +292,15 @@
         }
 
         // -- TODOS CRIADOS ----------------------------------------
-        // qrcodejs desenha o <canvas> de forma S√çNCRONA.
+        // qrcodejs desenha o <canvas> de forma SÕNCRONA.
         // Convertemos cada canvas para img data URL aqui mesmo,
-        // garantindo que o browser n√£o perca os pixels ao imprimir.
-        // (n√£o dependemos mais do setTimeout(0) interno da lib)
+        // garantindo que o browser n„o perca os pixels ao imprimir.
+        // (n„o dependemos mais do setTimeout(0) interno da lib)
         if (elProg) elProg.textContent = 'Finalizando...';
         setTimeout(function() {
           if (cancelado) return;
 
-          // canvas img data URL (s√≠ncrono ap√≥s o DOM estar est√°vel)
+          // canvas img data URL (sÌncrono apÛs o DOM estar est·vel)
           var canvases = area.querySelectorAll('.label-qr-col canvas');
           canvases.forEach(function(canvas) {
             var parent = canvas.parentNode; // = qrDiv
@@ -313,7 +313,7 @@
                 parent.style.cssText = 'width:61px;height:61px;display:flex;align-items:center;justify-content:center;background:#f0f0f0;font-size:7px;text-align:center;color:#333;padding:3px;box-sizing:border-box;border-radius:3px';
                 parent.innerHTML = '<div>' + cod + '</div>';
               } else {
-                // QR OK: substituir canvas por img est√°tica (impress√£o garantida)
+                // QR OK: substituir canvas por img est·tica (impress„o garantida)
                 var img = document.createElement('img');
                 img.src = dataURL;
                 img.style.cssText = 'width:61px;height:61px;display:block';
@@ -321,7 +321,7 @@
                 parent.appendChild(img);
               }
             } catch(e) {
-              // toDataURL falhou (improv√°vel em arquivo local) - manter como est√°
+              // toDataURL falhou (improv·vel em arquivo local) - manter como est·
             }
           });
 
@@ -339,7 +339,7 @@
             if (area.innerHTML !== '') area.innerHTML = '';
           }, 4000);
 
-        }, 200); // 200ms: DOM est√°vel; canvas j√° foi desenhado de forma s√≠ncrona
+        }, 200); // 200ms: DOM est·vel; canvas j· foi desenhado de forma sÌncrona
 
       } catch(err) {
         limparOverlay();

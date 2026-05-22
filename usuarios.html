@@ -1,6 +1,6 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Usu√°rios - Atlas PCM Almoxarifado</title> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <style> .avatar {
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Usu·rios - Atlas PCM Almoxarifado</title> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <style> .avatar {
       width: 36px; height: 36px; border-radius: 50%;
       background: var(--primary); color: #fff;
       display: flex; align-items: center; justify-content: center;
@@ -15,39 +15,39 @@
 <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">Gest√£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gest„o de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimenta√ß√µes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÁıes</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Pe√ßas</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÁas</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">An√°lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relat√≥rios</a>
+    <div class="nav-group-label">An·lise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÛrios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>Administra√ß√£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicita√ß√µes</a>
+    <div class="nav-group-label nav-admin" data-admin>AdministraÁ„o</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÁıes</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configura√ß√µes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu√°rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÁıes</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu·rios</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">‚Ä¶</div>
-    <div class="user-role" id="sidebar-user-role">‚Ä¶</div>
+    <div class="user-info" id="sidebar-user-name">Ö</div>
+    <div class="user-role" id="sidebar-user-role">Ö</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTE√öDO --> <div class="main-content"> <div class="topbar"> <div> <div class="topbar-title"> Gerenciar Usu√°rios</div> <div class="topbar-subtitle">Controle de acesso ao sistema - somente ADMIN</div> </div> <div class="topbar-actions"> <button class="btn btn-primary" onclick="abrirNovoUsuario()">+ Novo Usu√°rio</button> </div> </div> <div class="page-body"> <!-- KPIs de usu√°rios --> <div class="kpi-grid" style="margin-bottom:22px;grid-template-columns:repeat(3,1fr)"> <div class="kpi-card"> <div class="kpi-icon blue"></div> <div> <div class="kpi-value" id="kpi-total">-</div> <div class="kpi-label">Total de Usu√°rios</div> </div> </div> <div class="kpi-card"> <div class="kpi-icon green"></div> <div> <div class="kpi-value" id="kpi-ativos">-</div> <div class="kpi-label">Usu√°rios Ativos</div> </div> </div> <div class="kpi-card"> <div class="kpi-icon orange"></div> <div> <div class="kpi-value" id="kpi-admins">-</div> <div class="kpi-label">Administradores</div> </div> </div> </div> <!-- Tabela --> <div class="card"> <div class="table-wrapper"> <table> <thead> <tr> <th>Usu√°rio</th> <th>E-mail</th> <th>N√≠vel</th> <th>Status</th> <th>Criado em</th> <th style="text-align:center">A√ß√µes</th> </tr> </thead> <tbody id="tbody-usuarios"></tbody> </table> </div> </div> </div> </div>
-</div> <!-- MODAL NOVO / EDITAR USU√ÅRIO -->
-<div class="modal-overlay" id="modal-usuario" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:480px"> <div class="modal-header"> <div class="modal-title" id="modal-usuario-titulo">Novo Usu√°rio</div> <button class="modal-close" onclick="Utils.fecharModal('modal-usuario')"></button> </div> <form id="form-usuario" onsubmit="salvarUsuario(event)" autocomplete="off"> <input type="hidden" id="usr-id"> <div class="form-grid"> <div class="form-group full"> <label>Nome Completo *</label> <input type="text" id="usr-nome" placeholder="Nome do usu√°rio" required> </div> <div class="form-group full"> <label>E-mail *</label> <input type="email" id="usr-email" placeholder="email@atlas.com" required autocomplete="new-password"> </div> <div class="form-group"> <label>N√≠vel de Acesso *</label> <select id="usr-nivel" required> <option value="PCM">PCM - T√©cnico</option> <option value="ADMIN">ADMIN - Administrador</option> </select> </div> <div class="form-group"> <label id="senha-label">Senha *</label> <input type="password" id="usr-senha" placeholder="M√≠nimo 6 caracteres" autocomplete="new-password"> <span style="font-size:11px;color:var(--text-muted)" id="senha-hint"></span> </div> <div class="form-group full" id="grupo-status" style="display:none"> <label>Status</label> <select id="usr-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-outline" onclick="Utils.fecharModal('modal-usuario')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar</button> </div> </form> </div>
+</aside> <!-- CONTE⁄DO --> <div class="main-content"> <div class="topbar"> <div> <div class="topbar-title"> Gerenciar Usu·rios</div> <div class="topbar-subtitle">Controle de acesso ao sistema - somente ADMIN</div> </div> <div class="topbar-actions"> <button class="btn btn-primary" onclick="abrirNovoUsuario()">+ Novo Usu·rio</button> </div> </div> <div class="page-body"> <!-- KPIs de usu·rios --> <div class="kpi-grid" style="margin-bottom:22px;grid-template-columns:repeat(3,1fr)"> <div class="kpi-card"> <div class="kpi-icon blue"></div> <div> <div class="kpi-value" id="kpi-total">-</div> <div class="kpi-label">Total de Usu·rios</div> </div> </div> <div class="kpi-card"> <div class="kpi-icon green"></div> <div> <div class="kpi-value" id="kpi-ativos">-</div> <div class="kpi-label">Usu·rios Ativos</div> </div> </div> <div class="kpi-card"> <div class="kpi-icon orange"></div> <div> <div class="kpi-value" id="kpi-admins">-</div> <div class="kpi-label">Administradores</div> </div> </div> </div> <!-- Tabela --> <div class="card"> <div class="table-wrapper"> <table> <thead> <tr> <th>Usu·rio</th> <th>E-mail</th> <th>NÌvel</th> <th>Status</th> <th>Criado em</th> <th style="text-align:center">AÁıes</th> </tr> </thead> <tbody id="tbody-usuarios"></tbody> </table> </div> </div> </div> </div>
+</div> <!-- MODAL NOVO / EDITAR USU¡RIO -->
+<div class="modal-overlay" id="modal-usuario" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:480px"> <div class="modal-header"> <div class="modal-title" id="modal-usuario-titulo">Novo Usu·rio</div> <button class="modal-close" onclick="Utils.fecharModal('modal-usuario')"></button> </div> <form id="form-usuario" onsubmit="salvarUsuario(event)" autocomplete="off"> <input type="hidden" id="usr-id"> <div class="form-grid"> <div class="form-group full"> <label>Nome Completo *</label> <input type="text" id="usr-nome" placeholder="Nome do usu·rio" required> </div> <div class="form-group full"> <label>E-mail *</label> <input type="email" id="usr-email" placeholder="email@atlas.com" required autocomplete="new-password"> </div> <div class="form-group"> <label>NÌvel de Acesso *</label> <select id="usr-nivel" required> <option value="PCM">PCM - TÈcnico</option> <option value="ADMIN">ADMIN - Administrador</option> </select> </div> <div class="form-group"> <label id="senha-label">Senha *</label> <input type="password" id="usr-senha" placeholder="MÌnimo 6 caracteres" autocomplete="new-password"> <span style="font-size:11px;color:var(--text-muted)" id="senha-hint"></span> </div> <div class="form-group full" id="grupo-status" style="display:none"> <label>Status</label> <select id="usr-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-outline" onclick="Utils.fecharModal('modal-usuario')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar</button> </div> </form> </div>
 </div> <!-- MODAL CONFIRMAR RESET DE SENHA -->
 <div class="modal-overlay" id="modal-reset" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:400px"> <div class="modal-header"> <div class="modal-title">Redefinir Senha</div> <button class="modal-close" onclick="Utils.fecharModal('modal-reset')"></button> </div> <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px"> Digite a nova senha para <strong id="reset-nome-usuario"></strong>:
-    </p> <div class="form-group"> <label>Nova Senha *</label> <input type="password" id="reset-nova-senha" placeholder="M√≠nimo 6 caracteres" autocomplete="new-password"> </div> <div class="modal-footer"> <button class="btn btn-outline" onclick="Utils.fecharModal('modal-reset')">Cancelar</button> <button class="btn btn-warning" id="btn-confirmar-reset">Redefinir</button> </div> </div>
+    </p> <div class="form-group"> <label>Nova Senha *</label> <input type="password" id="reset-nova-senha" placeholder="MÌnimo 6 caracteres" autocomplete="new-password"> </div> <div class="modal-footer"> <button class="btn btn-outline" onclick="Utils.fecharModal('modal-reset')">Cancelar</button> <button class="btn btn-warning" id="btn-confirmar-reset">Redefinir</button> </div> </div>
 </div> <script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="utils.js"></script>
@@ -82,7 +82,7 @@
   function abrirNovoUsuario() {
     document.getElementById('form-usuario').reset();
     document.getElementById('usr-id').value = '';
-    document.getElementById('modal-usuario-titulo').textContent = 'Novo Usu√°rio';
+    document.getElementById('modal-usuario-titulo').textContent = 'Novo Usu·rio';
     document.getElementById('senha-label').textContent = 'Senha *';
     document.getElementById('senha-hint').textContent = '';
     document.getElementById('usr-senha').required = true;
@@ -100,8 +100,8 @@
     document.getElementById('usr-senha').value = '';
     document.getElementById('usr-senha').required = false;
     document.getElementById('usr-ativo').value = String(u.ativo !== false);
-    document.getElementById('modal-usuario-titulo').textContent = 'Editar Usu√°rio';
-    document.getElementById('senha-label').textContent = 'Nova Senha (deixe vazio para n√£o alterar)';
+    document.getElementById('modal-usuario-titulo').textContent = 'Editar Usu·rio';
+    document.getElementById('senha-label').textContent = 'Nova Senha (deixe vazio para n„o alterar)';
     document.getElementById('senha-hint').textContent = 'Deixe em branco para manter a senha atual.';
     document.getElementById('grupo-status').style.display = '';
     Utils.abrirModal('modal-usuario');
@@ -116,12 +116,12 @@
     const senha = document.getElementById('usr-senha').value;
     const ativo = document.getElementById('usr-ativo').value !== 'false';
 
-    // Valida√ß√µes
-    if (!id && !senha) { Utils.toast('Informe uma senha para o novo usu√°rio.', 'error'); return; }
-    if (senha && senha.length < 6) { Utils.toast('Senha deve ter no m√≠nimo 6 caracteres.', 'error'); return; }
+    // ValidaÁıes
+    if (!id && !senha) { Utils.toast('Informe uma senha para o novo usu·rio.', 'error'); return; }
+    if (senha && senha.length < 6) { Utils.toast('Senha deve ter no mÌnimo 6 caracteres.', 'error'); return; }
 
     const duplicado = DB.Usuarios.listar().find(u => u.email === email && u.id !== id);
-    if (duplicado) { Utils.toast('E-mail j√° cadastrado para outro usu√°rio.', 'error'); return; }
+    if (duplicado) { Utils.toast('E-mail j· cadastrado para outro usu·rio.', 'error'); return; }
 
     let usuario;
     if (id) {
@@ -153,7 +153,7 @@
     document.getElementById('reset-nova-senha').value = '';
     document.getElementById('btn-confirmar-reset').onclick = () => {
       const nova = document.getElementById('reset-nova-senha').value;
-      if (nova.length < 6) { Utils.toast('Senha deve ter no m√≠nimo 6 caracteres.', 'error'); return; }
+      if (nova.length < 6) { Utils.toast('Senha deve ter no mÌnimo 6 caracteres.', 'error'); return; }
       u.senha = nova;
       DB.Usuarios.salvar(u);
       Utils.fecharModal('modal-reset');

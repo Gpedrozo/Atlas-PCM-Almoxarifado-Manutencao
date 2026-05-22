@@ -1,6 +1,6 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Configura√ß√µes - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <!-- SheetJS: leitura direta de .xlsx/.xls/.ods --> <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> <style> .config-layout { display: grid; grid-template-columns: 180px 1fr; gap: 16px; }
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>ConfiguraÁıes - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <!-- SheetJS: leitura direta de .xlsx/.xls/.ods --> <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> <style> .config-layout { display: grid; grid-template-columns: 180px 1fr; gap: 16px; }
     .config-menu { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px; display: flex; flex-direction: column; gap: 2px; height: fit-content; position: sticky; top: 20px; }
     .config-menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: calc(var(--radius) - 4px); cursor: pointer; font-size: 13.5px; font-weight: 500; color: var(--text-muted); transition: all .15s; border: none; background: none; text-align: left; width: 100%; }
     .config-menu-item:hover { background: var(--bg); color: var(--text); }
@@ -26,38 +26,38 @@
 <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">Gest√£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gest„o de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimenta√ß√µes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÁıes</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Pe√ßas</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÁas</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">An√°lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relat√≥rios</a>
+    <div class="nav-group-label">An·lise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÛrios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>Administra√ß√£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicita√ß√µes</a>
+    <div class="nav-group-label nav-admin" data-admin>AdministraÁ„o</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÁıes</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configura√ß√µes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu√°rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÁıes</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu·rios</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">‚Ä¶</div>
-    <div class="user-role" id="sidebar-user-role">‚Ä¶</div>
+    <div class="user-info" id="sidebar-user-name">Ö</div>
+    <div class="user-role" id="sidebar-user-role">Ö</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTE√öDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title">Configura√ß√µes</div> <div class="topbar-subtitle">Administra√ß√£o do sistema</div> </div> <div class="topbar-actions"> <button class="btn-theme" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <div class="config-layout"> <!-- Menu --> <div class="config-menu"> <button class="config-menu-item active" onclick="mostrarAba('empresa', this)"> Empresa</button> <button class="config-menu-item" onclick="mostrarAba('usuarios', this)"> Usu√°rios</button> <button class="config-menu-item" onclick="mostrarAba('retirada', this)"> Retirada QR</button> <button class="config-menu-item" onclick="mostrarAba('aprovacao', this)">Aprova√ß√£o</button> <button class="config-menu-item" onclick="mostrarAba('sistema', this)"> Sistema</button> <button class="config-menu-item" onclick="mostrarAba('carga', this)"> Carga em Massa</button> </div> <!-- Painel --> <div class="config-panel" id="config-painel"> <!-- conte√∫do din√¢mico --> </div> </div> </div> </div>
-</div> <!-- MODAL USU√ÅRIO DE RETIRADA -->
-<div class="modal-overlay" id="modal-ur" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal"> <div class="modal-header"> <div class="modal-title" id="modal-ur-titulo">Novo Usu√°rio de Retirada</div> <button class="modal-close" onclick="Utils.fecharModal('modal-ur')"></button> </div> <form id="form-ur"> <input type="hidden" id="ur-id"> <div class="form-grid"> <div class="form-group"> <label>Nome *</label> <input type="text" id="ur-nome" required placeholder="Ex: Jo√£o da Silva"> </div> <div class="form-group"> <label>C√≥digo <span style="font-size:11px;color:var(--text-muted)">(opcional - pode usar n√∫mero ou matr√≠cula)</span></label> <input type="text" id="ur-codigo" placeholder="Ex: 1234 ou JS001" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"> </div> <div class="form-group"> <label>Status</label> <select id="ur-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-ur')">Cancelar</button> <button type="submit" class="btn btn-primary">Salvar</button> </div> </form> </div>
-</div> <!-- MODAL USU√ÅRIO -->
-<div class="modal-overlay" id="modal-usuario" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal"> <div class="modal-header"> <div class="modal-title" id="modal-usuario-titulo">Novo Usu√°rio</div> <button class="modal-close" onclick="Utils.fecharModal('modal-usuario')"></button> </div> <form id="form-usuario"> <input type="hidden" id="u-id"> <div class="form-grid"> <div class="form-group"> <label>Nome Completo *</label> <input type="text" id="u-nome" required placeholder="Nome do usu√°rio"> </div> <div class="form-group"> <label>E-mail *</label> <input type="email" id="u-email" required placeholder="email@empresa.com"> </div> <div class="form-group"> <label>Senha <span id="u-senha-hint" style="font-size:11px;color:var(--text-muted)">(deixe em branco para manter)</span></label> <input type="password" id="u-senha" placeholder="Nova senha"> </div> <div class="form-group"> <label>N√≠vel de Acesso *</label> <select id="u-nivel"> <option value="PCM">PCM (T√©cnico)</option> <option value="ADMIN">ADMIN (Administrador)</option> </select> </div> <div class="form-group"> <label>Status</label> <select id="u-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-usuario')">Cancelar</button> <button type="submit" class="btn btn-primary" id="u-btn-salvar">Salvar</button> </div> </form> </div>
+</aside> <!-- CONTE⁄DO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title">ConfiguraÁıes</div> <div class="topbar-subtitle">AdministraÁ„o do sistema</div> </div> <div class="topbar-actions"> <button class="btn-theme" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <div class="config-layout"> <!-- Menu --> <div class="config-menu"> <button class="config-menu-item active" onclick="mostrarAba('empresa', this)"> Empresa</button> <button class="config-menu-item" onclick="mostrarAba('usuarios', this)"> Usu·rios</button> <button class="config-menu-item" onclick="mostrarAba('retirada', this)"> Retirada QR</button> <button class="config-menu-item" onclick="mostrarAba('aprovacao', this)">AprovaÁ„o</button> <button class="config-menu-item" onclick="mostrarAba('sistema', this)"> Sistema</button> <button class="config-menu-item" onclick="mostrarAba('carga', this)"> Carga em Massa</button> </div> <!-- Painel --> <div class="config-panel" id="config-painel"> <!-- conte˙do din‚mico --> </div> </div> </div> </div>
+</div> <!-- MODAL USU¡RIO DE RETIRADA -->
+<div class="modal-overlay" id="modal-ur" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal"> <div class="modal-header"> <div class="modal-title" id="modal-ur-titulo">Novo Usu·rio de Retirada</div> <button class="modal-close" onclick="Utils.fecharModal('modal-ur')"></button> </div> <form id="form-ur"> <input type="hidden" id="ur-id"> <div class="form-grid"> <div class="form-group"> <label>Nome *</label> <input type="text" id="ur-nome" required placeholder="Ex: Jo„o da Silva"> </div> <div class="form-group"> <label>CÛdigo <span style="font-size:11px;color:var(--text-muted)">(opcional - pode usar n˙mero ou matrÌcula)</span></label> <input type="text" id="ur-codigo" placeholder="Ex: 1234 ou JS001" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"> </div> <div class="form-group"> <label>Status</label> <select id="ur-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-ur')">Cancelar</button> <button type="submit" class="btn btn-primary">Salvar</button> </div> </form> </div>
+</div> <!-- MODAL USU¡RIO -->
+<div class="modal-overlay" id="modal-usuario" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal"> <div class="modal-header"> <div class="modal-title" id="modal-usuario-titulo">Novo Usu·rio</div> <button class="modal-close" onclick="Utils.fecharModal('modal-usuario')"></button> </div> <form id="form-usuario"> <input type="hidden" id="u-id"> <div class="form-grid"> <div class="form-group"> <label>Nome Completo *</label> <input type="text" id="u-nome" required placeholder="Nome do usu·rio"> </div> <div class="form-group"> <label>E-mail *</label> <input type="email" id="u-email" required placeholder="email@empresa.com"> </div> <div class="form-group"> <label>Senha <span id="u-senha-hint" style="font-size:11px;color:var(--text-muted)">(deixe em branco para manter)</span></label> <input type="password" id="u-senha" placeholder="Nova senha"> </div> <div class="form-group"> <label>NÌvel de Acesso *</label> <select id="u-nivel"> <option value="PCM">PCM (TÈcnico)</option> <option value="ADMIN">ADMIN (Administrador)</option> </select> </div> <div class="form-group"> <label>Status</label> <select id="u-ativo"> <option value="true">Ativo</option> <option value="false">Inativo</option> </select> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onclick="Utils.fecharModal('modal-usuario')">Cancelar</button> <button type="submit" class="btn btn-primary" id="u-btn-salvar">Salvar</button> </div> </form> </div>
 </div> <script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="utils.js"></script>
@@ -89,9 +89,9 @@
   function abaEmpresa() {
     const cfg = DB.Config.get();
     return `
-      <div class="config-panel-header"> Identidade da Empresa</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start"> <div> <div class="form-group" style="margin-bottom:18px"> <label>Nome da Empresa</label> <input type="text" id="cfg-empresa-nome" value="${Utils.safe(cfg.empresa||'Atlas Ind. Eletrodom√©sticos')}" placeholder="Nome da empresa"> </div> <div class="form-group" style="margin-bottom:18px"> <label>Subt√≠tulo / Departamento</label> <input type="text" id="cfg-empresa-sub" value="${Utils.safe(cfg.sub||'PCM Almoxarifado')}" placeholder="Ex: PCM Almoxarifado"> </div> <button class="btn btn-primary" onclick="salvarEmpresa()"> Salvar Configura√ß√µes</button> </div> <div> <label style="font-size:12.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:8px">Logomarca</label> <div class="logo-preview-box" id="logo-preview-box" onclick="document.getElementById('logo-input').click()"> ${cfg.logo  `<img src="${cfg.logo}" id="logo-preview-img" alt="Logo">` : '<span id="logo-preview-placeholder">Clique para selecionar imagem</span>'}
+      <div class="config-panel-header"> Identidade da Empresa</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start"> <div> <div class="form-group" style="margin-bottom:18px"> <label>Nome da Empresa</label> <input type="text" id="cfg-empresa-nome" value="${Utils.safe(cfg.empresa||'Atlas Ind. EletrodomÈsticos')}" placeholder="Nome da empresa"> </div> <div class="form-group" style="margin-bottom:18px"> <label>SubtÌtulo / Departamento</label> <input type="text" id="cfg-empresa-sub" value="${Utils.safe(cfg.sub||'PCM Almoxarifado')}" placeholder="Ex: PCM Almoxarifado"> </div> <button class="btn btn-primary" onclick="salvarEmpresa()"> Salvar ConfiguraÁıes</button> </div> <div> <label style="font-size:12.5px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:8px">Logomarca</label> <div class="logo-preview-box" id="logo-preview-box" onclick="document.getElementById('logo-input').click()"> ${cfg.logo  `<img src="${cfg.logo}" id="logo-preview-img" alt="Logo">` : '<span id="logo-preview-placeholder">Clique para selecionar imagem</span>'}
           </div> <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="processarLogo(this)"> <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"> <button class="btn btn-secondary btn-sm" onclick="document.getElementById('logo-input').click()"> Alterar Logo</button> ${cfg.logo ? '<button class="btn btn-secondary btn-sm" onclick="removerLogo()" style="color:var(--danger)">Remover</button>' : ''}
-          </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:8px">Formatos aceitos: PNG, JPG, SVG, WebP. A imagem ser√° redimensionada automaticamente.</div> </div> </div> `;
+          </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:8px">Formatos aceitos: PNG, JPG, SVG, WebP. A imagem ser· redimensionada automaticamente.</div> </div> </div> `;
   }
 
   function bindEmpresa() {}
@@ -135,17 +135,17 @@
   function salvarEmpresa() {
     DB.Config.set({ empresa: document.getElementById('cfg-empresa-nome').value.trim(), sub: document.getElementById('cfg-empresa-sub').value.trim() });
     Utils.renderSidebarLogo();
-    Utils.toast('Configura√ß√µes da empresa salvas!');
+    Utils.toast('ConfiguraÁıes da empresa salvas!');
   }
 
-  // -- ABA USU√ÅRIOS --------------------------------------
+  // -- ABA USU¡RIOS --------------------------------------
   function abaUsuarios() {
     const usuarios = DB.Usuarios.listar();
     const rows = usuarios.map(u => `
-      <div class="user-row"> <div> <div class="nome">${Utils.safe(u.nome)}</div> <div class="email">${Utils.safe(u.email)}</div> </div> <div> <span class="badge badge-${u.nivel === 'ADMIN' ? 'ok' : 'low'}">${u.nivel}</span> </div> <span class="badge ${u.ativo ? 'badge-ok' : 'badge-critical'}">${u.ativo ? 'Ativo' : 'Inativo'}</span> <div style="display:flex;gap:6px"> <button class="btn btn-secondary btn-sm" onclick="editarUsuario('${u.id}')"></button> ${u.id !== Auth.getSessao().id ? `<button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUsuario('${u.id}')"></button>` : '<button class="btn btn-secondary btn-sm" disabled title="Usu√°rio atual"></button>'}
+      <div class="user-row"> <div> <div class="nome">${Utils.safe(u.nome)}</div> <div class="email">${Utils.safe(u.email)}</div> </div> <div> <span class="badge badge-${u.nivel === 'ADMIN' ? 'ok' : 'low'}">${u.nivel}</span> </div> <span class="badge ${u.ativo ? 'badge-ok' : 'badge-critical'}">${u.ativo ? 'Ativo' : 'Inativo'}</span> <div style="display:flex;gap:6px"> <button class="btn btn-secondary btn-sm" onclick="editarUsuario('${u.id}')"></button> ${u.id !== Auth.getSessao().id ? `<button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUsuario('${u.id}')"></button>` : '<button class="btn btn-secondary btn-sm" disabled title="Usu·rio atual"></button>'}
         </div> </div> `).join('');
     return `
-      <div class="config-panel-header" style="display:flex;align-items:center;justify-content:space-between"> <span> Gerenciamento de Usu√°rios</span> <button class="btn btn-primary btn-sm" onclick="novoUsuario()">+ Novo Usu√°rio</button> </div> <div id="lista-usuarios">${rows || '<div class="empty-state"><div class="icon"></div><p>Nenhum usu√°rio cadastrado</p></div>'}</div> `;
+      <div class="config-panel-header" style="display:flex;align-items:center;justify-content:space-between"> <span> Gerenciamento de Usu·rios</span> <button class="btn btn-primary btn-sm" onclick="novoUsuario()">+ Novo Usu·rio</button> </div> <div id="lista-usuarios">${rows || '<div class="empty-state"><div class="icon"></div><p>Nenhum usu·rio cadastrado</p></div>'}</div> `;
   }
 
   function novoUsuario() {
@@ -155,7 +155,7 @@
     document.getElementById('u-senha').value = '';
     document.getElementById('u-nivel').value = 'PCM';
     document.getElementById('u-ativo').value = 'true';
-    document.getElementById('modal-usuario-titulo').textContent = 'Novo Usu√°rio';
+    document.getElementById('modal-usuario-titulo').textContent = 'Novo Usu·rio';
     document.getElementById('u-senha-hint').style.display = 'none';
     document.getElementById('u-senha').required = true;
     Utils.abrirModal('modal-usuario');
@@ -170,17 +170,17 @@
     document.getElementById('u-senha').value = '';
     document.getElementById('u-nivel').value = u.nivel;
     document.getElementById('u-ativo').value = String(u.ativo);
-    document.getElementById('modal-usuario-titulo').textContent = 'Editar Usu√°rio';
+    document.getElementById('modal-usuario-titulo').textContent = 'Editar Usu·rio';
     document.getElementById('u-senha-hint').style.display = '';
     document.getElementById('u-senha').required = false;
     Utils.abrirModal('modal-usuario');
   }
 
   function excluirUsuario(id) {
-    if (!confirm('Excluir este usu√°rio')) return;
+    if (!confirm('Excluir este usu·rio')) return;
     DB.Usuarios.remover(id);
     mostrarAba('usuarios', document.querySelector('.config-menu-item.active'));
-    Utils.toast('Usu√°rio exclu√≠do.');
+    Utils.toast('Usu·rio excluÌdo.');
   }
 
   function bindUsuarios() {
@@ -195,7 +195,7 @@
 
       const todos = DB.Usuarios.listar();
       const emailDup = todos.find(u => u.email === email && u.id !== id);
-      if (emailDup) { alert('J√° existe um usu√°rio com este e-mail.'); return; }
+      if (emailDup) { alert('J· existe um usu·rio com este e-mail.'); return; }
 
       if (id) {
         // Editar
@@ -206,12 +206,12 @@
         u.ativo = ativo;
         if (senha) u.senha = senha;
         DB.Usuarios.salvar(u);
-        Utils.toast('Usu√°rio atualizado.');
+        Utils.toast('Usu·rio atualizado.');
       } else {
         // Novo
-        if (!senha) { alert('Informe uma senha para o novo usu√°rio.'); return; }
+        if (!senha) { alert('Informe uma senha para o novo usu·rio.'); return; }
         DB.Usuarios.salvar({ nome, email, senha: senha, nivel, ativo });
-        Utils.toast('Usu√°rio criado.');
+        Utils.toast('Usu·rio criado.');
       }
       Utils.fecharModal('modal-usuario');
       mostrarAba('usuarios', document.querySelector('.config-menu-item.active'));
@@ -222,32 +222,32 @@
   function abaSistema() {
     const temaAtual = localStorage.getItem('atlas_theme') || 'light';
     return `
-      <div class="config-panel-header"> Prefer√™ncias do Sistema</div> <div style="margin-bottom:28px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Tema Visual</label> <div style="display:flex;gap:16px"> <div class="theme-card ${temaAtual === 'light' ? 'selected' : ''}" onclick="mudarTema('light')" id="tc-light"> <div class="preview theme-light-preview"></div> <span style="font-size:13px;font-weight:600">Claro</span> </div> <div class="theme-card ${temaAtual === 'dark' ? 'selected' : ''}" onclick="mudarTema('dark')" id="tc-dark"> <div class="preview theme-dark-preview"></div> <span style="font-size:13px;font-weight:600">Escuro</span> </div> </div> </div> <div class="divider"></div> <div style="margin-top:24px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Dados do Sistema</label> <div style="display:flex;gap:12px;flex-wrap:wrap"> <button class="btn btn-secondary" onclick="exportarDados()"> Exportar Dados (JSON)</button> <button class="btn btn-secondary" onclick="importarDados()"> Importar Dados (JSON)</button> <button class="btn btn-secondary" style="color:var(--danger)" onclick="limparDados()"> Limpar Todos os Dados</button> </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:10px"> Exportar antes de limpar dados. Todos os registros ser√£o removidos permanentemente.</div> </div> <div style="margin-top:28px;padding:20px;background:var(--bg);border:2px solid var(--danger);border-radius:12px"> <div style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:8px"> Preparar para Uso Real</div> <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:14px"> Remove todos os dados de demonstra√ß√£o - pe√ßas, movimenta√ß√µes, ajustes, requisi√ß√µes e ativos.<br> <strong style="color:var(--text)">Usu√°rios, senhas e configura√ß√µes da empresa s√£o preservados.</strong> </div> <button class="btn" style="background:var(--danger);color:#fff;font-weight:700" onclick="limparParaUsoReal()"> Limpar Dados Demo e Iniciar Uso Real
+      <div class="config-panel-header"> PreferÍncias do Sistema</div> <div style="margin-bottom:28px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Tema Visual</label> <div style="display:flex;gap:16px"> <div class="theme-card ${temaAtual === 'light' ? 'selected' : ''}" onclick="mudarTema('light')" id="tc-light"> <div class="preview theme-light-preview"></div> <span style="font-size:13px;font-weight:600">Claro</span> </div> <div class="theme-card ${temaAtual === 'dark' ? 'selected' : ''}" onclick="mudarTema('dark')" id="tc-dark"> <div class="preview theme-dark-preview"></div> <span style="font-size:13px;font-weight:600">Escuro</span> </div> </div> </div> <div class="divider"></div> <div style="margin-top:24px"> <label style="font-size:13px;font-weight:600;color:var(--text);display:block;margin-bottom:14px">Dados do Sistema</label> <div style="display:flex;gap:12px;flex-wrap:wrap"> <button class="btn btn-secondary" onclick="exportarDados()"> Exportar Dados (JSON)</button> <button class="btn btn-secondary" onclick="importarDados()"> Importar Dados (JSON)</button> <button class="btn btn-secondary" style="color:var(--danger)" onclick="limparDados()"> Limpar Todos os Dados</button> </div> <div style="font-size:11.5px;color:var(--text-muted);margin-top:10px"> Exportar antes de limpar dados. Todos os registros ser„o removidos permanentemente.</div> </div> <div style="margin-top:28px;padding:20px;background:var(--bg);border:2px solid var(--danger);border-radius:12px"> <div style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:8px"> Preparar para Uso Real</div> <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:14px"> Remove todos os dados de demonstraÁ„o - peÁas, movimentaÁıes, ajustes, requisiÁıes e ativos.<br> <strong style="color:var(--text)">Usu·rios, senhas e configuraÁıes da empresa s„o preservados.</strong> </div> <button class="btn" style="background:var(--danger);color:#fff;font-weight:700" onclick="limparParaUsoReal()"> Limpar Dados Demo e Iniciar Uso Real
         </button> </div> <input type="file" id="import-json-input" accept=".json" style="display:none" onchange="processarImportacao(this)"> `;
   }
 
   function bindSistema() {}
 
-  // -- ABA APROVA√á√ÉO -------------------------------------
+  // -- ABA APROVA«√O -------------------------------------
   function abaAprovacao() {
     const cfg = DB.Config.get();
     return `
-      <div class="config-panel-header">Configura√ß√µes de Aprova√ß√£o</div> <div style="max-width:580px"> <div class="form-group" style="margin-bottom:20px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">Emails dos Aprovadores de Compras</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Separe m√∫ltiplos emails com v√≠rgula. Estes emails ser√£o usados no bot√£o " Notificar" nas requisi√ß√µes de compra.</div> <input type="email" multiple id="ap-emails" value="${Utils.safe(cfg.emailAprovadores||'')}" placeholder="gerente@empresa.com, pcm@empresa.com" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13.5px"> </div> <div class="form-group" style="margin-bottom:20px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">Aprova√ß√£o de Ajustes de Saldo</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Quando ativado, PCM n√£o pode aplicar ajustes diretamente - cria solicita√ß√£o PENDENTE para o ADMIN aprovar.</div> <label style="display:flex;align-items:center;gap:10px;cursor:pointer"> <input type="checkbox" id="ap-req-ajuste" ${cfg.aprovacaoAjustes  'checked' : ''} style="width:17px;height:17px;cursor:pointer"> <span style="font-size:13px">Exigir aprova√ß√£o do ADMIN para ajustes de saldo</span> </label> </div> <div class="form-group" style="margin-bottom:20px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">Aprova√ß√£o de Requisi√ß√µes de Compra</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Quando ativado, requisi√ß√µes cridas por PCM ficam PENDENTES at√© ADMIN aprovar.</div> <label style="display:flex;align-items:center;gap:10px;cursor:pointer"> <input type="checkbox" id="ap-req-compra" ${cfg.aprovacaoRequisicoes !== false  'checked' : ''} style="width:17px;height:17px;cursor:pointer"> <span style="font-size:13px">Exigir aprova√ß√£o do ADMIN para requisi√ß√µes de compra</span> </label> </div> <div style="margin-top:22px;padding:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px"> <div style="font-size:13px;font-weight:700;margin-bottom:4px">Configura√ß√£o EmailJS (envio direto, sem abrir cliente de e-mail)</div> <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Crie uma conta gratuita em <a href="https://www.emailjs.com" target="_blank" style="color:var(--primary)">emailjs.com</a>, configure um servi√ßo de e-mail e um template. Vari√°veis principais: <code>to_email</code>, <code>req_numero</code>, <code>req_prioridade</code>, <code>req_data</code>, <code>req_hora</code>, <code>req_solicitante</code>, <code>req_responsavel</code>, <code>req_material</code>, <code>req_maquina</code>, <code>req_classificacao</code>, <code>req_fluxo</code>, <code>req_cc_oi</code>, <code>req_fornecedor</code>, <code>req_num_orcamento</code>, <code>req_valor</code>, <code>req_moeda</code>, <code>req_cotacao</code>, <code>req_valor_original_moeda</code>, <code>req_itens</code>, <code>req_data_entrega</code>, <code>req_justificativa</code>, <code>req_observacoes</code>, <code>orcamento_info</code>, <code>link_requisicao</code>, <code>link_sap</code>.</div> <div class="form-group" style="margin-bottom:12px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">URL do Sistema (base para links de aprova√ß√£o)</label> <input type="url" id="cfg-sysurl" value="${Utils.safe(cfg.sysUrl||'')}" placeholder="https://meusite.com/atlas/" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group" style="margin-bottom:12px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">EmailJS Public Key</label> <input type="text" id="cfg-ejs-key" value="${Utils.safe(cfg.emailjsPublicKey||'')}" placeholder="user_XXXXXXXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Service ID</label> <input type="text" id="cfg-ejs-service" value="${Utils.safe(cfg.emailjsServiceId||'')}" placeholder="service_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Nova Solicita√ß√£o / Rejei√ß√£o)</label> <input type="text" id="cfg-ejs-template" value="${Utils.safe(cfg.emailjsTemplateId||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Aprova√ß√£o) <span style="font-weight:400;color:var(--text-muted)">(opcional - usa o mesmo se vazio)</span></label> <input type="text" id="cfg-ejs-template-aprov" value="${Utils.safe(cfg.emailjsTemplateIdAprovacao||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> </div> <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px"> <div style="font-size:12px;font-weight:700;margin-bottom:10px"> Templates para M√≥dulo de Consertos Externos</div> <div class="form-group" style="margin-bottom:14px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px"> E-mail da Contabilidade (destinat√°rios do link seguro)</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Separe m√∫ltiplos e-mails com v√≠rgula. Estes endere√ßos receber√£o o link seguro para upload da NF de remessa.</div> <input type="email" multiple id="cfg-email-contabilidade" value="${Utils.safe(cfg.emailContabilidade||'')}" placeholder="contabilidade@empresa.com, fiscal@empresa.com" style="width:100%;padding:9px 12px;border:1.5px solid var(--primary);border-radius:8px;background:var(--bg);color:var(--text);font-size:13.5px"> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Nova Solicita√ß√£o de Conserto)</label> <input type="text" id="cfg-ejs-template-conserto-novo" value="${Utils.safe(cfg.emailjsTemplateIdConsertoNovo||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Retorno do Material)</label> <input type="text" id="cfg-ejs-template-conserto-retorno" value="${Utils.safe(cfg.emailjsTemplateIdConsertoRetorno||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Prazo Vencido)</label> <input type="text" id="cfg-ejs-template-conserto-prazo" value="${Utils.safe(cfg.emailjsTemplateIdConsertoPrazo||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (NF Anexada)</label> <input type="text" id="cfg-ejs-template-conserto-nf" value="${Utils.safe(cfg.emailjsTemplateIdConsertoNF||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> </div> <div style="font-size:11px;color:var(--text-muted);margin-top:8px">Vari√°veis dispon√≠veis: <code>to_email</code>, <code>conserto_numero</code>, <code>conserto_material</code>, <code>conserto_descricao</code>, <code>conserto_fornecedor</code>, <code>conserto_status</code>, <code>conserto_data_prevista_retorno</code>, <code>conserto_valor</code>, <code>solicitante_nome</code>, <code>link_conserto</code>.</div> </div> </div> <div style="margin-top:22px;padding:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px"> <div style="font-size:13px;font-weight:700;margin-bottom:8px"> Op√ß√µes Din√¢micas da Requisi√ß√£o</div> <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Edite as listas abaixo para o formul√°rio de requisi√ß√£o. Formato por linha: <code>VALOR|R√≥tulo</code>. Exemplo: <code>URGENTE|Urgente</code>.</div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Prioridades (bot√µes)</label> <textarea id="cfg-req-prioridades" rows="4" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Fluxos de Entrada (dropdown)</label> <textarea id="cfg-req-fluxos" rows="5" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Moedas (uma por linha)</label> <textarea id="cfg-req-moedas" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugest√µes de Fornecedor (uma por linha)</label> <textarea id="cfg-req-sug-forn" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugest√µes de Centro de Custo (uma por linha)</label> <textarea id="cfg-req-sug-cc" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugest√µes de Material/Servi√ßo (uma por linha)</label> <textarea id="cfg-req-sug-mat" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugest√µes de Equipamento (uma por linha)</label> <textarea id="cfg-req-sug-eqp" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> </div> <button class="btn btn-primary" style="margin-top:18px" onclick="salvarAprovacao()"> Salvar Configura√ß√µes</button> </div> `;
+      <div class="config-panel-header">ConfiguraÁıes de AprovaÁ„o</div> <div style="max-width:580px"> <div class="form-group" style="margin-bottom:20px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">Emails dos Aprovadores de Compras</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Separe m˙ltiplos emails com vÌrgula. Estes emails ser„o usados no bot„o " Notificar" nas requisiÁıes de compra.</div> <input type="email" multiple id="ap-emails" value="${Utils.safe(cfg.emailAprovadores||'')}" placeholder="gerente@empresa.com, pcm@empresa.com" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13.5px"> </div> <div class="form-group" style="margin-bottom:20px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">AprovaÁ„o de Ajustes de Saldo</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Quando ativado, PCM n„o pode aplicar ajustes diretamente - cria solicitaÁ„o PENDENTE para o ADMIN aprovar.</div> <label style="display:flex;align-items:center;gap:10px;cursor:pointer"> <input type="checkbox" id="ap-req-ajuste" ${cfg.aprovacaoAjustes  'checked' : ''} style="width:17px;height:17px;cursor:pointer"> <span style="font-size:13px">Exigir aprovaÁ„o do ADMIN para ajustes de saldo</span> </label> </div> <div class="form-group" style="margin-bottom:20px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">AprovaÁ„o de RequisiÁıes de Compra</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Quando ativado, requisiÁıes cridas por PCM ficam PENDENTES atÈ ADMIN aprovar.</div> <label style="display:flex;align-items:center;gap:10px;cursor:pointer"> <input type="checkbox" id="ap-req-compra" ${cfg.aprovacaoRequisicoes !== false  'checked' : ''} style="width:17px;height:17px;cursor:pointer"> <span style="font-size:13px">Exigir aprovaÁ„o do ADMIN para requisiÁıes de compra</span> </label> </div> <div style="margin-top:22px;padding:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px"> <div style="font-size:13px;font-weight:700;margin-bottom:4px">ConfiguraÁ„o EmailJS (envio direto, sem abrir cliente de e-mail)</div> <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Crie uma conta gratuita em <a href="https://www.emailjs.com" target="_blank" style="color:var(--primary)">emailjs.com</a>, configure um serviÁo de e-mail e um template. Vari·veis principais: <code>to_email</code>, <code>req_numero</code>, <code>req_prioridade</code>, <code>req_data</code>, <code>req_hora</code>, <code>req_solicitante</code>, <code>req_responsavel</code>, <code>req_material</code>, <code>req_maquina</code>, <code>req_classificacao</code>, <code>req_fluxo</code>, <code>req_cc_oi</code>, <code>req_fornecedor</code>, <code>req_num_orcamento</code>, <code>req_valor</code>, <code>req_moeda</code>, <code>req_cotacao</code>, <code>req_valor_original_moeda</code>, <code>req_itens</code>, <code>req_data_entrega</code>, <code>req_justificativa</code>, <code>req_observacoes</code>, <code>orcamento_info</code>, <code>link_requisicao</code>, <code>link_sap</code>.</div> <div class="form-group" style="margin-bottom:12px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">URL do Sistema (base para links de aprovaÁ„o)</label> <input type="url" id="cfg-sysurl" value="${Utils.safe(cfg.sysUrl||'')}" placeholder="https://meusite.com/atlas/" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group" style="margin-bottom:12px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">EmailJS Public Key</label> <input type="text" id="cfg-ejs-key" value="${Utils.safe(cfg.emailjsPublicKey||'')}" placeholder="user_XXXXXXXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Service ID</label> <input type="text" id="cfg-ejs-service" value="${Utils.safe(cfg.emailjsServiceId||'')}" placeholder="service_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Nova SolicitaÁ„o / RejeiÁ„o)</label> <input type="text" id="cfg-ejs-template" value="${Utils.safe(cfg.emailjsTemplateId||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (AprovaÁ„o) <span style="font-weight:400;color:var(--text-muted)">(opcional - usa o mesmo se vazio)</span></label> <input type="text" id="cfg-ejs-template-aprov" value="${Utils.safe(cfg.emailjsTemplateIdAprovacao||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> </div> <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px"> <div style="font-size:12px;font-weight:700;margin-bottom:10px"> Templates para MÛdulo de Consertos Externos</div> <div class="form-group" style="margin-bottom:14px"> <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px"> E-mail da Contabilidade (destinat·rios do link seguro)</label> <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Separe m˙ltiplos e-mails com vÌrgula. Estes endereÁos receber„o o link seguro para upload da NF de remessa.</div> <input type="email" multiple id="cfg-email-contabilidade" value="${Utils.safe(cfg.emailContabilidade||'')}" placeholder="contabilidade@empresa.com, fiscal@empresa.com" style="width:100%;padding:9px 12px;border:1.5px solid var(--primary);border-radius:8px;background:var(--bg);color:var(--text);font-size:13.5px"> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Nova SolicitaÁ„o de Conserto)</label> <input type="text" id="cfg-ejs-template-conserto-novo" value="${Utils.safe(cfg.emailjsTemplateIdConsertoNovo||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Retorno do Material)</label> <input type="text" id="cfg-ejs-template-conserto-retorno" value="${Utils.safe(cfg.emailjsTemplateIdConsertoRetorno||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (Prazo Vencido)</label> <input type="text" id="cfg-ejs-template-conserto-prazo" value="${Utils.safe(cfg.emailjsTemplateIdConsertoPrazo||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Template ID (NF Anexada)</label> <input type="text" id="cfg-ejs-template-conserto-nf" value="${Utils.safe(cfg.emailjsTemplateIdConsertoNF||'')}" placeholder="template_XXXXXXX" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"> </div> </div> <div style="font-size:11px;color:var(--text-muted);margin-top:8px">Vari·veis disponÌveis: <code>to_email</code>, <code>conserto_numero</code>, <code>conserto_material</code>, <code>conserto_descricao</code>, <code>conserto_fornecedor</code>, <code>conserto_status</code>, <code>conserto_data_prevista_retorno</code>, <code>conserto_valor</code>, <code>solicitante_nome</code>, <code>link_conserto</code>.</div> </div> </div> <div style="margin-top:22px;padding:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px"> <div style="font-size:13px;font-weight:700;margin-bottom:8px"> OpÁıes Din‚micas da RequisiÁ„o</div> <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Edite as listas abaixo para o formul·rio de requisiÁ„o. Formato por linha: <code>VALOR|RÛtulo</code>. Exemplo: <code>URGENTE|Urgente</code>.</div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Prioridades (botıes)</label> <textarea id="cfg-req-prioridades" rows="4" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Fluxos de Entrada (dropdown)</label> <textarea id="cfg-req-fluxos" rows="5" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Moedas (uma por linha)</label> <textarea id="cfg-req-moedas" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugestıes de Fornecedor (uma por linha)</label> <textarea id="cfg-req-sug-forn" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugestıes de Centro de Custo (uma por linha)</label> <textarea id="cfg-req-sug-cc" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group" style="margin-bottom:10px"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugestıes de Material/ServiÁo (uma por linha)</label> <textarea id="cfg-req-sug-mat" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> <div class="form-group"> <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Sugestıes de Equipamento (uma por linha)</label> <textarea id="cfg-req-sug-eqp" rows="3" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:12px"></textarea> </div> </div> <button class="btn btn-primary" style="margin-top:18px" onclick="salvarAprovacao()"> Salvar ConfiguraÁıes</button> </div> `;
   }
 
   function bindAprovacao() {
     var cfg = DB.Config.get();
     var prioridades = Array.isArray(cfg.reqPrioridades) && cfg.reqPrioridades.length  cfg.reqPrioridades : [
       { value:'BAIXA', label:'Baixa' },
-      { value:'MEDIA', label:'M√©dia' },
+      { value:'MEDIA', label:'MÈdia' },
       { value:'ALTA', label:'Alta' },
       { value:'URGENTE', label:'Urgente' }
     ];
     var fluxos = Array.isArray(cfg.reqFluxos) && cfg.reqFluxos.length  cfg.reqFluxos : [
       { value:'MATERIAL_NORMAL', label:'Material - Normal' },
       { value:'MATERIAL_RETIRAR', label:'Material - Retirar no Fornecedor' },
-      { value:'SERVICO_INTERNO', label:'Servi√ßo - Interno' },
-      { value:'SERVICO_EXTERNO', label:'Servi√ßo - Externo' },
+      { value:'SERVICO_INTERNO', label:'ServiÁo - Interno' },
+      { value:'SERVICO_EXTERNO', label:'ServiÁo - Externo' },
       { value:'FRETE', label:'Frete' }
     ];
     var moedas = Array.isArray(cfg.reqMoedas) && cfg.reqMoedas.length  cfg.reqMoedas : ['BRL','USD','EUR','CNY','JPY','GBP'];
@@ -272,15 +272,15 @@
     setVal('cfg-email-contabilidade', cfg.emailContabilidade || '');
   }
 
-  // -- ABA USU√ÅRIOS DE RETIRADA ---------------------------
+  // -- ABA USU¡RIOS DE RETIRADA ---------------------------
   function abaRetirada() {
     const lista = DB.UsuariosRetirada.listar();
     const rows = lista.map(u => `
       <div class="user-row" style="grid-template-columns:1fr 1fr 1fr auto auto"> <div> <div class="nome">${Utils.safe(u.nome)}</div> </div> <div style="font-family:monospace;font-size:13px;color:var(--text-muted)">${Utils.safe(u.codigo||'-')}</div> <span class="badge ${u.ativo !== false ? 'badge-ok' : 'badge-critical'}">${u.ativo !== false ? 'Ativo' : 'Inativo'}</span> <button class="btn btn-secondary btn-sm" onclick="editarUR('${u.id}')"></button> <button class="btn btn-secondary btn-sm" style="color:var(--danger)" onclick="excluirUR('${u.id}')"></button> </div> `).join('');
     return `
-      <div class="config-panel-header" style="display:flex;align-items:center;justify-content:space-between"> <span> Usu√°rios de Retirada (QR Code)</span> <button class="btn btn-primary btn-sm" onclick="novoUR()">+ Novo Usu√°rio</button> </div> <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px;background:var(--bg);padding:12px 16px;border-radius:8px;border:1px solid var(--border)"> Estes usu√°rios s√£o quem pode <strong>retirar materiais via QR Code</strong> (tela <code>retirada.html</code>), sem precisar de login no sistema completo.
-        Cada usu√°rio se identifica pelo <strong>nome</strong> ou <strong>c√≥digo</strong> cadastrado aqui.
-      </div> <div style="font-size:12px;font-weight:600;color:var(--text-muted);display:grid;grid-template-columns:1fr 1fr 1fr auto auto;gap:14px;padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:4px"> <span>Nome</span><span>C√≥digo</span><span>Status</span><span></span><span></span> </div> <div id="lista-ur">${rows || '<div class="empty-state"><div class="icon"></div><p>Nenhum usu√°rio cadastrado</p></div>'}</div> `;
+      <div class="config-panel-header" style="display:flex;align-items:center;justify-content:space-between"> <span> Usu·rios de Retirada (QR Code)</span> <button class="btn btn-primary btn-sm" onclick="novoUR()">+ Novo Usu·rio</button> </div> <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px;background:var(--bg);padding:12px 16px;border-radius:8px;border:1px solid var(--border)"> Estes usu·rios s„o quem pode <strong>retirar materiais via QR Code</strong> (tela <code>retirada.html</code>), sem precisar de login no sistema completo.
+        Cada usu·rio se identifica pelo <strong>nome</strong> ou <strong>cÛdigo</strong> cadastrado aqui.
+      </div> <div style="font-size:12px;font-weight:600;color:var(--text-muted);display:grid;grid-template-columns:1fr 1fr 1fr auto auto;gap:14px;padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:4px"> <span>Nome</span><span>CÛdigo</span><span>Status</span><span></span><span></span> </div> <div id="lista-ur">${rows || '<div class="empty-state"><div class="icon"></div><p>Nenhum usu·rio cadastrado</p></div>'}</div> `;
   }
 
   function bindRetirada() {
@@ -295,7 +295,7 @@
     document.getElementById('ur-nome').value  = '';
     document.getElementById('ur-codigo').value = '';
     document.getElementById('ur-ativo').value = 'true';
-    document.getElementById('modal-ur-titulo').textContent = 'Novo Usu√°rio de Retirada';
+    document.getElementById('modal-ur-titulo').textContent = 'Novo Usu·rio de Retirada';
     Utils.abrirModal('modal-ur');
   }
 
@@ -306,7 +306,7 @@
     document.getElementById('ur-nome').value   = u.nome;
     document.getElementById('ur-codigo').value = u.codigo || '';
     document.getElementById('ur-ativo').value  = String(u.ativo !== false);
-    document.getElementById('modal-ur-titulo').textContent = 'Editar Usu√°rio de Retirada';
+    document.getElementById('modal-ur-titulo').textContent = 'Editar Usu·rio de Retirada';
     Utils.abrirModal('modal-ur');
   }
 
@@ -315,17 +315,17 @@
     const nome = document.getElementById('ur-nome').value.trim();
     const cod  = document.getElementById('ur-codigo').value.trim().toUpperCase();
     const ativo = document.getElementById('ur-ativo').value === 'true';
-    if (!nome) { Utils.toast('Nome obrigat√≥rio', 'error'); return; }
+    if (!nome) { Utils.toast('Nome obrigatÛrio', 'error'); return; }
     DB.UsuariosRetirada.salvar({ id: id||undefined, nome, codigo: cod, ativo });
     Utils.fecharModal('modal-ur');
-    Utils.toast('Usu√°rio salvo!');
+    Utils.toast('Usu·rio salvo!');
     mostrarAba('retirada', document.querySelector('.config-menu-item.active'));
   }
 
   function excluirUR(id) {
-    if (!confirm('Remover este usu√°rio de retirada')) return;
+    if (!confirm('Remover este usu·rio de retirada')) return;
     DB.UsuariosRetirada.remover(id);
-    Utils.toast('Usu√°rio removido!');
+    Utils.toast('Usu·rio removido!');
     mostrarAba('retirada', document.querySelector('.config-menu-item.active'));
   }
 
@@ -393,7 +393,7 @@
       reqSugestoesMaterial:     reqSugestoesMaterial,
       reqSugestoesEquipamento:  reqSugestoesEquipamento,
     });
-    Utils.toast('Configura√ß√µes de aprova√ß√£o salvas!', 'success');
+    Utils.toast('ConfiguraÁıes de aprovaÁ„o salvas!', 'success');
   }
 
   function mudarTema(tema) {
@@ -417,7 +417,7 @@
       URL.revokeObjectURL(a.href);
       Utils.toast('Backup exportado com sucesso!', 'success');
     } catch(err) {
-      alert('Erro ao exportar dados. Verifique se o servidor est√° rodando.');
+      alert('Erro ao exportar dados. Verifique se o servidor est· rodando.');
     }
   }
 
@@ -432,7 +432,7 @@
     reader.onload = async function(e) {
       try {
         const dados = JSON.parse(e.target.result);
-        if (!confirm('Isso substituir√° TODOS os dados atuais. Confirma')) return;
+        if (!confirm('Isso substituir· TODOS os dados atuais. Confirma')) return;
         const resp = await fetch('/api/import', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -442,7 +442,7 @@
         Utils.toast('Dados importados com sucesso!', 'success');
         setTimeout(() => location.reload(), 1000);
       } catch(err) {
-        alert('Arquivo inv√°lido ou erro no servidor. Verifique se √© um JSON de backup do Atlas PCM.');
+        alert('Arquivo inv·lido ou erro no servidor. Verifique se È um JSON de backup do Atlas PCM.');
       }
     };
     reader.readAsText(file);
@@ -450,39 +450,39 @@
   }
 
   async function limparDados() {
-    if (!confirm('ATEN√á√ÉO: Todos os dados incluindo usu√°rios ser√£o removidos permanentemente.\nExporte um backup antes se necess√°rio.\n\nClique OK para confirmar.')) return;
+    if (!confirm('ATEN«√O: Todos os dados incluindo usu·rios ser„o removidos permanentemente.\nExporte um backup antes se necess·rio.\n\nClique OK para confirmar.')) return;
     try {
       await fetch('/api/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pecas:[], movimentos:[], ajustes:[], requisicoes:[], usuarios:[], ativos:[], config:{} })
       });
-      alert('Dados removidos. O sistema ser√° reiniciado.');
+      alert('Dados removidos. O sistema ser· reiniciado.');
       Auth.logout();
     } catch(err) {
-      alert('Erro ao limpar dados. Verifique se o servidor est√° rodando.');
+      alert('Erro ao limpar dados. Verifique se o servidor est· rodando.');
     }
   }
 
   async function limparParaUsoReal() {
-    if (!confirm('ATEN√á√ÉO: Todos os dados de demonstra√ß√£o ser√£o removidos.\n\nSer√£o preservados:\nUsu√°rios e senhas\nConfigura√ß√µes da empresa\n\nSer√£o removidos:\nPe√ßas\nMovimenta√ß√µes\nAjustes de saldo\nRequisi√ß√µes de compra\nAtivos\n\nConfirma')) return;
+    if (!confirm('ATEN«√O: Todos os dados de demonstraÁ„o ser„o removidos.\n\nSer„o preservados:\nUsu·rios e senhas\nConfiguraÁıes da empresa\n\nSer„o removidos:\nPeÁas\nMovimentaÁıes\nAjustes de saldo\nRequisiÁıes de compra\nAtivos\n\nConfirma')) return;
     try {
       const resp = await fetch('/api/reset-dados', { method: 'POST' });
       if (!resp.ok) throw new Error();
       Utils.toast('Sistema limpo! Pronto para uso real.', 'success');
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
     } catch(err) {
-      alert('Erro ao limpar dados. Verifique se o servidor est√° rodando.');
+      alert('Erro ao limpar dados. Verifique se o servidor est· rodando.');
     }
   }
 
   // -- ABA CARGA EM MASSA --------------------------------
   function abaCarga() {
     return `
-      <div class="config-panel-header"> Carga em Massa - Importar Planilha de Pe√ßas</div> <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:22px;font-size:13px;color:var(--text-muted);line-height:1.7"> <strong style="color:var(--text)"> Formatos aceitos:</strong> Excel (.xlsx, .xls), CSV (.csv) ou planilha Google Sheets exportada.<br><br> <strong style="color:var(--text)"> Colunas esperadas</strong> (em qualquer idioma - o sistema detecta automaticamente pela posi√ß√£o):<br> <code style="display:inline-block;margin-top:6px;padding:4px 10px;background:var(--card);border-radius:6px;font-size:12px;color:var(--text)"> Coluna A: C√≥digo &nbsp;|&nbsp; B: Nome/Descri√ß√£o &nbsp;|&nbsp; C: Descri√ß√£o &nbsp;|&nbsp; D: Localiza√ß√£o &nbsp;|&nbsp; E: Pre√ßo Unit. &nbsp;|&nbsp; F: Qtd Estoque<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;G: (ignorada) &nbsp;|&nbsp; H: Estoque M√≠n. &nbsp;|&nbsp; I: Prazo (dias) &nbsp;|&nbsp; J: √öltima Compra &nbsp;|&nbsp; K: Qtd Repor &nbsp;|&nbsp; L: Descontinuado
-        </code><br> A <strong>primeira linha</strong> de cabe√ßalho √© ignorada. Itens com c√≥digo j√° existente s√£o <strong>atualizados</strong>.
+      <div class="config-panel-header"> Carga em Massa - Importar Planilha de PeÁas</div> <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:22px;font-size:13px;color:var(--text-muted);line-height:1.7"> <strong style="color:var(--text)"> Formatos aceitos:</strong> Excel (.xlsx, .xls), CSV (.csv) ou planilha Google Sheets exportada.<br><br> <strong style="color:var(--text)"> Colunas esperadas</strong> (em qualquer idioma - o sistema detecta automaticamente pela posiÁ„o):<br> <code style="display:inline-block;margin-top:6px;padding:4px 10px;background:var(--card);border-radius:6px;font-size:12px;color:var(--text)"> Coluna A: CÛdigo &nbsp;|&nbsp; B: Nome/DescriÁ„o &nbsp;|&nbsp; C: DescriÁ„o &nbsp;|&nbsp; D: LocalizaÁ„o &nbsp;|&nbsp; E: PreÁo Unit. &nbsp;|&nbsp; F: Qtd Estoque<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;G: (ignorada) &nbsp;|&nbsp; H: Estoque MÌn. &nbsp;|&nbsp; I: Prazo (dias) &nbsp;|&nbsp; J: ⁄ltima Compra &nbsp;|&nbsp; K: Qtd Repor &nbsp;|&nbsp; L: Descontinuado
+        </code><br> A <strong>primeira linha</strong> de cabeÁalho È ignorada. Itens com cÛdigo j· existente s„o <strong>atualizados</strong>.
       </div> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px"> <label class="btn btn-primary" style="cursor:pointer"> Selecionar Planilha / CSV
-          <input type="file" id="carga-csv-input" accept=".xlsx,.xls,.ods,.csv,.txt" style="display:none" onchange="previewCarga(this)"> </label> <span id="carga-nome-arquivo" style="font-size:13px;color:var(--text-muted)">Nenhum arquivo selecionado</span> </div> <div id="carga-preview" style="display:none"> <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px"> <div id="carga-resumo" style="font-size:13px;font-weight:600;color:var(--text)"></div> <div style="display:flex;gap:10px"> <button class="btn btn-secondary" onclick="document.getElementById('carga-csv-input').value='';document.getElementById('carga-preview').style.display='none';document.getElementById('carga-nome-arquivo').textContent='Nenhum arquivo selecionado'">Cancelar</button> <button class="btn btn-primary" id="carga-btn-importar" onclick="executarCarga()">Importar Todos</button> </div> </div> <div style="overflow-x:auto;max-height:420px;overflow-y:auto;border-radius:8px;border:1px solid var(--border)"> <table class="data-table" id="carga-tabela" style="font-size:12.5px"> <thead><tr> <th>C√≥digo</th><th>Nome / Descri√ß√£o</th><th>Compartimento</th> <th>Pre√ßo Unit.</th><th>Qtd Estoque</th><th>N√≠vel M√≠n.</th> <th>Prazo</th><th>Status</th> </tr></thead> <tbody id="carga-tbody"></tbody> </table> </div> </div> <div id="carga-resultado" style="display:none;margin-top:20px"></div> `;
+          <input type="file" id="carga-csv-input" accept=".xlsx,.xls,.ods,.csv,.txt" style="display:none" onchange="previewCarga(this)"> </label> <span id="carga-nome-arquivo" style="font-size:13px;color:var(--text-muted)">Nenhum arquivo selecionado</span> </div> <div id="carga-preview" style="display:none"> <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px"> <div id="carga-resumo" style="font-size:13px;font-weight:600;color:var(--text)"></div> <div style="display:flex;gap:10px"> <button class="btn btn-secondary" onclick="document.getElementById('carga-csv-input').value='';document.getElementById('carga-preview').style.display='none';document.getElementById('carga-nome-arquivo').textContent='Nenhum arquivo selecionado'">Cancelar</button> <button class="btn btn-primary" id="carga-btn-importar" onclick="executarCarga()">Importar Todos</button> </div> </div> <div style="overflow-x:auto;max-height:420px;overflow-y:auto;border-radius:8px;border:1px solid var(--border)"> <table class="data-table" id="carga-tabela" style="font-size:12.5px"> <thead><tr> <th>CÛdigo</th><th>Nome / DescriÁ„o</th><th>Compartimento</th> <th>PreÁo Unit.</th><th>Qtd Estoque</th><th>NÌvel MÌn.</th> <th>Prazo</th><th>Status</th> </tr></thead> <tbody id="carga-tbody"></tbody> </table> </div> </div> <div id="carga-resultado" style="display:none;margin-top:20px"></div> `;
   }
 
   let _cargaLinhas = [];
@@ -513,7 +513,7 @@
     if (isXlsx) {
       // -- Leitura via SheetJS -----------------------------
       if (typeof XLSX === 'undefined') {
-        Utils.toast('Biblioteca XLSX n√£o carregada. Verifique a conex√£o com a internet.', 'error');
+        Utils.toast('Biblioteca XLSX n„o carregada. Verifique a conex„o com a internet.', 'error');
         return;
       }
       const reader = new FileReader();
@@ -521,7 +521,7 @@
         try {
           const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true });
           const ws = wb.Sheets[wb.SheetNames[0]];  // primeira aba
-          // Converter para array de arrays (sem cabe√ßalho autom√°tico)
+          // Converter para array de arrays (sem cabeÁalho autom·tico)
           const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false });
           processarLinhas(rows);
         } catch(err) {
@@ -537,27 +537,27 @@
         const primLinha = texto.split('\n')[0];
         const sep = (primLinha.split(';').length > primLinha.split(',').length) ? ';' : ',';
         const linhasTxt = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        // Detectar se tem cabe√ßalho
+        // Detectar se tem cabeÁalho
         let inicio = 0;
         const primaCel = linhasTxt[0].split(sep)[0].trim().replace(/^"|"$/g,'');
         if (isNaN(primaCel) || primaCel === '') inicio = 1;
 
         const rows = linhasTxt.slice(inicio).map(l => parseCsvLine(l, sep));
-        processarLinhas(rows, true); // j√° sem cabe√ßalho
+        processarLinhas(rows, true); // j· sem cabeÁalho
       };
       reader.readAsText(file, 'UTF-8');
     }
   }
 
-  // N√∫cleo do preview: recebe array de arrays (rows[0] pode ser cabe√ßalho)
+  // N˙cleo do preview: recebe array de arrays (rows[0] pode ser cabeÁalho)
   function processarLinhas(rows, semCabecalho) {
-    // Detectar in√≠cio dos dados: procurar linha onde cells[1] √© um c√≥digo v√°lido
-    // (planilha real tem t√≠tulo na linha 0, cabe√ßalho na linha 2, dados a partir da 3)
+    // Detectar inÌcio dos dados: procurar linha onde cells[1] È um cÛdigo v·lido
+    // (planilha real tem tÌtulo na linha 0, cabeÁalho na linha 2, dados a partir da 3)
     let inicio = 0;
     if (!semCabecalho) {
       for (let i = 0; i < Math.min(rows.length, 10); i++) {
         const col1 = String(rows[i][1] || '').trim();
-        // C√≥digo v√°lido: letra(s) + d√≠gitos, opcionalmente com h√≠fen (ex: A0001, S4-0001)
+        // CÛdigo v·lido: letra(s) + dÌgitos, opcionalmente com hÌfen (ex: A0001, S4-0001)
         if (/^[A-Za-z][A-Za-z0-9\-]{3,}$/.test(col1)) {
           inicio = i;
           break;
@@ -576,17 +576,17 @@
 
       const str = v => String(v === null || v === undefined ? '' : v).trim().replace(/^"|"$/g, '');
 
-      // Mapeamento real da planilha (col A = √≠ndice/branco, dados a partir de B):
-      const codigo      = str(cells[1]).toUpperCase();   // Col B - C√≥digo
+      // Mapeamento real da planilha (col A = Ìndice/branco, dados a partir de B):
+      const codigo      = str(cells[1]).toUpperCase();   // Col B - CÛdigo
       const categoria   = str(cells[2]);                  // Col C - Nome/Categoria
-      const descricao   = str(cells[3]);                  // Col D - Descri√ß√£o completa
-      const localizacao = str(cells[4]);                  // Col E - N¬∫ Compartimento
-      const preco       = parsePtBRNumber(str(cells[5])); // Col F - Pre√ßo unit√°rio
+      const descricao   = str(cells[3]);                  // Col D - DescriÁ„o completa
+      const localizacao = str(cells[4]);                  // Col E - N∫ Compartimento
+      const preco       = parsePtBRNumber(str(cells[5])); // Col F - PreÁo unit·rio
       const qtdEstoque  = Math.round(parsePtBRNumber(str(cells[6]))); // Col G - Qtd estoque
       // cells[7] = Valor de estoque (calculado - ignorar)
-      const estoqueMin  = Math.round(parsePtBRNumber(str(cells[8]  || ''))); // Col I - N√≠vel m√≠nimo
+      const estoqueMin  = Math.round(parsePtBRNumber(str(cells[8]  || ''))); // Col I - NÌvel mÌnimo
       const prazo       = Math.round(parsePtBRNumber(str(cells[9]  || ''))); // Col J - Prazo entrega
-      const ultCompra   = str(cells[10] || '');                               // Col K - Data √∫ltima compra
+      const ultCompra   = str(cells[10] || '');                               // Col K - Data ˙ltima compra
       const qtdReposicao = Math.round(parsePtBRNumber(str(cells[11] || ''))); // Col L - Qtd a encomendar
       const descontStr  = str(cells[12] || '').toLowerCase();                 // Col M - Descontinuado
       const ativo       = !(descontStr === 'sim' || descontStr === 'yes' || descontStr === '1' || descontStr === 'true' || descontStr === 's');
@@ -625,7 +625,7 @@
 
   function executarCarga() {
     if (!_cargaLinhas.length) return;
-    if (!confirm(`Importar ${_cargaLinhas.length} itensItens existentes ser√£o atualizados.`)) return;
+    if (!confirm(`Importar ${_cargaLinhas.length} itensItens existentes ser„o atualizados.`)) return;
 
     let criados = 0, atualizados = 0;
     const agora = new Date().toISOString();
@@ -637,7 +637,7 @@
       peca.nome           = item.descricao || item.categoria || item.codigo;
       peca.categoria      = item.categoria || peca.categoria || 'Importado';
       peca.descricao      = item.descricao;
-      peca.localiza√ß√£o    = item.localizacao;
+      peca.localizaÁ„o    = item.localizacao;
       peca.precoUnitario  = item.preco;
       peca.estoqueMinimo  = item.estoqueMin;
       peca.unidade        = peca.unidade || 'UN';
@@ -660,7 +660,7 @@
           data: agora,
           responsavel: Auth.getSessao().id || 'sistema',
           ordemServico: '',
-          observacao: 'Carga inicial - importa√ß√£o de planilha'
+          observacao: 'Carga inicial - importaÁ„o de planilha'
         });
         criados++;
       } else if (pecaExistente) {
@@ -673,15 +673,15 @@
     document.getElementById('carga-preview').style.display = 'none';
     document.getElementById('carga-resultado').style.display = '';
     document.getElementById('carga-resultado').innerHTML = `
-      <div style="background:var(--success-light,#f0fdf4);border:1.5px solid var(--success);border-radius:10px;padding:18px 22px;color:var(--text)"> <div style="font-size:15px;font-weight:700;margin-bottom:6px">Importa√ß√£o conclu√≠da!</div> <div style="font-size:13.5px"> <strong>${criados}</strong> itens criados &nbsp;¬∑&nbsp;
-          <strong>${atualizados}</strong> itens atualizados &nbsp;¬∑&nbsp;
+      <div style="background:var(--success-light,#f0fdf4);border:1.5px solid var(--success);border-radius:10px;padding:18px 22px;color:var(--text)"> <div style="font-size:15px;font-weight:700;margin-bottom:6px">ImportaÁ„o concluÌda!</div> <div style="font-size:13.5px"> <strong>${criados}</strong> itens criados &nbsp;∑&nbsp;
+          <strong>${atualizados}</strong> itens atualizados &nbsp;∑&nbsp;
           <strong>${_cargaLinhas.length}</strong> total
-        </div> <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"> <a href="estoque.html" class="btn btn-primary btn-sm"> Ver Estoque</a> <a href="pecas.html" class="btn btn-secondary btn-sm"> Ver Pe√ßas</a> <button class="btn btn-secondary btn-sm" onclick="document.getElementById('carga-resultado').style.display='none';_cargaLinhas=[]">Nova importa√ß√£o</button> </div> </div> `;
+        </div> <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"> <a href="estoque.html" class="btn btn-primary btn-sm"> Ver Estoque</a> <a href="pecas.html" class="btn btn-secondary btn-sm"> Ver PeÁas</a> <button class="btn btn-secondary btn-sm" onclick="document.getElementById('carga-resultado').style.display='none';_cargaLinhas=[]">Nova importaÁ„o</button> </div> </div> `;
     _cargaLinhas = [];
   }
 
   function _inicializar() {
-    // Renderizar aba inicial com bot√£o correto selecionado
+    // Renderizar aba inicial com bot„o correto selecionado
     mostrarAba('empresa', document.querySelector('.config-menu-item'));
   }
 </script>

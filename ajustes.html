@@ -1,6 +1,6 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Ajuste de Saldo - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <style> .ajuste-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 24px; margin-bottom: 22px; }
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Ajuste de Saldo - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <style> .ajuste-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 24px; margin-bottom: 22px; }
     .operacao-selector { display: flex; gap: 10px; margin-bottom: 4px; }
     .op-btn { flex: 1; padding: 14px; border-radius: 8px; border: 2px solid var(--border); background: var(--bg); cursor: pointer; font-size: 15px; font-weight: 700; text-align: center; transition: all .15s; }
     .op-btn.selected-add { border-color: var(--success); background: #e6f4ea; color: var(--success); }
@@ -17,35 +17,35 @@
 <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">GestÃ£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gestão de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÃ§Ãµes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimentações</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÃ§as</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Peças</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">AnÃ¡lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÃ³rios</a>
+    <div class="nav-group-label">Análise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relatórios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>AdministraÃ§Ã£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÃ§Ãµes</a>
+    <div class="nav-group-label nav-admin" data-admin>Administração</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicitações</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÃ§Ãµes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> UsuÃ¡rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configurações</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usuários</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">â€¦</div>
-    <div class="user-role" id="sidebar-user-role">â€¦</div>
+    <div class="user-info" id="sidebar-user-name">…</div>
+    <div class="user-role" id="sidebar-user-role">…</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTEÃšDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Ajuste de Saldo</div> <div class="topbar-subtitle" id="topbar-subtitle">SolicitaÃ§Ã£o de ajuste de estoque</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- SEÃ‡ÃƒO PENDENTES (sÃ³ admin) --> <div id="secao-pendentes" style="display:none"> <div class="card" style="border-left:4px solid var(--warning);margin-bottom:18px"> <div class="card-title" style="color:var(--warning)">Ajustes Aguardando AprovaÃ§Ã£o</div> <div id="lista-pendentes"></div> <div id="empty-pendentes" style="display:none;font-size:13px;color:var(--text-muted);padding:10px 0">Nenhum ajuste pendente.</div> </div> </div> <div class="alert alert-warning" style="margin-bottom:18px"> <strong>AtenÃ§Ã£o:</strong> Ajustes de saldo devem ser usados apenas para corrigir divergÃªncias fÃ­sicas. Todo ajuste fica registrado com o responsÃ¡vel e <strong>requer aprovaÃ§Ã£o do ADMIN</strong>.
-      </div> <!-- FORMULÃRIO DE AJUSTE --> <div class="ajuste-card"> <div class="card-title"> Novo Ajuste</div> <form id="form-ajuste" onsubmit="registrarAjuste(event)" autocomplete="off"> <div class="form-grid"> <!-- PeÃ§a --> <div class="form-group" style="grid-column:1/-1"> <label>PeÃ§a *</label> <select id="aj-peca" required onchange="atualizarPreview()"> <option value="">- Selecione a peÃ§a -</option> </select> </div> <!-- OperaÃ§Ã£o --> <div class="form-group" style="grid-column:1/-1"> <label>OperaÃ§Ã£o *</label> <div class="operacao-selector"> <button type="button" class="op-btn selected-add" id="btn-add" onclick="selecionarOperacao('ADD')"> + ACRESCENTAR<br><span style="font-size:11px;font-weight:400;opacity:.7">Adicionar unidades ao saldo</span> </button> <button type="button" class="op-btn" id="btn-sub" onclick="selecionarOperacao('SUB')"> - SUBTRAIR<br><span style="font-size:11px;font-weight:400;opacity:.7">Remover unidades do saldo</span> </button> </div> <input type="hidden" id="aj-operacao" value="ADD"> </div> <!-- Quantidade --> <div class="form-group"> <label>Quantidade *</label> <input type="number" id="aj-quantidade" min="1" step="1" placeholder="0" required oninput="atualizarPreview()"> </div> <!-- Motivo --> <div class="form-group"> <label>Motivo *</label> <select id="aj-motivo" required> <option value="">- Selecione -</option> <option value="InventÃ¡rio fÃ­sico">InventÃ¡rio fÃ­sico</option> <option value="Erro de lanÃ§amento">Erro de lanÃ§amento anterior</option> <option value="Avaria/Perda">Avaria / Perda</option> <option value="DevoluÃ§Ã£o">DevoluÃ§Ã£o de material</option> <option value="DoaÃ§Ã£o">DoaÃ§Ã£o / TransferÃªncia</option> <option value="Outro">Outro (ver observaÃ§Ã£o)</option> </select> </div> <!-- ObservaÃ§Ã£o --> <div class="form-group full"> <label>ObservaÃ§Ã£o *</label> <textarea id="aj-obs" placeholder="Descreva o motivo detalhado do ajuste..." required></textarea> </div> </div> <!-- Preview saldo --> <div id="saldo-preview" class="saldo-preview" style="display:none"> <div class="saldo-prev-item"> <div class="label">Saldo Atual</div> <div class="valor" id="prev-atual">-</div> </div> <div class="saldo-prev-item"> <div class="label">Ajuste</div> <div class="valor" id="prev-ajuste">-</div> </div> <div class="saldo-prev-item"> <div class="label">Saldo Final</div> <div class="valor" id="prev-final">-</div> </div> </div> <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"> <button type="button" class="btn btn-outline" onclick="limparAjuste()">Limpar</button> <button type="submit" class="btn btn-warning" id="btn-confirmar-ajuste"> Solicitar Ajuste</button> </div> </form> </div> <!-- HISTÃ“RICO DE AJUSTES --> <div class="card"> <div class="card-title"> HistÃ³rico de Ajustes</div> <div class="table-wrapper"> <table> <thead> <tr> <th>Data</th> <th>PeÃ§a</th> <th>OperaÃ§Ã£o</th> <th>Quantidade</th> <th>Status</th> <th>Motivo</th> <th>ResponsÃ¡vel</th> <th>ObservaÃ§Ã£o</th> </tr> </thead> <tbody id="tbody-ajustes"></tbody> </table> </div> <div id="empty-ajustes" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhum ajuste realizado</p> </div> </div> </div> </div>
+</aside> <!-- CONTEÚDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Ajuste de Saldo</div> <div class="topbar-subtitle" id="topbar-subtitle">Solicitação de ajuste de estoque</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- SEÇÃO PENDENTES (só admin) --> <div id="secao-pendentes" style="display:none"> <div class="card" style="border-left:4px solid var(--warning);margin-bottom:18px"> <div class="card-title" style="color:var(--warning)">Ajustes Aguardando Aprovação</div> <div id="lista-pendentes"></div> <div id="empty-pendentes" style="display:none;font-size:13px;color:var(--text-muted);padding:10px 0">Nenhum ajuste pendente.</div> </div> </div> <div class="alert alert-warning" style="margin-bottom:18px"> <strong>Atenção:</strong> Ajustes de saldo devem ser usados apenas para corrigir divergências físicas. Todo ajuste fica registrado com o responsável e <strong>requer aprovação do ADMIN</strong>.
+      </div> <!-- FORMULÁRIO DE AJUSTE --> <div class="ajuste-card"> <div class="card-title"> Novo Ajuste</div> <form id="form-ajuste" onsubmit="registrarAjuste(event)" autocomplete="off"> <div class="form-grid"> <!-- Peça --> <div class="form-group" style="grid-column:1/-1"> <label>Peça *</label> <select id="aj-peca" required onchange="atualizarPreview()"> <option value="">- Selecione a peça -</option> </select> </div> <!-- Operação --> <div class="form-group" style="grid-column:1/-1"> <label>Operação *</label> <div class="operacao-selector"> <button type="button" class="op-btn selected-add" id="btn-add" onclick="selecionarOperacao('ADD')"> + ACRESCENTAR<br><span style="font-size:11px;font-weight:400;opacity:.7">Adicionar unidades ao saldo</span> </button> <button type="button" class="op-btn" id="btn-sub" onclick="selecionarOperacao('SUB')"> - SUBTRAIR<br><span style="font-size:11px;font-weight:400;opacity:.7">Remover unidades do saldo</span> </button> </div> <input type="hidden" id="aj-operacao" value="ADD"> </div> <!-- Quantidade --> <div class="form-group"> <label>Quantidade *</label> <input type="number" id="aj-quantidade" min="1" step="1" placeholder="0" required oninput="atualizarPreview()"> </div> <!-- Motivo --> <div class="form-group"> <label>Motivo *</label> <select id="aj-motivo" required> <option value="">- Selecione -</option> <option value="Inventário físico">Inventário físico</option> <option value="Erro de lançamento">Erro de lançamento anterior</option> <option value="Avaria/Perda">Avaria / Perda</option> <option value="Devolução">Devolução de material</option> <option value="Doação">Doação / Transferência</option> <option value="Outro">Outro (ver observação)</option> </select> </div> <!-- Observação --> <div class="form-group full"> <label>Observação *</label> <textarea id="aj-obs" placeholder="Descreva o motivo detalhado do ajuste..." required></textarea> </div> </div> <!-- Preview saldo --> <div id="saldo-preview" class="saldo-preview" style="display:none"> <div class="saldo-prev-item"> <div class="label">Saldo Atual</div> <div class="valor" id="prev-atual">-</div> </div> <div class="saldo-prev-item"> <div class="label">Ajuste</div> <div class="valor" id="prev-ajuste">-</div> </div> <div class="saldo-prev-item"> <div class="label">Saldo Final</div> <div class="valor" id="prev-final">-</div> </div> </div> <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"> <button type="button" class="btn btn-outline" onclick="limparAjuste()">Limpar</button> <button type="submit" class="btn btn-warning" id="btn-confirmar-ajuste"> Solicitar Ajuste</button> </div> </form> </div> <!-- HISTÓRICO DE AJUSTES --> <div class="card"> <div class="card-title"> Histórico de Ajustes</div> <div class="table-wrapper"> <table> <thead> <tr> <th>Data</th> <th>Peça</th> <th>Operação</th> <th>Quantidade</th> <th>Status</th> <th>Motivo</th> <th>Responsável</th> <th>Observação</th> </tr> </thead> <tbody id="tbody-ajustes"></tbody> </table> </div> <div id="empty-ajustes" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhum ajuste realizado</p> </div> </div> </div> </div>
 </div> <script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="utils.js"></script>
@@ -61,10 +61,10 @@
 
   const isAdmin = Auth.isAdmin();
 
-  // Mostrar seÃ§Ã£o de pendentes sÃ³ para admin
+  // Mostrar seção de pendentes só para admin
   if (isAdmin) {
     document.getElementById('secao-pendentes').style.display = '';
-    document.getElementById('topbar-subtitle').textContent = 'Corrija divergÃªncias e gerencie aprovaÃ§Ãµes';
+    document.getElementById('topbar-subtitle').textContent = 'Corrija divergências e gerencie aprovações';
     document.getElementById('btn-confirmar-ajuste').textContent = ' Aplicar Ajuste';
   }
 
@@ -73,7 +73,7 @@
   function populaPecas() {
     const sel = document.getElementById('aj-peca');
     const pecas = DB.Pecas.ativas();
-    sel.innerHTML = '<option value="">- Selecione a peÃ§a -</option>';
+    sel.innerHTML = '<option value="">- Selecione a peça -</option>';
     pecas.forEach(p => {
       const o = document.createElement('option');
       o.value = p.id;
@@ -81,7 +81,7 @@
       sel.appendChild(o);
     });
 
-    // PrÃ©-selecionar via URL
+    // Pré-selecionar via URL
     const urlParams = new URLSearchParams(window.location.search);
     const pecaParam = urlParams.get('peca');
     if (pecaParam) { sel.value = pecaParam; atualizarPreview(); }
@@ -127,13 +127,13 @@
     const motivo = document.getElementById('aj-motivo').value;
     const obs    = document.getElementById('aj-obs').value.trim();
 
-    if (!id) { Utils.toast('Selecione uma peÃ§a.', 'error'); return; }
+    if (!id) { Utils.toast('Selecione uma peça.', 'error'); return; }
     if (qtd <= 0) { Utils.toast('Quantidade deve ser maior que zero.', 'error'); return; }
 
     if (op === 'SUB') {
       const saldoAtual = DB.Movimentos.saldoPeca(id);
       if (qtd > saldoAtual) {
-        Utils.toast(`NÃ£o Ã© possÃ­vel subtrair ${qtd} - saldo atual Ã© ${saldoAtual}.`, 'error');
+        Utils.toast(`Não é possível subtrair ${qtd} - saldo atual é ${saldoAtual}.`, 'error');
         return;
       }
     }
@@ -147,7 +147,7 @@
       DB.Ajustes.registrar({ pecaId: id, operacao: op, quantidade: qtd, motivo, observacao: obs, responsavelId: sessao.id, status: 'APROVADO', aprovadoEm: new Date().toISOString(), aprovadorId: sessao.id });
       Utils.toast('Ajuste aplicado com sucesso!', 'success');
     } else {
-      // PCM/Operador: cria solicitaÃ§Ã£o PENDENTE
+      // PCM/Operador: cria solicitação PENDENTE
       const ajReg = { pecaId: id, operacao: op, quantidade: qtd, motivo, observacao: obs, responsavelId: sessao.id, status: 'PENDENTE' };
       DB.Ajustes.registrar(ajReg);
       // Notificar admins in-sistema
@@ -157,13 +157,13 @@
         DB.Notificacoes.criar({
           userId: admin.id,
           tipo: 'PENDENTE_APROVACAO',
-          titulo: 'Novo ajuste de saldo aguardando aprovaÃ§Ã£o ',
+          titulo: 'Novo ajuste de saldo aguardando aprovação ',
           mensagem: sessao.nome + ' solicitou ajuste de ' + sinalNotif + qtd + ' ' + (pecaNotif  pecaNotif.unidade : '') + ' em ' + (pecaNotif  pecaNotif.nome : id) + '.',
           referenciaId: '',
           referenciaTipo: 'ajuste'
         });
       });
-      Utils.toast('SolicitaÃ§Ã£o enviada! Aguardando aprovaÃ§Ã£o do ADMIN.', 'info');
+      Utils.toast('Solicitação enviada! Aguardando aprovação do ADMIN.', 'info');
     }
 
     limparAjuste();
@@ -192,12 +192,12 @@
   }
 
   function rejeitarAjuste(ajusteId) {
-    if (!confirm('Rejeitar esta solicitaÃ§Ã£o de ajuste')) return;
+    if (!confirm('Rejeitar esta solicitação de ajuste')) return;
     const a = DB.Ajustes.buscarId(ajusteId);
     if (!a) return;
     const sessao = Auth.getSessao();
     DB.Ajustes.atualizar({ ...a, status: 'REJEITADO', rejeitadoEm: new Date().toISOString(), aprovadorId: sessao.id });
-    Utils.toast('SolicitaÃ§Ã£o rejeitada.', 'warning');
+    Utils.toast('Solicitação rejeitada.', 'warning');
     renderPendentes();
     renderHistorico();
   }
@@ -224,7 +224,7 @@
       const saldo = peca  DB.Movimentos.saldoPeca(a.pecaId) : 0;
       const final = a.operacao === 'ADD'  saldo + a.quantidade : saldo - a.quantidade;
       return `<div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)"> <div> <div style="font-weight:700">${peca ? Utils.safe(peca.nome) : '-'} <span style="font-size:11px;font-family:monospace;background:var(--border);padding:1px 6px;border-radius:4px">${peca ? Utils.safe(peca.codigo) : ''}</span></div> <div style="font-size:12px;color:var(--text-muted);margin-top:2px"> ${a.operacao === 'ADD' ? 'Acrscimo de' : 'Subtra-o de'}
-            <strong>${a.quantidade} ${peca ? Utils.safe(peca.unidade) : ''}</strong> Â· Saldo: ${saldo} <strong>${final}</strong> Â· Motivo: ${Utils.safe(a.motivo)} Â· Por: ${Utils.safe(usuariosMap[a.responsavelId] || '-')} Â· ${Utils.formatarDataHora(a.criadoEm)}
+            <strong>${a.quantidade} ${peca ? Utils.safe(peca.unidade) : ''}</strong> · Saldo: ${saldo} <strong>${final}</strong> · Motivo: ${Utils.safe(a.motivo)} · Por: ${Utils.safe(usuariosMap[a.responsavelId] || '-')} · ${Utils.formatarDataHora(a.criadoEm)}
           </div> ${a.observacao  `<div style="font-size:11.5px;color:var(--text-muted);font-style:italic;margin-top:2px">${Utils.safe(a.observacao)}</div>` : ''}
         </div> <div style="display:flex;gap:6px"> <button class="btn btn-success btn-sm" onclick="aprovarAjuste('${a.id}')">Aprovar</button> <button class="btn btn-danger btn-sm"  onclick="rejeitarAjuste('${a.id}')">Rejeitar</button> </div> </div>`;
     }).join('');

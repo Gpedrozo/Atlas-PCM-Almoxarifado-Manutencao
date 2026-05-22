@@ -1,43 +1,43 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Pe√ßas - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>PeÁas - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" >
 </head>
 <body>
 <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">Gest√£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gest„o de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimenta√ß√µes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÁıes</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Pe√ßas</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÁas</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">An√°lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relat√≥rios</a>
+    <div class="nav-group-label">An·lise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÛrios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>Administra√ß√£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicita√ß√µes</a>
+    <div class="nav-group-label nav-admin" data-admin>AdministraÁ„o</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÁıes</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configura√ß√µes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu√°rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÁıes</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu·rios</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">‚Ä¶</div>
-    <div class="user-role" id="sidebar-user-role">‚Ä¶</div>
+    <div class="user-info" id="sidebar-user-name">Ö</div>
+    <div class="user-role" id="sidebar-user-role">Ö</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTE√öDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Cadastro de Pe√ßas</div> <div class="topbar-subtitle">Gerencie o cat√°logo de pe√ßas e materiais</div> </div> <div class="topbar-actions"> <button class="btn btn-secondary btn-sm" onclick="Utils.abrirModal('modal-importar')"> Importar em Massa</button> <button class="btn btn-primary" onclick="abrirNovaPeca()">+ Nova Pe√ßa</button> <button class="btn-theme" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- Filtros --> <div class="card" style="margin-bottom:18px;padding:14px 20px;"> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"> <div class="search-bar" style="flex:1;min-width:200px;"> <input type="text" id="busca" placeholder="Buscar por c√≥digo, nome ou categoria..." oninput="renderTabela()"> </div> <select id="filtro-categoria" onchange="renderTabela()" style="min-width:160px;"> <option value="">Todas as Categorias</option> </select> <select id="filtro-status" onchange="renderTabela()" style="min-width:140px;"> <option value="">Todos</option> <option value="ativo">Ativos</option> <option value="inativo">Inativos</option> </select> </div> </div> <!-- Tabela --> <div class="card"> <div class="table-wrapper"> <table id="tabela-pecas"> <thead> <tr> <th>C√≥digo</th> <th>Nome</th> <th>Categoria</th> <th>Un.</th> <th>M√≠n.</th> <th style="text-align:right">Pre√ßo</th> <th>Local</th> <th>Status</th> <th style="text-align:center">A√ß√µes</th> </tr> </thead> <tbody id="tbody-pecas"></tbody> </table> </div> <div id="empty-state-pecas" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma pe√ßa encontrada</p> </div> </div> </div> </div>
-</div> <!-- MODAL NOVA / EDITAR PE√áA -->
-<div class="modal-overlay" id="modal-peca" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:920px"> <div class="modal-header"> <div class="modal-title" id="modal-peca-titulo">Nova Pe√ßa</div> <button class="modal-close" onclick="Utils.fecharModal('modal-peca')"></button> </div> <form id="form-peca" onsubmit="salvarPeca(event)" autocomplete="off"> <input type="hidden" id="peca-id"> <div class="wizard-stack"> <section class="wizard-section"> <div class="wizard-section-title">1. Identifica√ß√£o</div> <div class="form-grid"> <div class="form-group"> <label>C√≥digo *</label> <input type="text" id="peca-codigo" placeholder="ex: ROL-001" required> </div> <div class="form-group"> <label>Nome *</label> <input type="text" id="peca-nome" placeholder="Nome da pe√ßa" required> </div> <div class="form-group"> <label>Categoria *</label> <input type="text" id="peca-categoria" placeholder="ex: Rolamentos" required list="lista-categorias"> <datalist id="lista-categorias"></datalist> </div> <div class="form-group"> <label>Unidade *</label> <select id="peca-unidade" required> <option value="UN">UN - Unidade</option> <option value="MT">MT - Metro</option> <option value="KG">KG - Quilograma</option> <option value="LT">LT - Litro</option> <option value="CX">CX - Caixa</option> <option value="PC">PC - Pe√ßa</option> <option value="PR">PR - Par</option> <option value="RL">RL - Rolo</option> </select> </div> </div> </section> <section class="wizard-section"> <div class="wizard-section-title">2. Estoque e compra</div> <div class="form-grid"> <div class="form-group"> <label>Estoque M√≠nimo *</label> <input type="number" id="peca-estoque-minimo" min="0" placeholder="0" required> </div> <div class="form-group"> <label>Localiza√ß√£o</label> <input type="text" id="peca-localizacao" placeholder="ex: Prateleira A1"> </div> <div class="form-group"> <label>Fornecedor</label> <input type="text" id="peca-fornecedor" placeholder="Nome do fornecedor"> </div> <div class="form-group"> <label>Pre√ßo Unit√°rio (R$)</label> <input type="number" id="peca-preco" min="0" step="0.01" placeholder="0,00"> </div> </div> </section> <section class="wizard-section"> <div class="wizard-section-title">3. Detalhes e fotos</div> <div class="form-grid"> <div class="form-group full"> <label>Descri√ß√£o</label> <textarea id="peca-descricao" placeholder="Detalhes t√©cnicos da pe√ßa..."></textarea> </div> <div class="form-group full"> <label>Fotos do Item</label> <div id="foto-galeria-edit" class="foto-galeria"></div> <input type="file" id="peca-foto-input" accept="image/*" multiple style="display:none" onchange="adicionarFotos(event)"> <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Clique em <strong>+</strong> para adicionar fotos. M√∫ltiplas imagens melhoram a identifica√ß√£o do item.</p> </div> </div> </section> </div> <div class="modal-footer"> <button type="button" class="btn btn-outline" onclick="Utils.fecharModal('modal-peca')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar Pe√ßa</button> </div> </form> </div>
-</div> <!-- MODAL CONFIRMAR DESATIVA√á√ÉO -->
-<div class="modal-overlay" id="modal-confirmar" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:400px"> <div class="modal-header"> <div class="modal-title">Confirmar Desativa√ß√£o</div> <button class="modal-close" onclick="Utils.fecharModal('modal-confirmar')"></button> </div> <p style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Tem certeza que deseja desativar a pe√ßa <strong id="confirmar-nome"></strong></p> <p style="font-size:12px;color:var(--text-muted)">A pe√ßa n√£o ser√° exclu√≠da, apenas marcada como inativa.</p> <div class="modal-footer"> <button class="btn btn-outline" onclick="Utils.fecharModal('modal-confirmar')">Cancelar</button> <button class="btn btn-danger" id="btn-confirmar-desativar">Desativar</button> </div> </div>
+</aside> <!-- CONTE⁄DO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Cadastro de PeÁas</div> <div class="topbar-subtitle">Gerencie o cat·logo de peÁas e materiais</div> </div> <div class="topbar-actions"> <button class="btn btn-secondary btn-sm" onclick="Utils.abrirModal('modal-importar')"> Importar em Massa</button> <button class="btn btn-primary" onclick="abrirNovaPeca()">+ Nova PeÁa</button> <button class="btn-theme" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- Filtros --> <div class="card" style="margin-bottom:18px;padding:14px 20px;"> <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;"> <div class="search-bar" style="flex:1;min-width:200px;"> <input type="text" id="busca" placeholder="Buscar por cÛdigo, nome ou categoria..." oninput="renderTabela()"> </div> <select id="filtro-categoria" onchange="renderTabela()" style="min-width:160px;"> <option value="">Todas as Categorias</option> </select> <select id="filtro-status" onchange="renderTabela()" style="min-width:140px;"> <option value="">Todos</option> <option value="ativo">Ativos</option> <option value="inativo">Inativos</option> </select> </div> </div> <!-- Tabela --> <div class="card"> <div class="table-wrapper"> <table id="tabela-pecas"> <thead> <tr> <th>CÛdigo</th> <th>Nome</th> <th>Categoria</th> <th>Un.</th> <th>MÌn.</th> <th style="text-align:right">PreÁo</th> <th>Local</th> <th>Status</th> <th style="text-align:center">AÁıes</th> </tr> </thead> <tbody id="tbody-pecas"></tbody> </table> </div> <div id="empty-state-pecas" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma peÁa encontrada</p> </div> </div> </div> </div>
+</div> <!-- MODAL NOVA / EDITAR PE«A -->
+<div class="modal-overlay" id="modal-peca" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:920px"> <div class="modal-header"> <div class="modal-title" id="modal-peca-titulo">Nova PeÁa</div> <button class="modal-close" onclick="Utils.fecharModal('modal-peca')"></button> </div> <form id="form-peca" onsubmit="salvarPeca(event)" autocomplete="off"> <input type="hidden" id="peca-id"> <div class="wizard-stack"> <section class="wizard-section"> <div class="wizard-section-title">1. IdentificaÁ„o</div> <div class="form-grid"> <div class="form-group"> <label>CÛdigo *</label> <input type="text" id="peca-codigo" placeholder="ex: ROL-001" required> </div> <div class="form-group"> <label>Nome *</label> <input type="text" id="peca-nome" placeholder="Nome da peÁa" required> </div> <div class="form-group"> <label>Categoria *</label> <input type="text" id="peca-categoria" placeholder="ex: Rolamentos" required list="lista-categorias"> <datalist id="lista-categorias"></datalist> </div> <div class="form-group"> <label>Unidade *</label> <select id="peca-unidade" required> <option value="UN">UN - Unidade</option> <option value="MT">MT - Metro</option> <option value="KG">KG - Quilograma</option> <option value="LT">LT - Litro</option> <option value="CX">CX - Caixa</option> <option value="PC">PC - PeÁa</option> <option value="PR">PR - Par</option> <option value="RL">RL - Rolo</option> </select> </div> </div> </section> <section class="wizard-section"> <div class="wizard-section-title">2. Estoque e compra</div> <div class="form-grid"> <div class="form-group"> <label>Estoque MÌnimo *</label> <input type="number" id="peca-estoque-minimo" min="0" placeholder="0" required> </div> <div class="form-group"> <label>LocalizaÁ„o</label> <input type="text" id="peca-localizacao" placeholder="ex: Prateleira A1"> </div> <div class="form-group"> <label>Fornecedor</label> <input type="text" id="peca-fornecedor" placeholder="Nome do fornecedor"> </div> <div class="form-group"> <label>PreÁo Unit·rio (R$)</label> <input type="number" id="peca-preco" min="0" step="0.01" placeholder="0,00"> </div> </div> </section> <section class="wizard-section"> <div class="wizard-section-title">3. Detalhes e fotos</div> <div class="form-grid"> <div class="form-group full"> <label>DescriÁ„o</label> <textarea id="peca-descricao" placeholder="Detalhes tÈcnicos da peÁa..."></textarea> </div> <div class="form-group full"> <label>Fotos do Item</label> <div id="foto-galeria-edit" class="foto-galeria"></div> <input type="file" id="peca-foto-input" accept="image/*" multiple style="display:none" onchange="adicionarFotos(event)"> <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Clique em <strong>+</strong> para adicionar fotos. M˙ltiplas imagens melhoram a identificaÁ„o do item.</p> </div> </div> </section> </div> <div class="modal-footer"> <button type="button" class="btn btn-outline" onclick="Utils.fecharModal('modal-peca')">Cancelar</button> <button type="submit" class="btn btn-primary"> Salvar PeÁa</button> </div> </form> </div>
+</div> <!-- MODAL CONFIRMAR DESATIVA«√O -->
+<div class="modal-overlay" id="modal-confirmar" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:400px"> <div class="modal-header"> <div class="modal-title">Confirmar DesativaÁ„o</div> <button class="modal-close" onclick="Utils.fecharModal('modal-confirmar')"></button> </div> <p style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Tem certeza que deseja desativar a peÁa <strong id="confirmar-nome"></strong></p> <p style="font-size:12px;color:var(--text-muted)">A peÁa n„o ser· excluÌda, apenas marcada como inativa.</p> <div class="modal-footer"> <button class="btn btn-outline" onclick="Utils.fecharModal('modal-confirmar')">Cancelar</button> <button class="btn btn-danger" id="btn-confirmar-desativar">Desativar</button> </div> </div>
 </div> <script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="utils.js"></script>
@@ -51,7 +51,7 @@
     _inicializar();
   });
 
-  let pecaImagens = []; // array de filenames da pe√ßa em edi√ß√£o
+  let pecaImagens = []; // array de filenames da peÁa em ediÁ„o
 
   // -- Galeria de fotos no modal -------------------------
   function renderGaleriaEdit() {
@@ -152,7 +152,7 @@
 
     const isAdmin = Auth.isAdmin();
     tbody.innerHTML = pecas.map(p => `
-      <tr> <td><code style="font-size:11px;background:var(--bg);padding:2px 6px;border-radius:4px;">${Utils.safe(p.codigo)}</code></td> <td style="max-width:220px"><strong style="font-size:13px">${Utils.safe(p.nome)}</strong></td> <td><span class="badge badge-pending" style="font-size:11px">${Utils.safe(p.categoria)}</span></td> <td style="font-size:12px">${Utils.safe(p.unidade)}</td> <td style="font-size:12px">${p.estoqueMinimo}</td> <td style="text-align:right;font-size:12px">${p.precoUnitario  Utils.fmtMoeda(Number(p.precoUnitario)) : '-'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localiza√ß√£o||p.localizacao||'-')}</td> <td>${p.ativo !== false  '<span class="badge badge-ok">Ativo</span>' : '<span class="badge badge-critical">Inativo</span>'}</td> <td style="text-align:center;white-space:nowrap;padding:6px 8px"> <button class="btn-icon" title="Editar" onclick="editarPeca('${p.id}')"></button> <a class="btn-icon" title="Gerar Etiqueta" href="etiquetas.html" onclick="localStorage.setItem('etiqueta_quick','${p.id}')"></a> ${isAdmin && p.ativo !== false  `<button class="btn-icon" title="Desativar" onclick="confirmarDesativar('${p.id}','${Utils.safe(p.nome)}')"></button>` : ''}
+      <tr> <td><code style="font-size:11px;background:var(--bg);padding:2px 6px;border-radius:4px;">${Utils.safe(p.codigo)}</code></td> <td style="max-width:220px"><strong style="font-size:13px">${Utils.safe(p.nome)}</strong></td> <td><span class="badge badge-pending" style="font-size:11px">${Utils.safe(p.categoria)}</span></td> <td style="font-size:12px">${Utils.safe(p.unidade)}</td> <td style="font-size:12px">${p.estoqueMinimo}</td> <td style="text-align:right;font-size:12px">${p.precoUnitario  Utils.fmtMoeda(Number(p.precoUnitario)) : '-'}</td> <td style="font-size:11px;color:var(--text-muted)">${Utils.safe(p.localizaÁ„o||p.localizacao||'-')}</td> <td>${p.ativo !== false  '<span class="badge badge-ok">Ativo</span>' : '<span class="badge badge-critical">Inativo</span>'}</td> <td style="text-align:center;white-space:nowrap;padding:6px 8px"> <button class="btn-icon" title="Editar" onclick="editarPeca('${p.id}')"></button> <a class="btn-icon" title="Gerar Etiqueta" href="etiquetas.html" onclick="localStorage.setItem('etiqueta_quick','${p.id}')"></a> ${isAdmin && p.ativo !== false  `<button class="btn-icon" title="Desativar" onclick="confirmarDesativar('${p.id}','${Utils.safe(p.nome)}')"></button>` : ''}
           ${isAdmin && p.ativo === false  `<button class="btn-icon" title="Reativar" onclick="reativarPeca('${p.id}')"></button>` : ''}
         </td> </tr> `).join('');
   }
@@ -160,7 +160,7 @@
   function abrirNovaPeca() {
     document.getElementById('form-peca').reset();
     document.getElementById('peca-id').value = '';
-    document.getElementById('modal-peca-titulo').textContent = 'Nova Pe√ßa';
+    document.getElementById('modal-peca-titulo').textContent = 'Nova PeÁa';
     pecaImagens = [];
     populaFiltros();
     renderGaleriaEdit();
@@ -176,14 +176,14 @@
     document.getElementById('peca-categoria').value = p.categoria;
     document.getElementById('peca-unidade').value = p.unidade;
     document.getElementById('peca-estoque-minimo').value = p.estoqueMinimo;
-    document.getElementById('peca-localizacao').value = p.localizacao || p.localiza√ß√£o || '';
+    document.getElementById('peca-localizacao').value = p.localizacao || p.localizaÁ„o || '';
     document.getElementById('peca-fornecedor').value = p.fornecedor || '';
     document.getElementById('peca-preco').value = p.precoUnitario || '';
     document.getElementById('peca-descricao').value = p.descricao || '';
     pecaImagens = (p.imagens || []).slice();
     populaFiltros();
     renderGaleriaEdit();
-    document.getElementById('modal-peca-titulo').textContent = 'Editar Pe√ßa';
+    document.getElementById('modal-peca-titulo').textContent = 'Editar PeÁa';
     Utils.abrirModal('modal-peca');
   }
 
@@ -198,16 +198,16 @@
       unidade: document.getElementById('peca-unidade').value,
       estoqueMinimo: Number(document.getElementById('peca-estoque-minimo').value),
       precoUnitario: parseFloat(document.getElementById('peca-preco').value) || 0,
-      localiza√ß√£o: document.getElementById('peca-localizacao').value.trim(),
+      localizaÁ„o: document.getElementById('peca-localizacao').value.trim(),
       fornecedor: document.getElementById('peca-fornecedor').value.trim(),
       descricao: document.getElementById('peca-descricao').value.trim(),
       imagens: pecaImagens.slice(),
       ativo: true,
     };
 
-    // Verificar c√≥digo duplicado
+    // Verificar cÛdigo duplicado
     const existente = DB.Pecas.listar().find(p => p.codigo === peca.codigo && p.id !== id);
-    if (existente) { Utils.toast('C√≥digo j√° cadastrado para outra pe√ßa.', 'error'); return; }
+    if (existente) { Utils.toast('CÛdigo j· cadastrado para outra peÁa.', 'error'); return; }
 
     DB.Pecas.salvar(peca);
     Utils.fecharModal('modal-peca');
@@ -221,7 +221,7 @@
     document.getElementById('btn-confirmar-desativar').onclick = () => {
       DB.Pecas.remover(id);
       Utils.fecharModal('modal-confirmar');
-      Utils.toast('Pe√ßa desativada.', 'warning');
+      Utils.toast('PeÁa desativada.', 'warning');
       renderTabela();
     };
     Utils.abrirModal('modal-confirmar');
@@ -232,26 +232,26 @@
     if (!p) return;
     p.ativo = true;
     DB.Pecas.salvar(p);
-    Utils.toast('Pe√ßa reativada com sucesso!', 'success');
+    Utils.toast('PeÁa reativada com sucesso!', 'success');
     renderTabela();
   }
 
   function _inicializar() { populaFiltros(); renderTabela(); }
 </script> <!-- ------------------------------------------------------
-     MODAL IMPORTA√á√ÉO EM MASSA (CSV)
+     MODAL IMPORTA«√O EM MASSA (CSV)
 -------------------------------------------------------- -->
-<div class="modal-overlay" id="modal-importar" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:680px"> <div class="modal-header"> <div class="modal-title"> Importar Pe√ßas em Massa (CSV)</div> <button class="modal-close" onclick="Utils.fecharModal('modal-importar')"></button> </div> <div style="margin-bottom:16px"> <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px"> Fa√ßa upload de um arquivo CSV com as pe√ßas. Baixe o modelo abaixo para garantir o formato correto.
+<div class="modal-overlay" id="modal-importar" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:680px"> <div class="modal-header"> <div class="modal-title"> Importar PeÁas em Massa (CSV)</div> <button class="modal-close" onclick="Utils.fecharModal('modal-importar')"></button> </div> <div style="margin-bottom:16px"> <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px"> FaÁa upload de um arquivo CSV com as peÁas. Baixe o modelo abaixo para garantir o formato correto.
       </p> <div style="background:var(--bg);border-radius:8px;padding:12px 16px;font-size:12px;font-family:monospace;margin-bottom:12px;border:1px solid var(--border)"> codigo,nome,categoria,unidade,estoqueMinimo,precoUnitario,localizacao,fornecedor
       </div> <button class="btn btn-secondary btn-sm" onclick="downloadTemplate()"> Baixar Modelo CSV</button> </div> <div class="drop-zone" id="drop-zone-importar"
          ondragover="event.preventDefault();this.classList.add('drag-over')"
          ondragleave="this.classList.remove('drag-over')"
          ondrop="onDropImport(event)"
-         onclick="document.getElementById('csv-input').click()"> <div class="icon"></div> <p>Clique ou arraste o arquivo CSV aqui</p> <input type="file" id="csv-input" accept=".csv,text/csv" style="display:none" onchange="lerCSV(this.files[0])"> </div> <div id="import-preview" style="display:none;margin-top:16px"> <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"> <strong id="import-resumo" style="font-size:13px"></strong> <button class="btn btn-primary btn-sm" onclick="confirmarImport()">Confirmar Importa√ß√£o</button> </div> <div class="table-wrapper" style="max-height:260px;overflow-y:auto"> <table id="import-table" style="font-size:12px"> <thead> <tr> <th>C√≥digo</th><th>Nome</th><th>Categoria</th><th>Unidade</th> <th>M√≠n</th><th>Pre√ßo</th><th>Local</th><th>Fornecedor</th> </tr> </thead> <tbody id="import-tbody"></tbody> </table> </div> </div> <div id="import-erro" style="display:none;color:var(--danger);font-size:13px;margin-top:10px"></div> </div>
+         onclick="document.getElementById('csv-input').click()"> <div class="icon"></div> <p>Clique ou arraste o arquivo CSV aqui</p> <input type="file" id="csv-input" accept=".csv,text/csv" style="display:none" onchange="lerCSV(this.files[0])"> </div> <div id="import-preview" style="display:none;margin-top:16px"> <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"> <strong id="import-resumo" style="font-size:13px"></strong> <button class="btn btn-primary btn-sm" onclick="confirmarImport()">Confirmar ImportaÁ„o</button> </div> <div class="table-wrapper" style="max-height:260px;overflow-y:auto"> <table id="import-table" style="font-size:12px"> <thead> <tr> <th>CÛdigo</th><th>Nome</th><th>Categoria</th><th>Unidade</th> <th>MÌn</th><th>PreÁo</th><th>Local</th><th>Fornecedor</th> </tr> </thead> <tbody id="import-tbody"></tbody> </table> </div> </div> <div id="import-erro" style="display:none;color:var(--danger);font-size:13px;margin-top:10px"></div> </div>
 </div> <script> var importDados = [];
 
   function downloadTemplate() {
     var csv = 'codigo,nome,categoria,unidade,estoqueMinimo,precoUnitario,localizacao,fornecedor\n'
-            + 'EX-001,Exemplo de Pe√ßa,Rolamentos,UN,5,49.90,Prateleira A1,Fornecedor ABC';
+            + 'EX-001,Exemplo de PeÁa,Rolamentos,UN,5,49.90,Prateleira A1,Fornecedor ABC';
     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     var url  = URL.createObjectURL(blob);
     var a    = document.createElement('a');
@@ -287,7 +287,7 @@
     var cabecalho = linhas[0].split(',').map(function(h){ return h.trim().toLowerCase(); });
     var campos = ['codigo','nome','categoria','unidade','estoqueminimo','precounitario','localizacao','fornecedor'];
     var ok = campos.slice(0,4).every(function(c){ return cabecalho.indexOf(c) >= 0; });
-    if (!ok) throw new Error('Colunas obrigat√≥rias ausentes: codigo, nome, categoria, unidade.');
+    if (!ok) throw new Error('Colunas obrigatÛrias ausentes: codigo, nome, categoria, unidade.');
 
     importDados = [];
     var erros = [];
@@ -295,7 +295,7 @@
       var vals = linhas[i].split(',').map(function(v){ return v.trim(); });
       var obj = {};
       cabecalho.forEach(function(h, idx){ obj[h] = vals[idx] || ''; });
-      if (!obj.codigo || !obj.nome) { erros.push('Linha ' + (i+1) + ': c√≥digo e nome s√£o obrigat√≥rios.'); continue; }
+      if (!obj.codigo || !obj.nome) { erros.push('Linha ' + (i+1) + ': cÛdigo e nome s„o obrigatÛrios.'); continue; }
       importDados.push({
         codigo:        obj.codigo,
         nome:          obj.nome,
@@ -313,7 +313,7 @@
     if (erros.length) { errEl.style.display=''; errEl.textContent = erros.join(' | '); }
     else              { errEl.style.display='none'; }
 
-    document.getElementById('import-resumo').textContent = importDados.length + ' pe√ßa(s) prontas para importar';
+    document.getElementById('import-resumo').textContent = importDados.length + ' peÁa(s) prontas para importar';
     document.getElementById('import-tbody').innerHTML = importDados.map(function(p){
       return '<tr><td>' + Utils.safe(p.codigo) + '</td><td>' + Utils.safe(p.nome) + '</td>'
         + '<td>' + Utils.safe(p.categoria) + '</td><td>' + Utils.safe(p.unidade) + '</td>'

@@ -1,6 +1,6 @@
-Ôªø<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Dashboard - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <style> /* --- DASHBOARD - VISUAL SUAVE & REFINADO --- */
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Dashboard - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <style> /* --- DASHBOARD - VISUAL SUAVE & REFINADO --- */
 
-    /* T√≠tulo de se√ß√£o elegante */
+    /* TÌtulo de seÁ„o elegante */
     .dash-section-label {
       font-size: 11px;
       font-weight: 600;
@@ -11,7 +11,7 @@
       padding: 0 2px;
     }
 
-    /* -- SE√á√ÉO 1: KPI Grid (4 cards) -- */
+    /* -- SE«√O 1: KPI Grid (4 cards) -- */
     .dashboard-kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -80,7 +80,7 @@
 
     .kpi-large-trend.alert-badge { color: var(--danger); }
 
-    /* -- SE√á√ÉO 2: Status Cards (3 colunas) -- */
+    /* -- SE«√O 2: Status Cards (3 colunas) -- */
     .dashboard-status-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -155,7 +155,7 @@
     .status-value.danger  { color: var(--danger);  }
     .status-value.info    { color: var(--info);    }
 
-    /* -- SE√á√ÉO 3: Alertas -- */
+    /* -- SE«√O 3: Alertas -- */
     .alerts-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -241,7 +241,7 @@
       color: var(--success);
     }
 
-    /* -- SE√á√ÉO 4: Activity Feed -- */
+    /* -- SE«√O 4: Activity Feed -- */
     .activities-list { display: flex; flex-direction: column; }
 
     .activity-item {
@@ -322,37 +322,37 @@
     [data-theme="dark"] .kpi-large-icon.red    { background: rgba(239,68,68,0.14);  color: #F87171; }
     [data-theme="dark"] .alert-item-strip.danger  { background: rgba(239,68,68,0.04); }
     [data-theme="dark"] .alert-item-strip.warning { background: rgba(245,158,11,0.04); }
-  </style> </head> <body> <!-- Sprite SVG com √≠cones --> <svg xmlns="http://www.w3.org/2000/svg" style="display:none"> <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol> <symbol id="icon-estoque" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18v2H3V4zm1 4h16v10H4V8zm2 2v6h2v-6H6zm5 0v6h2v-6h-2zm5 0v6h2v-6h-2z"/></symbol> <symbol id="icon-movimentacoes" viewBox="0 0 24 24" fill="currentColor"><path d="M15 5l-1.41 1.41L18.17 10H4v2h14.17l-4.58 3.59L15 17l7-7-7-5z"/></symbol> <symbol id="icon-pecas" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.52l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.34.24.52.49.52h4c.25 0 .46-.18.49-.52l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></symbol> <symbol id="icon-ativos" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol> <symbol id="icon-requisicoes" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M16 18H8v-2h8v2zm0-4H8v-2h8v2zm0-4H8V8h8v2z" fill="white" opacity="0.3"/></symbol> <symbol id="icon-consertos" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62.03-.32.05-.64.05-.97 0-.95-.19-1.86-.52-2.75l-.03-.12-.9-.9zM17 16v-6h-6v6h6zM5 6.41L6.41 5 16 14.59 14.59 16 5 6.41z"/></symbol> <symbol id="icon-relatorios" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-4h2V17z"/></symbol> <symbol id="icon-etiquetas" viewBox="0 0 24 24" fill="currentColor"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></symbol> <symbol id="icon-aprovacoes" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol> <symbol id="icon-config" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41L9.25 5.35C8.66 5.59 8.12 5.92 7.63 6.29L5.24 5.33c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.11.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.11-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol> <symbol id="icon-logout" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></symbol> </svg> <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
+  </style> </head> <body> <!-- Sprite SVG com Ìcones --> <svg xmlns="http://www.w3.org/2000/svg" style="display:none"> <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol> <symbol id="icon-estoque" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18v2H3V4zm1 4h16v10H4V8zm2 2v6h2v-6H6zm5 0v6h2v-6h-2zm5 0v6h2v-6h-2z"/></symbol> <symbol id="icon-movimentacoes" viewBox="0 0 24 24" fill="currentColor"><path d="M15 5l-1.41 1.41L18.17 10H4v2h14.17l-4.58 3.59L15 17l7-7-7-5z"/></symbol> <symbol id="icon-pecas" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.52l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.34.24.52.49.52h4c.25 0 .46-.18.49-.52l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></symbol> <symbol id="icon-ativos" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol> <symbol id="icon-requisicoes" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M16 18H8v-2h8v2zm0-4H8v-2h8v2zm0-4H8V8h8v2z" fill="white" opacity="0.3"/></symbol> <symbol id="icon-consertos" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62.03-.32.05-.64.05-.97 0-.95-.19-1.86-.52-2.75l-.03-.12-.9-.9zM17 16v-6h-6v6h6zM5 6.41L6.41 5 16 14.59 14.59 16 5 6.41z"/></symbol> <symbol id="icon-relatorios" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-4h2V17z"/></symbol> <symbol id="icon-etiquetas" viewBox="0 0 24 24" fill="currentColor"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></symbol> <symbol id="icon-aprovacoes" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol> <symbol id="icon-config" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41L9.25 5.35C8.66 5.59 8.12 5.92 7.63 6.29L5.24 5.33c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.11.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.11-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol> <symbol id="icon-logout" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></symbol> </svg> <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">Gest√£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gest„o de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimenta√ß√µes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÁıes</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Pe√ßas</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÁas</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">An√°lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relat√≥rios</a>
+    <div class="nav-group-label">An·lise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÛrios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>Administra√ß√£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicita√ß√µes</a>
+    <div class="nav-group-label nav-admin" data-admin>AdministraÁ„o</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÁıes</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configura√ß√µes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu√°rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÁıes</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu·rios</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">‚Ä¶</div>
-    <div class="user-role" id="sidebar-user-role">‚Ä¶</div>
+    <div class="user-info" id="sidebar-user-name">Ö</div>
+    <div class="user-role" id="sidebar-user-role">Ö</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTE√öDO PRINCIPAL --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar"> <div> <div class="topbar-title">Dashboard</div> <div class="topbar-subtitle" id="topbar-date">-</div> </div> <div class="topbar-actions"> <a href="movimentacoes.html" class="btn btn-primary btn-sm">+ Registrar Movimenta√ß√£o</a> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- --------------------------------------------------------------- --> <!-- SE√á√ÉO 1: INDICADORES CR√çTICOS (4 KPIs Grandes)                  --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label">Indicadores Cr√≠ticos</div> <div class="dashboard-kpi-grid"> <div class="kpi-card-large clickable" onclick="abrirDrill('todos')"> <div class="kpi-large-icon blue"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-total-itens">-</div> <div class="kpi-large-label">Itens Cadastrados</div> <div class="kpi-large-trend" id="kpi-trend-itens"></div> </div> </div> <div class="kpi-card-large clickable" onclick="abrirDrill('entrada-mes')"> <div class="kpi-large-icon green"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-entrada-mes">-</div> <div class="kpi-large-label">Entradas (Este M√™s)</div> <div class="kpi-large-trend" id="kpi-trend-entrada"></div> </div> </div> <div class="kpi-card-large clickable" onclick="abrirDrill('saida-mes')"> <div class="kpi-large-icon orange"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-saida-mes">-</div> <div class="kpi-large-label">Sa√≠das (Este M√™s)</div> <div class="kpi-large-trend" id="kpi-trend-saida"></div> </div> </div> <div class="kpi-card-large clickable" onclick="abrirDrill('critical')"> <div class="kpi-large-icon red"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-critico">-</div> <div class="kpi-large-label">Itens Cr√≠ticos</div> <div class="kpi-large-trend alert-badge" id="kpi-trend-critico"></div> </div> </div> </div> <!-- --------------------------------------------------------------- --> <!-- SE√á√ÉO 2: STATUS OPERACIONAL (3 Cards de Status)                --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label" style="margin-top:20px">Status Operacional</div> <div class="dashboard-status-grid"> <div class="status-card"> <div class="status-card-header"> Estoque</div> <div class="status-card-body"> <div class="status-item clickable" onclick="abrirDrill('ok')"> <div class="status-label">Normal</div> <div class="status-value" id="status-ok">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('low')"> <div class="status-label">Baixo</div> <div class="status-value warning" id="status-baixo">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('zerado')"> <div class="status-label">Zerado</div> <div class="status-value danger" id="status-zerado">-</div> </div> </div> </div> <div class="status-card"> <div class="status-card-header"> Requisi√ß√µes</div> <div class="status-card-body"> <div class="status-item clickable" onclick="abrirDrill('req-pend')"> <div class="status-label">Pendentes</div> <div class="status-value warning" id="status-req-pend">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('req-aprov')"> <div class="status-label">Aprovadas</div> <div class="status-value success" id="status-req-aprov">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('req-rej')"> <div class="status-label">Rejeitadas</div> <div class="status-value danger" id="status-req-rej">-</div> </div> </div> </div> <div class="status-card"> <div class="status-card-header"> Consertos</div> <div class="status-card-body"> <div class="status-item clickable" onclick="abrirDrill('cons-analise')"> <div class="status-label">Em An√°lise</div> <div class="status-value" id="status-cons-analise">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('cons-andamento')"> <div class="status-label">Em Andamento</div> <div class="status-value info" id="status-cons-andamento">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('cons-pronto')"> <div class="status-label">Pronto</div> <div class="status-value success" id="status-cons-pronto">-</div> </div> </div> </div> </div> <!-- --------------------------------------------------------------- --> <!-- SE√á√ÉO 3: ALERTAS IMPORTANTES (por Severidade)                   --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label" style="margin-top:20px">Alertas & Notifica√ß√µes</div> <div class="alerts-grid"> <div id="alert-criticos" class="alert-group alert-critical"></div> <div id="alert-atencao" class="alert-group alert-warning"></div> <div id="alert-info" class="alert-group alert-info"></div> </div> <!-- --------------------------------------------------------------- --> <!-- SE√á√ÉO 4: √öLTIMAS ATIVIDADES (2 colunas)                         --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label" style="margin-top:20px">√öltimas Atividades</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"> <div class="card"> <div class="card-title"> Movimenta√ß√µes (√∫ltimas 8)</div> <div id="lista-movimentos" class="activities-list"></div> </div> <div class="card"> <div class="card-title"> Requisi√ß√µes (√∫ltimas 5)</div> <div id="lista-requisicoes" class="activities-list"></div> </div> </div> </div> </div> </div> <!-- MODAL DRILL-DOWN --> <div class="modal-overlay" id="modal-drill" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:700px"> <div class="modal-header"> <div class="modal-title" id="drill-titulo">-</div> <button class="modal-close" onclick="Utils.fecharModal('modal-drill')"></button> </div> <div id="drill-body" style="max-height:60vh;overflow-y:auto"></div> </div> </div> <script src="db.js"></script> <script src="auth.js"></script> <script src="utils.js"></script> <script> DB.init().then(function() {
+</aside> <!-- CONTE⁄DO PRINCIPAL --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">-</span> </div> <div class="topbar"> <div> <div class="topbar-title">Dashboard</div> <div class="topbar-subtitle" id="topbar-date">-</div> </div> <div class="topbar-actions"> <a href="movimentacoes.html" class="btn btn-primary btn-sm">+ Registrar MovimentaÁ„o</a> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- --------------------------------------------------------------- --> <!-- SE«√O 1: INDICADORES CRÕTICOS (4 KPIs Grandes)                  --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label">Indicadores CrÌticos</div> <div class="dashboard-kpi-grid"> <div class="kpi-card-large clickable" onclick="abrirDrill('todos')"> <div class="kpi-large-icon blue"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-total-itens">-</div> <div class="kpi-large-label">Itens Cadastrados</div> <div class="kpi-large-trend" id="kpi-trend-itens"></div> </div> </div> <div class="kpi-card-large clickable" onclick="abrirDrill('entrada-mes')"> <div class="kpi-large-icon green"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-entrada-mes">-</div> <div class="kpi-large-label">Entradas (Este MÍs)</div> <div class="kpi-large-trend" id="kpi-trend-entrada"></div> </div> </div> <div class="kpi-card-large clickable" onclick="abrirDrill('saida-mes')"> <div class="kpi-large-icon orange"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-saida-mes">-</div> <div class="kpi-large-label">SaÌdas (Este MÍs)</div> <div class="kpi-large-trend" id="kpi-trend-saida"></div> </div> </div> <div class="kpi-card-large clickable" onclick="abrirDrill('critical')"> <div class="kpi-large-icon red"></div> <div class="kpi-large-content"> <div class="kpi-large-value" id="kpi-critico">-</div> <div class="kpi-large-label">Itens CrÌticos</div> <div class="kpi-large-trend alert-badge" id="kpi-trend-critico"></div> </div> </div> </div> <!-- --------------------------------------------------------------- --> <!-- SE«√O 2: STATUS OPERACIONAL (3 Cards de Status)                --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label" style="margin-top:20px">Status Operacional</div> <div class="dashboard-status-grid"> <div class="status-card"> <div class="status-card-header"> Estoque</div> <div class="status-card-body"> <div class="status-item clickable" onclick="abrirDrill('ok')"> <div class="status-label">Normal</div> <div class="status-value" id="status-ok">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('low')"> <div class="status-label">Baixo</div> <div class="status-value warning" id="status-baixo">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('zerado')"> <div class="status-label">Zerado</div> <div class="status-value danger" id="status-zerado">-</div> </div> </div> </div> <div class="status-card"> <div class="status-card-header"> RequisiÁıes</div> <div class="status-card-body"> <div class="status-item clickable" onclick="abrirDrill('req-pend')"> <div class="status-label">Pendentes</div> <div class="status-value warning" id="status-req-pend">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('req-aprov')"> <div class="status-label">Aprovadas</div> <div class="status-value success" id="status-req-aprov">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('req-rej')"> <div class="status-label">Rejeitadas</div> <div class="status-value danger" id="status-req-rej">-</div> </div> </div> </div> <div class="status-card"> <div class="status-card-header"> Consertos</div> <div class="status-card-body"> <div class="status-item clickable" onclick="abrirDrill('cons-analise')"> <div class="status-label">Em An·lise</div> <div class="status-value" id="status-cons-analise">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('cons-andamento')"> <div class="status-label">Em Andamento</div> <div class="status-value info" id="status-cons-andamento">-</div> </div> <div class="status-item clickable" onclick="abrirDrill('cons-pronto')"> <div class="status-label">Pronto</div> <div class="status-value success" id="status-cons-pronto">-</div> </div> </div> </div> </div> <!-- --------------------------------------------------------------- --> <!-- SE«√O 3: ALERTAS IMPORTANTES (por Severidade)                   --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label" style="margin-top:20px">Alertas & NotificaÁıes</div> <div class="alerts-grid"> <div id="alert-criticos" class="alert-group alert-critical"></div> <div id="alert-atencao" class="alert-group alert-warning"></div> <div id="alert-info" class="alert-group alert-info"></div> </div> <!-- --------------------------------------------------------------- --> <!-- SE«√O 4: ⁄LTIMAS ATIVIDADES (2 colunas)                         --> <!-- --------------------------------------------------------------- --> <div class="dash-section-label" style="margin-top:20px">⁄ltimas Atividades</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"> <div class="card"> <div class="card-title"> MovimentaÁıes (˙ltimas 8)</div> <div id="lista-movimentos" class="activities-list"></div> </div> <div class="card"> <div class="card-title"> RequisiÁıes (˙ltimas 5)</div> <div id="lista-requisicoes" class="activities-list"></div> </div> </div> </div> </div> </div> <!-- MODAL DRILL-DOWN --> <div class="modal-overlay" id="modal-drill" onclick="Utils.fecharModalClicandoFora(event)"> <div class="modal" style="max-width:700px"> <div class="modal-header"> <div class="modal-title" id="drill-titulo">-</div> <button class="modal-close" onclick="Utils.fecharModal('modal-drill')"></button> </div> <div id="drill-body" style="max-height:60vh;overflow-y:auto"></div> </div> </div> <script src="db.js"></script> <script src="auth.js"></script> <script src="utils.js"></script> <script> DB.init().then(function() {
     if (!Auth.requireLogin()) { return; }
     Utils.applyTheme();
     Utils.renderSidebarUser();
@@ -386,18 +386,18 @@
       if (s === 0) zerado++;
     });
 
-    // - Requisi√ß√µes e Consertos -
+    // - RequisiÁıes e Consertos -
     var reqs     = DB.Requisicoes.listar();
     var reqPend  = reqs.filter(function(r){ return r.status === 'PENDENTE'; }).length;
     var reqAprov = reqs.filter(function(r){ return r.status === 'APROVADA'; }).length;
     var reqRej   = reqs.filter(function(r){ return r.status === 'REJEITADA'; }).length;
 
     var consertos = DB.Consertos  DB.Consertos.listar() : [];
-    var consAnalise = consertos.filter(function(c){ return c.status === 'AN√ÅLISE'; }).length;
+    var consAnalise = consertos.filter(function(c){ return c.status === 'AN¡LISE'; }).length;
     var consAndamento = consertos.filter(function(c){ return ['ENVIADO','CONSERTANDO'].includes(c.status); }).length;
     var consPronto = consertos.filter(function(c){ return c.status === 'PRONTO'; }).length;
 
-    // - Movimenta√ß√µes -
+    // - MovimentaÁıes -
     var entradaMes = movs.filter(function(m){ return m.tipo === 'ENTRADA' && m.data && m.data.slice(0,10) >= inicioMesStr; }).length;
     var saidaMes   = movs.filter(function(m){ return m.tipo === 'SAIDA' && m.data && m.data.slice(0,10) >= inicioMesStr; }).length;
     var movHoje    = movs.filter(function(m){ return m.data && m.data.slice(0,10) === hoje; }).length;
@@ -406,21 +406,21 @@
     var ajustesPend = DB.Ajustes.pendentes().length;
 
     // ------------------------------------------------------
-    // SE√á√ÉO 1: INDICADORES CR√çTICOS
+    // SE«√O 1: INDICADORES CRÕTICOS
     // ------------------------------------------------------
     document.getElementById('kpi-total-itens').textContent = pecas.length;
     document.getElementById('kpi-entrada-mes').textContent = entradaMes;
     document.getElementById('kpi-saida-mes').textContent = saidaMes;
     document.getElementById('kpi-critico').textContent = critico;
 
-    // Tend√™ncias (simuladas ou de dados hist√≥ricos)
-    document.getElementById('kpi-trend-itens').textContent = 'Est√°vel';
+    // TendÍncias (simuladas ou de dados histÛricos)
+    document.getElementById('kpi-trend-itens').textContent = 'Est·vel';
     document.getElementById('kpi-trend-entrada').innerHTML = entradaMes > 5 ? '<span style="color:var(--success)">Acima</span>' : 'Abaixo';
     document.getElementById('kpi-trend-saida').innerHTML = saidaMes > 5 ? '<span style="color:var(--success)">Normal</span>' : 'Baixo';
     document.getElementById('kpi-trend-critico').textContent = critico > 0 ? 'A-O NECESSRIA' : 'OK';
 
     // ------------------------------------------------------
-    // SE√á√ÉO 2: STATUS OPERACIONAL
+    // SE«√O 2: STATUS OPERACIONAL
     // ------------------------------------------------------
     document.getElementById('status-ok').textContent = ok;
     document.getElementById('status-baixo').textContent = baixo;
@@ -435,14 +435,14 @@
     document.getElementById('status-cons-pronto').textContent = consPronto;
 
     // ------------------------------------------------------
-    // SE√á√ÉO 3: ALERTAS (por Severidade)
+    // SE«√O 3: ALERTAS (por Severidade)
     // ------------------------------------------------------
-    renderAlertGroup('alert-criticos', alertas.critical, 'critical', 'ITENS CR√çTICOS');
-    renderAlertGroup('alert-atencao', alertas.warning, 'warning', 'ATEN√á√ÉO');
-    renderAlertGroup('alert-info', [], 'info', 'INFORMA√á√ÉO');
+    renderAlertGroup('alert-criticos', alertas.critical, 'critical', 'ITENS CRÕTICOS');
+    renderAlertGroup('alert-atencao', alertas.warning, 'warning', 'ATEN«√O');
+    renderAlertGroup('alert-info', [], 'info', 'INFORMA«√O');
 
     // ------------------------------------------------------
-    // SE√á√ÉO 4: √öLTIMAS ATIVIDADES
+    // SE«√O 4: ⁄LTIMAS ATIVIDADES
     // ------------------------------------------------------
     renderMovimentacoes();
     renderRequisicoes();
@@ -455,9 +455,9 @@
     
     if (items.length === 0) {
       if (tipo === 'critical') {
-        el.innerHTML = '<div class="alert-empty-state">Nenhum item cr√≠tico</div>';
+        el.innerHTML = '<div class="alert-empty-state">Nenhum item crÌtico</div>';
       } else if (tipo === 'warning') {
-        el.innerHTML = '<div class="alert-empty-state">Nenhum item em aten√ß√£o</div>';
+        el.innerHTML = '<div class="alert-empty-state">Nenhum item em atenÁ„o</div>';
       } else {
         el.innerHTML = '';
       }
@@ -470,7 +470,7 @@
         + '<div class="alert-item-icon">' + (tipo === 'critical' ? '!' : '') + '</div>'
         + '<div class="alert-item-info">'
         + '<div class="alert-item-nome">' + Utils.safe(a.peca.nome) + '</div>'
-        + '<div class="alert-item-detalhe">Saldo: <strong>' + a.saldo + '</strong> ' + Utils.safe(a.peca.unidade) + ' (m√≠n: ' + a.peca.estoqueMinimo + ')</div>'
+        + '<div class="alert-item-detalhe">Saldo: <strong>' + a.saldo + '</strong> ' + Utils.safe(a.peca.unidade) + ' (mÌn: ' + a.peca.estoqueMinimo + ')</div>'
         + '</div>'
         + '<div class="alert-item-action"><button class="btn btn-sm btn-outline" onclick="window.location=\'estoque.html\'">Ver Item</button></div>'
         + '</div>';
@@ -482,14 +482,14 @@
     el.innerHTML = html;
   }
 
-  // -- Renderizar Movimenta√ß√µes ----------------------------
+  // -- Renderizar MovimentaÁıes ----------------------------
   function renderMovimentacoes() {
     var el = document.getElementById('lista-movimentos');
     var movs = DB.Movimentos.listar();
     var ultMovs = movs.slice(0, 8);
 
     if (ultMovs.length === 0) {
-      el.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Sem movimenta√ß√µes</p></div>';
+      el.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Sem movimentaÁıes</p></div>';
       return;
     }
 
@@ -513,7 +513,7 @@
     }).join('');
   }
 
-  // -- Renderizar Requisi√ß√µes -----------------------------
+  // -- Renderizar RequisiÁıes -----------------------------
   function renderRequisicoes() {
     var el = document.getElementById('lista-requisicoes');
     var reqs = DB.Requisicoes.listar().sort(function(a,b){ 
@@ -521,7 +521,7 @@
     }).slice(0, 5);
 
     if (reqs.length === 0) {
-      el.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Sem requisi√ß√µes</p></div>';
+      el.innerHTML = '<div class="empty-state"><div class="icon"></div><p>Sem requisiÁıes</p></div>';
       return;
     }
 
@@ -534,7 +534,7 @@
         + '<div class="activity-time">' + Utils.formatarData(r.criadoEm) + '</div>'
         + '<div class="activity-content">'
         + '<div class="activity-type ' + statusCls + '">' + Utils.safe(r.status || 'N/A') + '</div>'
-        + '<div class="activity-name">' + Utils.safe(r.descricao || 'Requisi√ß√£o #' + r.id) + '</div>'
+        + '<div class="activity-name">' + Utils.safe(r.descricao || 'RequisiÁ„o #' + r.id) + '</div>'
         + '</div>'
         + '<div class="activity-badge">' + Utils.safe(usuariosMap[r.solicitanteId] || '-') + '</div>'
         + '</div>';
@@ -567,10 +567,10 @@
           + '<td>' + Utils.badgeEstoque(s, p.estoqueMinimo) + '</td>'
           + '</tr>';
       });
-      mostrarDrillTable(['C√≥digo','Nome','Categoria','Saldo','Status'], rows, titulo);
+      mostrarDrillTable(['CÛdigo','Nome','Categoria','Saldo','Status'], rows, titulo);
 
     } else if (tipo === 'entrada-mes') {
-      titulo = 'Entradas do M√™s Atual';
+      titulo = 'Entradas do MÍs Atual';
       var mesAgo = new Date(); mesAgo.setMonth(mesAgo.getMonth()-1); var mesAgoStr = mesAgo.toISOString().slice(0,10);
       var inicioMes = new Date(); inicioMes.setDate(1); var inicioMesStr = inicioMes.toISOString().slice(0,10);
       rows = movs.filter(function(m){ return m.tipo === 'ENTRADA' && m.data && m.data.slice(0,10) >= inicioMesStr; }).map(function(m) {
@@ -583,10 +583,10 @@
           + '<td>' + Utils.safe(usuariosMap[m.responsavel]||'-') + '</td>'
           + '</tr>';
       });
-      mostrarDrillTable(['Hora','Pe√ßa','Qtd','Pre√ßo Unit.','Respons√°vel'], rows, titulo);
+      mostrarDrillTable(['Hora','PeÁa','Qtd','PreÁo Unit.','Respons·vel'], rows, titulo);
 
     } else if (tipo === 'saida-mes') {
-      titulo = 'Sa√≠das do M√™s Atual';
+      titulo = 'SaÌdas do MÍs Atual';
       var inicioMes = new Date(); inicioMes.setDate(1); var inicioMesStr = inicioMes.toISOString().slice(0,10);
       rows = movs.filter(function(m){ return m.tipo === 'SAIDA' && m.data && m.data.slice(0,10) >= inicioMesStr; }).map(function(m) {
         var p = pecasMap[m.pecaId];
@@ -598,10 +598,10 @@
           + '<td>' + Utils.safe(m.observacao||'-') + '</td>'
           + '</tr>';
       });
-      mostrarDrillTable(['Hora','Pe√ßa','Qtd','Respons√°vel','Observa√ß√£o'], rows, titulo);
+      mostrarDrillTable(['Hora','PeÁa','Qtd','Respons·vel','ObservaÁ„o'], rows, titulo);
 
     } else if (tipo === 'ok' || tipo === 'low' || tipo === 'critical' || tipo === 'zerado') {
-      var labels = { ok:'Itens em N√≠vel Normal', low:'Itens com Estoque Baixo', critical:'Itens Cr√≠ticos', zerado:'Itens Zerados' };
+      var labels = { ok:'Itens em NÌvel Normal', low:'Itens com Estoque Baixo', critical:'Itens CrÌticos', zerado:'Itens Zerados' };
       titulo = labels[tipo];
       rows = pecas.filter(function(p){
         var s = saldos[p.id] || 0;
@@ -609,7 +609,7 @@
         return Utils.statusEstoque(s, p.estoqueMinimo).classe === tipo;
       }).map(function(p) {
         var s = saldos[p.id] || 0;
-        var loc = p.localiza√ß√£o || p.localizacao || '-';
+        var loc = p.localizaÁ„o || p.localizacao || '-';
         return '<tr>'
           + '<td><code style="font-size:11px;background:var(--bg);padding:1px 6px;border-radius:4px">' + Utils.safe(p.codigo) + '</code></td>'
           + '<td>' + Utils.safe(p.nome) + '</td>'
@@ -618,11 +618,11 @@
           + '<td>' + Utils.safe(loc) + '</td>'
           + '</tr>';
       });
-      mostrarDrillTable(['C√≥digo','Nome','Saldo','M√≠nimo','Localiza√ß√£o'], rows, titulo);
+      mostrarDrillTable(['CÛdigo','Nome','Saldo','MÌnimo','LocalizaÁ„o'], rows, titulo);
 
     } else if (tipo === 'req-pend' || tipo === 'req-aprov' || tipo === 'req-rej') {
       var statusMap = { 'req-pend': 'PENDENTE', 'req-aprov': 'APROVADA', 'req-rej': 'REJEITADA' };
-      var labelMap = { 'req-pend': 'Requisi√ß√µes Pendentes', 'req-aprov': 'Requisi√ß√µes Aprovadas', 'req-rej': 'Requisi√ß√µes Rejeitadas' };
+      var labelMap = { 'req-pend': 'RequisiÁıes Pendentes', 'req-aprov': 'RequisiÁıes Aprovadas', 'req-rej': 'RequisiÁıes Rejeitadas' };
       titulo = labelMap[tipo];
       rows = reqs.filter(function(r){ return r.status === statusMap[tipo]; }).map(function(r) {
         return '<tr>'
@@ -633,12 +633,12 @@
           + '<td>' + (r.valor  Utils.fmtMoeda(r.valor) : '-') + '</td>'
           + '</tr>';
       });
-      mostrarDrillTable(['Data','Descri√ß√£o','Qtd','Solicitante','Valor'], rows, titulo);
+      mostrarDrillTable(['Data','DescriÁ„o','Qtd','Solicitante','Valor'], rows, titulo);
 
     } else if (tipo === 'cons-analise' || tipo === 'cons-andamento' || tipo === 'cons-pronto') {
       var consertos = DB.Consertos  DB.Consertos.listar() : [];
-      var statusMap = { 'cons-analise': 'AN√ÅLISE', 'cons-andamento': ['ENVIADO','CONSERTANDO'], 'cons-pronto': 'PRONTO' };
-      var labelMap = { 'cons-analise': 'Consertos em An√°lise', 'cons-andamento': 'Consertos em Andamento', 'cons-pronto': 'Consertos Prontos' };
+      var statusMap = { 'cons-analise': 'AN¡LISE', 'cons-andamento': ['ENVIADO','CONSERTANDO'], 'cons-pronto': 'PRONTO' };
+      var labelMap = { 'cons-analise': 'Consertos em An·lise', 'cons-andamento': 'Consertos em Andamento', 'cons-pronto': 'Consertos Prontos' };
       titulo = labelMap[tipo];
       rows = consertos.filter(function(c){
         var st = statusMap[tipo];
@@ -651,7 +651,7 @@
           + '<td>' + (c.valor  Utils.fmtMoeda(c.valor) : '-') + '</td>'
           + '</tr>';
       });
-      mostrarDrillTable(['Data','Fornecedor','Descri√ß√£o','Valor'], rows, titulo);
+      mostrarDrillTable(['Data','Fornecedor','DescriÁ„o','Valor'], rows, titulo);
     }
   }
 

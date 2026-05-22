@@ -1,6 +1,6 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Movimenta√ß√µes - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=4"> <link rel="stylesheet" href="atlas-industrial.css?v=1"> <style> .tipo-entrada { color: var(--success); font-weight: 700; }
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>MovimentaÁıes - Atlas PCM Almoxarifado</title> <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('atlas_theme')||'light');</script> <link rel="stylesheet" href="style.css?v=5"> <link rel="stylesheet" > <style> .tipo-entrada { color: var(--success); font-weight: 700; }
     .tipo-saida   { color: var(--danger);  font-weight: 700; }
     .tipo-ajuste  { color: var(--warning); font-weight: 700; }
     .form-mov-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 24px; margin-bottom: 22px; }
@@ -15,34 +15,34 @@
 <div class="app-layout"> <!-- SIDEBAR --> <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <img id="sidebar-logo-img" class="logo-img" src="" alt="Logo" style="display:none">
-    <div id="sidebar-logo-text" class="system-name">Gest√£o de Estoque</div>
+    <div id="sidebar-logo-text" class="system-name">Gest„o de Estoque</div>
     <div class="sub">PCM Almoxarifado</div>
   </div>
   <nav>
     <div class="nav-group-label">Principal</div>
     <a href="dashboard.html" data-page="dashboard"><svg class="icon"><use href="#icon-dashboard"></use></svg> Dashboard</a>
     <a href="estoque.html" data-page="estoque"><svg class="icon"><use href="#icon-estoque"></use></svg> Estoque</a>
-    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> Movimenta√ß√µes</a>
+    <a href="movimentacoes.html" data-page="movimentacoes"><svg class="icon"><use href="#icon-movimentacoes"></use></svg> MovimentaÁıes</a>
     <div class="nav-group-label">Cadastros</div>
-    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> Pe√ßas</a>
+    <a href="pecas.html" data-page="pecas"><svg class="icon"><use href="#icon-pecas"></use></svg> PeÁas</a>
     <a href="ativos.html" data-page="ativos"><svg class="icon"><use href="#icon-ativos"></use></svg> Ativos</a>
     <a href="requisicoes.html" data-page="requisicoes"><svg class="icon"><use href="#icon-requisicoes"></use></svg> Req. de Compra</a>
     <a href="consertos.html" data-page="consertos"><svg class="icon"><use href="#icon-consertos"></use></svg> Consertos Externos</a>
-    <div class="nav-group-label">An√°lise</div>
-    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> Relat√≥rios</a>
+    <div class="nav-group-label">An·lise</div>
+    <a href="relatorios.html" data-page="relatorios"><svg class="icon"><use href="#icon-relatorios"></use></svg> RelatÛrios</a>
     <a href="etiquetas.html" data-page="etiquetas"><svg class="icon"><use href="#icon-etiquetas"></use></svg> Etiquetas</a>
-    <div class="nav-group-label nav-admin" data-admin>Administra√ß√£o</div>
-    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> Solicita√ß√µes</a>
+    <div class="nav-group-label nav-admin" data-admin>AdministraÁ„o</div>
+    <a href="aprovacoes.html" data-page="aprovacoes" data-admin><svg class="icon"><use href="#icon-aprovacoes"></use></svg> SolicitaÁıes</a>
     <a href="ajustes.html" data-page="ajustes" data-admin><svg class="icon"><use href="#icon-ajustes"></use></svg> Ajuste de Saldo</a>
-    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> Configura√ß√µes</a>
-    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu√°rios</a>
+    <a href="configuracoes.html" data-page="configuracoes" data-admin><svg class="icon"><use href="#icon-config"></use></svg> ConfiguraÁıes</a>
+    <a href="usuarios.html" data-page="usuarios" data-admin><svg class="icon"><use href="#icon-usuarios"></use></svg> Usu·rios</a>
   </nav>
   <div class="sidebar-footer">
-    <div class="user-info" id="sidebar-user-name">‚Ä¶</div>
-    <div class="user-role" id="sidebar-user-role">‚Ä¶</div>
+    <div class="user-info" id="sidebar-user-name">Ö</div>
+    <div class="user-role" id="sidebar-user-role">Ö</div>
     <button class="btn-logout" onclick="Auth.logout()"><svg class="icon-logout"><use href="#icon-logout"></use></svg> Sair do Sistema</button>
   </div>
-</aside> <!-- CONTE√öDO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> Movimenta√ß√µes</div> <div class="topbar-subtitle">Registre entradas e sa√≠das de estoque</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- FORMUL√ÅRIO DE REGISTRO --> <div class="form-mov-card"> <div class="card-title">+ Registrar Movimenta√ß√£o</div> <form id="form-mov" onsubmit="registrarMovimentacao(event)" autocomplete="off"> <!-- Tipo --> <div class="form-group" style="margin-bottom:16px"> <label>Tipo de Movimenta√ß√£o *</label> <div class="tipo-selector"> <button type="button" class="tipo-btn selected-entrada" id="btn-tipo-entrada" onclick="selecionarTipo('ENTRADA')"> ENTRADA<br><span style="font-size:11px;font-weight:400;opacity:.8">Recebimento de material</span> </button> <button type="button" class="tipo-btn" id="btn-tipo-saida" onclick="selecionarTipo('SAIDA')"> SA√çDA<br><span style="font-size:11px;font-weight:400;opacity:.8">Uso em manuten√ß√£o</span> </button> </div> <input type="hidden" id="mov-tipo" value="ENTRADA"> </div> <div class="form-grid"> <!-- Pe√ßa --> <div class="form-group" style="grid-column:1/-1"> <label>Pe√ßa / Material *</label> <select id="mov-peca" required onchange="atualizarSaldoInfo()"> <option value="">- Selecione a pe√ßa -</option> </select> <div id="saldo-info" style="display:none" class="saldo-info"> <span style="font-size:13px;color:var(--text-muted)">Saldo atual:</span> <span id="saldo-valor" style="font-size:20px;font-weight:800;color:var(--primary)">0</span> <span id="saldo-unidade" style="font-size:12px;color:var(--text-muted)"></span> <span id="saldo-badge"></span> </div> </div> <!-- Quantidade --> <div class="form-group"> <label>Quantidade *</label> <input type="number" id="mov-quantidade" min="1" step="1" placeholder="0" required> </div> <!-- Pre√ßo Unit√°rio (vis√≠vel apenas em ENTRADA) --> <div class="form-group" id="grupo-preco"> <label>Pre√ßo Unit√°rio (nesta compra) <span style="font-size:11px;color:var(--text-muted);font-weight:400">R$</span></label> <input type="number" id="mov-preco" min="0" step="0.01" placeholder="0,00"> <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Informe o valor pago por unidade nesta entrada. Pode ser diferente do cadastro.</div> </div> <!-- Data --> <div class="form-group"> <label>Data *</label> <input type="date" id="mov-data" required> </div> <!-- Ordem de Servi√ßo --> <div class="form-group"> <label>Ordem de Servi√ßo</label> <input type="text" id="mov-os" placeholder="ex: OS-2026-001"> </div> <!-- Ativo / M√°quina (mostrado em SA√çDA) --> <div class="form-group" id="grupo-ativo" style="display:none"> <label>Ativo / TAG da M√°quina</label> <div style="display:flex;gap:8px"> <select id="mov-ativo" onchange="onAtivoChange()" style="flex:1"> <option value="">- Selecione o ativo (opcional) -</option> </select> </div> <div id="ativo-info" style="display:none;font-size:12px;color:var(--text-muted);margin-top:4px"></div> </div> <!-- Observa√ß√£o --> <div class="form-group full"> <label>Observa√ß√£o</label> <input type="text" id="mov-obs" placeholder="Informa√ß√µes adicionais..."> </div> </div> <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"> <button type="button" class="btn btn-outline" onclick="limparFormulario()">Limpar</button> <button type="submit" class="btn btn-primary" id="btn-registrar">Registrar</button> </div> </form> </div> <!-- HIST√ìRICO --> <div class="card"> <div class="card-title" style="justify-content:space-between"> <span> Hist√≥rico de Movimenta√ß√µes</span> <div style="display:flex;gap:10px;align-items:center"> <div class="search-bar" style="width:220px;padding:5px 10px"> <span class="icon" style="font-size:13px"></span> <input type="text" id="busca-hist" placeholder="Buscar por pe√ßa..." oninput="renderHistorico()" style="font-size:13px"> </div> <select id="filtro-tipo" onchange="renderHistorico()" style="font-size:13px;padding:5px 10px;border:1.5px solid var(--border);border-radius:7px"> <option value="">Todos os tipos</option> <option value="ENTRADA">Entradas</option> <option value="SAIDA">Sa√≠das</option> <option value="AJUSTE">Ajustes</option> </select> </div> </div> <div class="table-wrapper"> <table> <thead> <tr> <th>Data</th> <th>Tipo</th> <th>Pe√ßa</th> <th>Ativo / TAG</th> <th>Qtd</th> <th>Pre√ßo Unit.</th> <th>OS</th> <th>Respons√°vel</th> <th>Observa√ß√£o</th> </tr> </thead> <tbody id="tbody-hist"></tbody> </table> </div> <div id="empty-hist" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma movimenta√ß√£o encontrada</p> </div> <div id="paginacao" style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;align-items:center"></div> </div> </div> </div>
+</aside> <!-- CONTE⁄DO --> <div class="main-content"> <!-- BREADCRUMB --> <div class="breadcrumb" id="breadcrumb"> <a href="dashboard.html" class="bc-item">Dashboard</a> <span class="bc-separator">/</span> <span class="bc-current" id="bc-current">--</span> </div> <div class="topbar"> <div> <div class="topbar-title"> MovimentaÁıes</div> <div class="topbar-subtitle">Registre entradas e saÌdas de estoque</div> </div> <div class="topbar-actions"> <button class="btn-theme no-print" onclick="Utils.toggleTheme()" id="btn-theme"></button> </div> </div> <div class="page-body"> <!-- FORMUL¡RIO DE REGISTRO --> <div class="form-mov-card"> <div class="card-title">+ Registrar MovimentaÁ„o</div> <form id="form-mov" onsubmit="registrarMovimentacao(event)" autocomplete="off"> <!-- Tipo --> <div class="form-group" style="margin-bottom:16px"> <label>Tipo de MovimentaÁ„o *</label> <div class="tipo-selector"> <button type="button" class="tipo-btn selected-entrada" id="btn-tipo-entrada" onclick="selecionarTipo('ENTRADA')"> ENTRADA<br><span style="font-size:11px;font-weight:400;opacity:.8">Recebimento de material</span> </button> <button type="button" class="tipo-btn" id="btn-tipo-saida" onclick="selecionarTipo('SAIDA')"> SAÕDA<br><span style="font-size:11px;font-weight:400;opacity:.8">Uso em manutenÁ„o</span> </button> </div> <input type="hidden" id="mov-tipo" value="ENTRADA"> </div> <div class="form-grid"> <!-- PeÁa --> <div class="form-group" style="grid-column:1/-1"> <label>PeÁa / Material *</label> <select id="mov-peca" required onchange="atualizarSaldoInfo()"> <option value="">- Selecione a peÁa -</option> </select> <div id="saldo-info" style="display:none" class="saldo-info"> <span style="font-size:13px;color:var(--text-muted)">Saldo atual:</span> <span id="saldo-valor" style="font-size:20px;font-weight:800;color:var(--primary)">0</span> <span id="saldo-unidade" style="font-size:12px;color:var(--text-muted)"></span> <span id="saldo-badge"></span> </div> </div> <!-- Quantidade --> <div class="form-group"> <label>Quantidade *</label> <input type="number" id="mov-quantidade" min="1" step="1" placeholder="0" required> </div> <!-- PreÁo Unit·rio (visÌvel apenas em ENTRADA) --> <div class="form-group" id="grupo-preco"> <label>PreÁo Unit·rio (nesta compra) <span style="font-size:11px;color:var(--text-muted);font-weight:400">R$</span></label> <input type="number" id="mov-preco" min="0" step="0.01" placeholder="0,00"> <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Informe o valor pago por unidade nesta entrada. Pode ser diferente do cadastro.</div> </div> <!-- Data --> <div class="form-group"> <label>Data *</label> <input type="date" id="mov-data" required> </div> <!-- Ordem de ServiÁo --> <div class="form-group"> <label>Ordem de ServiÁo</label> <input type="text" id="mov-os" placeholder="ex: OS-2026-001"> </div> <!-- Ativo / M·quina (mostrado em SAÕDA) --> <div class="form-group" id="grupo-ativo" style="display:none"> <label>Ativo / TAG da M·quina</label> <div style="display:flex;gap:8px"> <select id="mov-ativo" onchange="onAtivoChange()" style="flex:1"> <option value="">- Selecione o ativo (opcional) -</option> </select> </div> <div id="ativo-info" style="display:none;font-size:12px;color:var(--text-muted);margin-top:4px"></div> </div> <!-- ObservaÁ„o --> <div class="form-group full"> <label>ObservaÁ„o</label> <input type="text" id="mov-obs" placeholder="InformaÁıes adicionais..."> </div> </div> <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end"> <button type="button" class="btn btn-outline" onclick="limparFormulario()">Limpar</button> <button type="submit" class="btn btn-primary" id="btn-registrar">Registrar</button> </div> </form> </div> <!-- HIST”RICO --> <div class="card"> <div class="card-title" style="justify-content:space-between"> <span> HistÛrico de MovimentaÁıes</span> <div style="display:flex;gap:10px;align-items:center"> <div class="search-bar" style="width:220px;padding:5px 10px"> <span class="icon" style="font-size:13px"></span> <input type="text" id="busca-hist" placeholder="Buscar por peÁa..." oninput="renderHistorico()" style="font-size:13px"> </div> <select id="filtro-tipo" onchange="renderHistorico()" style="font-size:13px;padding:5px 10px;border:1.5px solid var(--border);border-radius:7px"> <option value="">Todos os tipos</option> <option value="ENTRADA">Entradas</option> <option value="SAIDA">SaÌdas</option> <option value="AJUSTE">Ajustes</option> </select> </div> </div> <div class="table-wrapper"> <table> <thead> <tr> <th>Data</th> <th>Tipo</th> <th>PeÁa</th> <th>Ativo / TAG</th> <th>Qtd</th> <th>PreÁo Unit.</th> <th>OS</th> <th>Respons·vel</th> <th>ObservaÁ„o</th> </tr> </thead> <tbody id="tbody-hist"></tbody> </table> </div> <div id="empty-hist" class="empty-state" style="display:none"> <div class="icon"></div> <p>Nenhuma movimentaÁ„o encontrada</p> </div> <div id="paginacao" style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;align-items:center"></div> </div> </div> </div>
 </div> <script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="utils.js"></script>
@@ -63,11 +63,11 @@
   // Preenche data de hoje
   document.getElementById('mov-data').value = Utils.dataHoje();
 
-  // Preenche select de pe√ßas
+  // Preenche select de peÁas
   function populaPecas(pecaPreSelecionada) {
     const sel = document.getElementById('mov-peca');
     const pecas = DB.Pecas.ativas();
-    sel.innerHTML = '<option value="">- Selecione a pe√ßa -</option>';
+    sel.innerHTML = '<option value="">- Selecione a peÁa -</option>';
     pecas.forEach(p => {
       const o = document.createElement('option');
       o.value = p.id;
@@ -127,7 +127,7 @@
     document.getElementById('saldo-unidade').textContent = p.unidade;
     document.getElementById('saldo-badge').innerHTML = Utils.badgeEstoque(saldo, p.estoqueMinimo);
     infoEl.style.display = 'flex';
-    // Pr√©-preenche pre√ßo com √∫ltimo pre√ßo de entrada registrado para essa pe√ßa
+    // PrÈ-preenche preÁo com ˙ltimo preÁo de entrada registrado para essa peÁa
     const movsPeca = DB.Movimentos.listar().filter(m => m.pecaId === id && m.tipo === 'ENTRADA' && m.precoUnitario > 0);
     const ultimoPreco = movsPeca.length > 0  movsPeca[0].precoUnitario : (p.precoUnitario || 0);
     const precoInput = document.getElementById('mov-preco');
@@ -146,21 +146,21 @@
     const ativoId = tipo === 'SAIDA'  (document.getElementById('mov-ativo').value || null) : null;
     const precoUnitario = tipo === 'ENTRADA'  (parseFloat(document.getElementById('mov-preco').value) || 0) : 0;
 
-    if (!pecaId) { Utils.toast('Selecione uma pe√ßa.', 'error'); return; }
+    if (!pecaId) { Utils.toast('Selecione uma peÁa.', 'error'); return; }
     if (qtd <= 0) { Utils.toast('Quantidade deve ser maior que zero.', 'error'); return; }
 
-    // Verificar saldo para sa√≠da
+    // Verificar saldo para saÌda
     if (tipo === 'SAIDA') {
       const saldoAtual = DB.Movimentos.saldoPeca(pecaId);
       if (qtd > saldoAtual) {
-        Utils.toast(`Saldo insuficiente! Dispon√≠vel: ${saldoAtual}`, 'error');
+        Utils.toast(`Saldo insuficiente! DisponÌvel: ${saldoAtual}`, 'error');
         return;
       }
     }
 
     const sessao = Auth.getSessao();
     DB.Movimentos.registrar({ tipo, pecaId, quantidade: qtd, data: new Date(data).toISOString(), responsavel: sessao.id, ordemServico: os, observacao: obs, ativoId, precoUnitario });
-    // Atualizar pre√ßo cadastrado da pe√ßa se for entrada com pre√ßo informado
+    // Atualizar preÁo cadastrado da peÁa se for entrada com preÁo informado
     if (tipo === 'ENTRADA' && precoUnitario > 0) {
       const peca = DB.Pecas.buscarId(pecaId);
       if (peca) { peca.precoUnitario = precoUnitario; DB.Pecas.salvar(peca); }
@@ -215,7 +215,7 @@
       }).join('');
     }
 
-    // Pagina√ß√£o
+    // PaginaÁ„o
     const pag = document.getElementById('paginacao');
     if (totalPags <= 1) { pag.innerHTML = ''; return; }
     let html = `<span style="font-size:12px;color:var(--text-muted)">${total} registros</span>`;
